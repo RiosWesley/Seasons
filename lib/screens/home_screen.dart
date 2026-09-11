@@ -926,9 +926,9 @@ class _HomeScreenState extends State<HomeScreen> {
               'RETROSPECTIVAS RECENTES',
               style: TextStyle(
                 fontSize: 11,
-                letterSpacing: 1.2,
+                letterSpacing: 1.4,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF64748B),
+                color: Color(0xFF6B7280),
               ),
             ),
             InkWell(
@@ -944,7 +944,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: SwissColors.irisPrimary,
                     ),
                   ),
-                  SizedBox(width: 2),
+                  SizedBox(width: 3),
                   Icon(
                     Icons.arrow_forward_rounded,
                     size: 12,
@@ -960,11 +960,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
         // Static Showcase Card 1: "Meu Amor 💕"
         _buildRecentWrappedCard(
-          avatarBg: const Color(0xFFFFF1F2),
-          iconColor: const Color(0xFFF43F5E),
+          avatarBg: const Color(0xFFFDE8E9),
+          iconColor: const Color(0xFFE11D48),
           icon: Icons.favorite_border_rounded,
           title: 'Meu Amor 💕',
-          subtitle: '1.248 mensagens • 12 de mar. de 2024',
+          subtitle: '1.248 mensagens  •  12 de mar. de 2024',
           onTap: () => _handleDemoRetrospective(_demoChatCasal, 'Meu Amor 💕'),
         ),
 
@@ -972,11 +972,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
         // Static Showcase Card 2: "Resenha do Squad"
         _buildRecentWrappedCard(
-          avatarBg: const Color(0xFFF0F9FF),
+          avatarBg: const Color(0xFFE0F2FE),
           iconColor: const Color(0xFF0284C7),
           icon: Icons.people_alt_outlined,
           title: 'Resenha do Squad',
-          subtitle: '8.732 mensagens • 3 de mar. de 2024',
+          subtitle: '8.732 mensagens  •  3 de mar. de 2024',
           onTap: () => _handleDemoRetrospective(_demoChatAmigos, 'Resenha do Squad'),
         ),
 
@@ -986,16 +986,16 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.only(top: 10.0),
             child: _buildRecentWrappedCard(
               avatarBg: saved.mode == ChatMode.casal
-                  ? const Color(0xFFFFF1F2)
-                  : const Color(0xFFF0F9FF),
+                  ? const Color(0xFFFDE8E9)
+                  : const Color(0xFFE0F2FE),
               iconColor: saved.mode == ChatMode.casal
-                  ? const Color(0xFFF43F5E)
+                  ? const Color(0xFFE11D48)
                   : const Color(0xFF0284C7),
               icon: saved.mode == ChatMode.casal
                   ? Icons.favorite_border_rounded
                   : Icons.people_alt_outlined,
               title: saved.title,
-              subtitle: '${saved.messageCount} mensagens • ${saved.dateText}',
+              subtitle: '${saved.messageCount} mensagens  •  ${saved.dateText}',
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute<void>(
@@ -1023,25 +1023,32 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFEDE8E1), width: 1.0),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: const Color(0xFFEFECE6), width: 1.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 14,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       child: Row(
         children: [
-          // Squircle Avatar
+          // Squircle Avatar (52x52)
           Container(
-            width: 42,
-            height: 42,
+            width: 52,
+            height: 52,
             decoration: ShapeDecoration(
               color: avatarBg,
-              shape: SquircleBorder.radius(12),
+              shape: SquircleBorder.radius(16),
             ),
             child: Center(
-              child: Icon(icon, color: iconColor, size: 20),
+              child: Icon(icon, color: iconColor, size: 24),
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 14),
 
           // Title & Subtitle Column
           Expanded(
@@ -1051,18 +1058,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text(
                   title,
                   style: const TextStyle(
-                    fontSize: 14.5,
+                    fontFamily: 'serif',
+                    fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: Color(0xFF0F172A),
+                    letterSpacing: -0.2,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: 3),
                 Text(
                   subtitle,
                   style: const TextStyle(
-                    fontSize: 11.5,
+                    fontSize: 12,
                     color: Color(0xFF64748B),
                   ),
                   maxLines: 1,
@@ -1071,17 +1080,26 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
+          const SizedBox(width: 8),
 
           // Action Button: "Ver análise →"
           InkWell(
             onTap: _isLoading ? null : onTap,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(999),
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              decoration: BoxDecoration(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              decoration: const ShapeDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: const Color(0xFFE2E8F0), width: 1.0),
+                shape: StadiumBorder(
+                  side: BorderSide(color: Color(0xFFE2E8F0), width: 1.0),
+                ),
+                shadows: [
+                  BoxShadow(
+                    color: Color(0x06000000),
+                    blurRadius: 6,
+                    offset: Offset(0, 2),
+                  ),
+                ],
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -1089,15 +1107,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text(
                     'Ver análise',
                     style: TextStyle(
-                      fontSize: 11,
+                      fontSize: 12,
                       fontWeight: FontWeight.w600,
                       color: Color(0xFF0F172A),
                     ),
                   ),
-                  SizedBox(width: 3),
+                  SizedBox(width: 4),
                   Icon(
                     Icons.arrow_forward_rounded,
-                    size: 11,
+                    size: 12,
                     color: Color(0xFF0F172A),
                   ),
                 ],
@@ -1105,13 +1123,13 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          const SizedBox(width: 4),
+          const SizedBox(width: 6),
 
           // 3-Dots Menu
           const Icon(
             Icons.more_vert_rounded,
-            size: 18,
-            color: Color(0xFF94A3B8),
+            size: 20,
+            color: Color(0xFF64748B),
           ),
         ],
       ),
@@ -1133,9 +1151,9 @@ class _HomeScreenState extends State<HomeScreen> {
               'ESCOLHA UMA LENTE DE ANÁLISE',
               style: TextStyle(
                 fontSize: 11,
-                letterSpacing: 1.2,
+                letterSpacing: 1.4,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF64748B),
+                color: Color(0xFF6B7280),
               ),
             ),
             InkWell(
@@ -1151,7 +1169,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: SwissColors.irisPrimary,
                     ),
                   ),
-                  SizedBox(width: 2),
+                  SizedBox(width: 3),
                   Icon(
                     Icons.arrow_forward_rounded,
                     size: 12,
@@ -1163,18 +1181,19 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
 
-        const SizedBox(height: 12),
+        const SizedBox(height: 14),
 
-        // 2-Column Bento Grid: Casal & Amigos
+        // 2-Column Bento Grid: Casal & Amigos with AI Texture Backgrounds
         Row(
           children: [
-            // Card 1: Casal (Pastel Rose)
+            // Card 1: Casal (with AI generated single-heart texture)
             Expanded(
               child: _buildBentoCard(
                 eyebrow: 'AFINIDADE & RITMO',
                 title: 'Casal',
                 description: 'Entenda a dinâmica, o afeto e os momentos mais especiais.',
-                bgGradient: const LinearGradient(
+                bgAsset: 'assets/images/casal_bento_bg.jpg',
+                fallbackGradient: const LinearGradient(
                   colors: [Color(0xFFFFF1F2), Color(0xFFFFE4E6)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -1183,20 +1202,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 accentColor: const Color(0xFFF43F5E),
                 eyebrowColor: const Color(0xFFE11D48),
                 icon: Icons.favorite_border_rounded,
-                watermarkIcon: Icons.favorite_border_rounded,
+                avatarBg: const Color(0xFFFDE8E9),
                 onTap: () => _handleDemoRetrospective(_demoChatCasal, 'Mariana & Lucas (Casal)'),
               ),
             ),
 
-            const SizedBox(width: 12),
+            const SizedBox(width: 14),
 
-            // Card 2: Amigos (Pastel Sky Blue)
+            // Card 2: Amigos (with AI generated doodle & rays texture)
             Expanded(
               child: _buildBentoCard(
                 eyebrow: 'DINÂMICA & SQUAD',
                 title: 'Amigos',
                 description: 'Descubra os padrões, os memes, os áudios e quem manda mais.',
-                bgGradient: const LinearGradient(
+                bgAsset: 'assets/images/amigos_bento_bg.jpg',
+                fallbackGradient: const LinearGradient(
                   colors: [Color(0xFFF0F9FF), Color(0xFFE0F2FE)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -1205,7 +1225,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 accentColor: const Color(0xFF0284C7),
                 eyebrowColor: const Color(0xFF0284C7),
                 icon: Icons.people_alt_outlined,
-                watermarkIcon: Icons.chat_bubble_outline_rounded,
+                avatarBg: const Color(0xFFE0F2FE),
                 onTap: () => _handleDemoRetrospective(_demoChatAmigos, 'Resenha do Squad (Amigos)'),
               ),
             ),
@@ -1219,135 +1239,138 @@ class _HomeScreenState extends State<HomeScreen> {
     required String eyebrow,
     required String title,
     required String description,
-    required Gradient bgGradient,
+    required String bgAsset,
+    required Gradient fallbackGradient,
     required Color borderColor,
     required Color accentColor,
     required Color eyebrowColor,
+    required Color avatarBg,
     required IconData icon,
-    required IconData watermarkIcon,
     required VoidCallback onTap,
   }) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: _isLoading ? null : onTap,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(22),
         child: Container(
-          height: 165,
+          height: 185,
           decoration: BoxDecoration(
-            gradient: bgGradient,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(22),
             border: Border.all(color: borderColor, width: 1.0),
+            image: DecorationImage(
+              image: AssetImage(bgAsset),
+              fit: BoxFit.cover,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: accentColor.withValues(alpha: 0.08),
+                blurRadius: 14,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
           clipBehavior: Clip.antiAlias,
-          child: Stack(
-            children: [
-              // Subtle background watermark icon
-              Positioned(
-                right: -8,
-                bottom: 8,
-                child: Icon(
-                  watermarkIcon,
-                  size: 72,
-                  color: accentColor.withValues(alpha: 0.12),
-                ),
-              ),
-
-              // Content Layout
-              Padding(
-                padding: const EdgeInsets.all(14.0),
-                child: Column(
+          child: Container(
+            color: Colors.white.withValues(alpha: 0.15),
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Top Row: Avatar Icon + Column(Eyebrow, Title)
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Top Row: Icon Container + Eyebrow & Title Column
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 34,
-                          height: 34,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Icon(icon, color: accentColor, size: 18),
+                    Container(
+                      width: 38,
+                      height: 38,
+                      decoration: BoxDecoration(
+                        color: avatarBg,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: borderColor.withValues(alpha: 0.6),
+                          width: 1.0,
                         ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                eyebrow,
-                                style: TextStyle(
-                                  fontSize: 8.5,
-                                  letterSpacing: 0.8,
-                                  fontWeight: FontWeight.w700,
-                                  color: eyebrowColor,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              Text(
-                                title,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w800,
-                                  color: Color(0xFF0F172A),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 10),
-
-                    // Description
-                    Expanded(
-                      child: Text(
-                        description,
-                        style: const TextStyle(
-                          fontSize: 11.5,
-                          height: 1.35,
-                          color: Color(0xFF475569),
-                        ),
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
+                      ),
+                      child: Center(
+                        child: Icon(icon, color: accentColor, size: 20),
                       ),
                     ),
-
-                    // Bottom Right: Circular Arrow Action
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: Container(
-                        width: 28,
-                        height: 28,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: accentColor.withValues(alpha: 0.18),
-                              blurRadius: 6,
-                              offset: const Offset(0, 2),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            eyebrow,
+                            style: TextStyle(
+                              fontSize: 9,
+                              letterSpacing: 0.9,
+                              fontWeight: FontWeight.w700,
+                              color: eyebrowColor,
                             ),
-                          ],
-                        ),
-                        child: Center(
-                          child: Icon(
-                            Icons.arrow_forward_rounded,
-                            size: 14,
-                            color: accentColor,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
+                          Text(
+                            title,
+                            style: const TextStyle(
+                              fontFamily: 'serif',
+                              fontSize: 19,
+                              fontWeight: FontWeight.w800,
+                              color: Color(0xFF0F172A),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
-              ),
-            ],
+
+                const SizedBox(height: 12),
+
+                // Description
+                Expanded(
+                  child: Text(
+                    description,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      height: 1.38,
+                      color: Color(0xFF475569),
+                    ),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+
+                // Bottom Right: Circular Arrow Action
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Container(
+                    width: 34,
+                    height: 34,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: accentColor.withValues(alpha: 0.22),
+                          blurRadius: 8,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.arrow_forward_rounded,
+                        size: 15,
+                        color: accentColor,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
