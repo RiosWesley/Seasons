@@ -912,6 +912,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // ==========================================
+  // ==========================================
   // SECTION 5: RETROSPECTIVAS RECENTES
   // ==========================================
   Widget _buildRecentRetrospectivesSection() {
@@ -925,10 +926,10 @@ class _HomeScreenState extends State<HomeScreen> {
             const Text(
               'RETROSPECTIVAS RECENTES',
               style: TextStyle(
-                fontSize: 11,
-                letterSpacing: 1.4,
+                fontSize: 11.5,
+                letterSpacing: 1.2,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF6B7280),
+                color: Color(0xFF5B647B),
               ),
             ),
             InkWell(
@@ -939,16 +940,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text(
                     'Ver todas',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 12.5,
                       fontWeight: FontWeight.w600,
-                      color: SwissColors.irisPrimary,
+                      color: Color(0xFF4F46E5),
                     ),
                   ),
                   SizedBox(width: 3),
                   Icon(
                     Icons.arrow_forward_rounded,
-                    size: 12,
-                    color: SwissColors.irisPrimary,
+                    size: 13,
+                    color: Color(0xFF4F46E5),
                   ),
                 ],
               ),
@@ -960,7 +961,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
         // Static Showcase Card 1: "Meu Amor 💕"
         _buildRecentWrappedCard(
-          avatarBg: const Color(0xFFFDE8E9),
+          avatarBg: const Color(0xFFFDE8EA),
           iconColor: const Color(0xFFE11D48),
           icon: Icons.favorite_border_rounded,
           title: 'Meu Amor 💕',
@@ -972,8 +973,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
         // Static Showcase Card 2: "Resenha do Squad"
         _buildRecentWrappedCard(
-          avatarBg: const Color(0xFFE0F2FE),
-          iconColor: const Color(0xFF0284C7),
+          avatarBg: const Color(0xFFE0EDFD),
+          iconColor: const Color(0xFF2563EB),
           icon: Icons.people_alt_outlined,
           title: 'Resenha do Squad',
           subtitle: '8.732 mensagens  •  3 de mar. de 2024',
@@ -986,11 +987,11 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.only(top: 10.0),
             child: _buildRecentWrappedCard(
               avatarBg: saved.mode == ChatMode.casal
-                  ? const Color(0xFFFDE8E9)
-                  : const Color(0xFFE0F2FE),
+                  ? const Color(0xFFFDE8EA)
+                  : const Color(0xFFE0EDFD),
               iconColor: saved.mode == ChatMode.casal
                   ? const Color(0xFFE11D48)
-                  : const Color(0xFF0284C7),
+                  : const Color(0xFF2563EB),
               icon: saved.mode == ChatMode.casal
                   ? Icons.favorite_border_rounded
                   : Icons.people_alt_outlined,
@@ -1024,22 +1025,22 @@ class _HomeScreenState extends State<HomeScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: const Color(0xFFEFECE6), width: 1.0),
+        border: Border.all(color: const Color(0xFFF1EFEA), width: 1.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 14,
-            offset: const Offset(0, 4),
+            color: Colors.black.withValues(alpha: 0.025),
+            blurRadius: 12,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
       child: Row(
         children: [
-          // Squircle Avatar (52x52)
+          // Squircle Avatar (50x50)
           Container(
-            width: 52,
-            height: 52,
+            width: 50,
+            height: 50,
             decoration: ShapeDecoration(
               color: avatarBg,
               shape: SquircleBorder.radius(16),
@@ -1054,12 +1055,13 @@ class _HomeScreenState extends State<HomeScreen> {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   title,
                   style: const TextStyle(
                     fontFamily: 'serif',
-                    fontSize: 16,
+                    fontSize: 16.5,
                     fontWeight: FontWeight.w700,
                     color: Color(0xFF0F172A),
                     letterSpacing: -0.2,
@@ -1073,6 +1075,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: const TextStyle(
                     fontSize: 12,
                     color: Color(0xFF64748B),
+                    fontWeight: FontWeight.w400,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -1082,54 +1085,67 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(width: 8),
 
-          // Action Button: "Ver análise →"
-          InkWell(
-            onTap: _isLoading ? null : onTap,
-            borderRadius: BorderRadius.circular(999),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              decoration: const ShapeDecoration(
-                color: Colors.white,
-                shape: StadiumBorder(
-                  side: BorderSide(color: Color(0xFFE2E8F0), width: 1.0),
-                ),
-                shadows: [
-                  BoxShadow(
-                    color: Color(0x06000000),
-                    blurRadius: 6,
-                    offset: Offset(0, 2),
+          // Pill Action Button: "Ver análise →"
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: _isLoading ? null : onTap,
+              borderRadius: BorderRadius.circular(999),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                decoration: const ShapeDecoration(
+                  color: Color(0xFFF8FAFC),
+                  shape: StadiumBorder(
+                    side: BorderSide(color: Color(0xFFE2E8F0), width: 1.0),
                   ),
-                ],
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  Text(
-                    'Ver análise',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
+                  shadows: [
+                    BoxShadow(
+                      color: Color(0x04000000),
+                      blurRadius: 4,
+                      offset: Offset(0, 1),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Text(
+                      'Ver análise',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF0F172A),
+                      ),
+                    ),
+                    SizedBox(width: 4),
+                    Icon(
+                      Icons.arrow_forward_rounded,
+                      size: 12,
                       color: Color(0xFF0F172A),
                     ),
-                  ),
-                  SizedBox(width: 4),
-                  Icon(
-                    Icons.arrow_forward_rounded,
-                    size: 12,
-                    color: Color(0xFF0F172A),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
 
           const SizedBox(width: 6),
 
-          // 3-Dots Menu
-          const Icon(
-            Icons.more_vert_rounded,
-            size: 20,
-            color: Color(0xFF64748B),
+          // Vertical 3-Dots Menu
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: _showAllModelsBottomSheet,
+              borderRadius: BorderRadius.circular(20),
+              child: const Padding(
+                padding: EdgeInsets.all(4.0),
+                child: Icon(
+                  Icons.more_vert_rounded,
+                  size: 20,
+                  color: Color(0xFF64748B),
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -1150,10 +1166,10 @@ class _HomeScreenState extends State<HomeScreen> {
             const Text(
               'ESCOLHA UMA LENTE DE ANÁLISE',
               style: TextStyle(
-                fontSize: 11,
-                letterSpacing: 1.4,
+                fontSize: 11.5,
+                letterSpacing: 1.2,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF6B7280),
+                color: Color(0xFF5B647B),
               ),
             ),
             InkWell(
@@ -1164,16 +1180,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text(
                     'Conheça todos os modelos',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 12.5,
                       fontWeight: FontWeight.w600,
-                      color: SwissColors.irisPrimary,
+                      color: Color(0xFF4F46E5),
                     ),
                   ),
                   SizedBox(width: 3),
                   Icon(
                     Icons.arrow_forward_rounded,
-                    size: 12,
-                    color: SwissColors.irisPrimary,
+                    size: 13,
+                    color: Color(0xFF4F46E5),
                   ),
                 ],
               ),
@@ -1183,49 +1199,41 @@ class _HomeScreenState extends State<HomeScreen> {
 
         const SizedBox(height: 14),
 
-        // 2-Column Bento Grid: Casal & Amigos with AI Texture Backgrounds
+        // 2-Column Bento Grid: Casal & Amigos with Watercolor Textures & Vector Doodles
         Row(
           children: [
-            // Card 1: Casal (with AI generated single-heart texture)
+            // Card 1: Casal
             Expanded(
               child: _buildBentoCard(
                 eyebrow: 'AFINIDADE & RITMO',
                 title: 'Casal',
-                description: 'Entenda a dinâmica, o afeto e os momentos mais especiais.',
+                description: 'Entenda a dinâmica,\no afeto e os momentos\nmais especiais.',
                 bgAsset: 'assets/images/casal_bento_bg.jpg',
-                fallbackGradient: const LinearGradient(
-                  colors: [Color(0xFFFFF1F2), Color(0xFFFFE4E6)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderColor: const Color(0xFFFECDD3),
-                accentColor: const Color(0xFFF43F5E),
+                doodlePainter: _HeartDoodlePainter(),
+                borderColor: const Color(0xFFFCD3D8),
+                accentColor: const Color(0xFFE11D48),
                 eyebrowColor: const Color(0xFFE11D48),
                 icon: Icons.favorite_border_rounded,
-                avatarBg: const Color(0xFFFDE8E9),
+                avatarBg: const Color(0xFFFDE8EA),
                 onTap: () => _handleDemoRetrospective(_demoChatCasal, 'Mariana & Lucas (Casal)'),
               ),
             ),
 
             const SizedBox(width: 14),
 
-            // Card 2: Amigos (with AI generated doodle & rays texture)
+            // Card 2: Amigos
             Expanded(
               child: _buildBentoCard(
                 eyebrow: 'DINÂMICA & SQUAD',
                 title: 'Amigos',
-                description: 'Descubra os padrões, os memes, os áudios e quem manda mais.',
+                description: 'Descubra os padrões,\nos memes, os áudios\ne quem manda mais.',
                 bgAsset: 'assets/images/amigos_bento_bg.jpg',
-                fallbackGradient: const LinearGradient(
-                  colors: [Color(0xFFF0F9FF), Color(0xFFE0F2FE)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                doodlePainter: _AmigosDoodlePainter(),
                 borderColor: const Color(0xFFBAE6FD),
-                accentColor: const Color(0xFF0284C7),
-                eyebrowColor: const Color(0xFF0284C7),
+                accentColor: const Color(0xFF2563EB),
+                eyebrowColor: const Color(0xFF2563EB),
                 icon: Icons.people_alt_outlined,
-                avatarBg: const Color(0xFFE0F2FE),
+                avatarBg: const Color(0xFFE0EDFD),
                 onTap: () => _handleDemoRetrospective(_demoChatAmigos, 'Resenha do Squad (Amigos)'),
               ),
             ),
@@ -1240,7 +1248,7 @@ class _HomeScreenState extends State<HomeScreen> {
     required String title,
     required String description,
     required String bgAsset,
-    required Gradient fallbackGradient,
+    required CustomPainter doodlePainter,
     required Color borderColor,
     required Color accentColor,
     required Color eyebrowColor,
@@ -1254,7 +1262,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onTap: _isLoading ? null : onTap,
         borderRadius: BorderRadius.circular(22),
         child: Container(
-          height: 185,
+          height: 196,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(22),
             border: Border.all(color: borderColor, width: 1.0),
@@ -1271,106 +1279,119 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           clipBehavior: Clip.antiAlias,
-          child: Container(
-            color: Colors.white.withValues(alpha: 0.15),
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Top Row: Avatar Icon + Column(Eyebrow, Title)
-                Row(
+          child: Stack(
+            children: [
+              // Vector doodle layer (Heart or Rays+Wave)
+              Positioned.fill(
+                child: CustomPaint(
+                  painter: doodlePainter,
+                ),
+              ),
+
+              // Foreground card content
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      width: 38,
-                      height: 38,
-                      decoration: BoxDecoration(
-                        color: avatarBg,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: borderColor.withValues(alpha: 0.6),
-                          width: 1.0,
+                    // Top Row: Avatar Icon + Column(Eyebrow, Title)
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 38,
+                          height: 38,
+                          decoration: BoxDecoration(
+                            color: avatarBg,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: borderColor.withValues(alpha: 0.6),
+                              width: 1.0,
+                            ),
+                          ),
+                          child: Center(
+                            child: Icon(icon, color: accentColor, size: 20),
+                          ),
                         ),
-                      ),
-                      child: Center(
-                        child: Icon(icon, color: accentColor, size: 20),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                eyebrow,
+                                style: TextStyle(
+                                  fontSize: 9,
+                                  letterSpacing: 0.9,
+                                  fontWeight: FontWeight.w800,
+                                  color: eyebrowColor,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 1),
+                              Text(
+                                title,
+                                style: const TextStyle(
+                                  fontFamily: 'serif',
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w800,
+                                  color: Color(0xFF0F172A),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    // Description (3 lines)
+                    Expanded(
+                      child: Text(
+                        description,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          height: 1.35,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xFF475569),
+                        ),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            eyebrow,
-                            style: TextStyle(
-                              fontSize: 9,
-                              letterSpacing: 0.9,
-                              fontWeight: FontWeight.w700,
-                              color: eyebrowColor,
+
+                    // Bottom Right: Circular White Floating Action Button
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Container(
+                        width: 34,
+                        height: 34,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: accentColor.withValues(alpha: 0.24),
+                              blurRadius: 8,
+                              offset: const Offset(0, 3),
                             ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                          ],
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.arrow_forward_rounded,
+                            size: 16,
+                            color: accentColor,
                           ),
-                          Text(
-                            title,
-                            style: const TextStyle(
-                              fontFamily: 'serif',
-                              fontSize: 19,
-                              fontWeight: FontWeight.w800,
-                              color: Color(0xFF0F172A),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ],
                 ),
-
-                const SizedBox(height: 12),
-
-                // Description
-                Expanded(
-                  child: Text(
-                    description,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      height: 1.38,
-                      color: Color(0xFF475569),
-                    ),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-
-                // Bottom Right: Circular Arrow Action
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Container(
-                    width: 34,
-                    height: 34,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: accentColor.withValues(alpha: 0.22),
-                          blurRadius: 8,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Center(
-                      child: Icon(
-                        Icons.arrow_forward_rounded,
-                        size: 15,
-                        color: accentColor,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -1572,7 +1593,7 @@ class _HeroChatIllustration extends StatelessWidget {
                     width: 42,
                     height: 8,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFDCFCE7),
+                      color: const Color(0xFFEEF2FF),
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
@@ -1660,7 +1681,7 @@ class _HeroChatIllustration extends StatelessWidget {
           ),
         ),
 
-        // WhatsApp Green Badge Icon (Floating top-left)
+        // Chat Brand Icon (Floating top-left)
         Positioned(
           top: 0,
           left: 12,
@@ -1668,11 +1689,15 @@ class _HeroChatIllustration extends StatelessWidget {
             width: 32,
             height: 32,
             decoration: BoxDecoration(
-              color: const Color(0xFF25D366),
+              gradient: const LinearGradient(
+                colors: [SwissColors.irisPrimary, SwissColors.violetSecondary],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF25D366).withValues(alpha: 0.35),
+                  color: SwissColors.irisPrimary.withValues(alpha: 0.35),
                   blurRadius: 8,
                   offset: const Offset(0, 3),
                 ),
@@ -1755,3 +1780,79 @@ class _CurvedArrowPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
+
+/// Custom painter that draws the delicate white line-art heart doodle on the Casal Bento card
+class _HeartDoodlePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.90)
+      ..strokeWidth = 2.4
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+
+    final center = Offset(size.width * 0.77, size.height * 0.46);
+
+    canvas.save();
+    canvas.translate(center.dx, center.dy);
+    canvas.rotate(0.22); // ~12 degrees tilt
+
+    final path = Path();
+    path.moveTo(0, 16);
+    path.cubicTo(-18, 5, -20, -10, -7, -15);
+    path.cubicTo(-1, -17, 0, -10, 0, -8);
+    path.cubicTo(0, -10, 1, -17, 7, -15);
+    path.cubicTo(20, -10, 18, 5, 0, 16);
+
+    canvas.drawPath(path, paint);
+    canvas.restore();
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+/// Custom painter that draws the spark rays and soft translucent organic wave on the Amigos Bento card
+class _AmigosDoodlePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    // 1. Soft organic translucent wave/hill in lower right corner
+    final wavePaint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.35)
+      ..style = PaintingStyle.fill;
+
+    final wavePath = Path();
+    wavePath.moveTo(size.width * 0.40, size.height);
+    wavePath.quadraticBezierTo(
+      size.width * 0.70,
+      size.height * 0.72,
+      size.width,
+      size.height * 0.62,
+    );
+    wavePath.lineTo(size.width, size.height);
+    wavePath.close();
+    canvas.drawPath(wavePath, wavePaint);
+
+    // 2. Three radiating spark rays in upper right
+    final rayPaint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.90)
+      ..strokeWidth = 2.4
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    final cx = size.width * 0.82;
+    final cy = size.height * 0.36;
+
+    // Ray 1: angled down-left
+    canvas.drawLine(Offset(cx - 10, cy + 6), Offset(cx - 18, cy + 12), rayPaint);
+    // Ray 2: angled up-left
+    canvas.drawLine(Offset(cx - 8, cy - 6), Offset(cx - 15, cy - 14), rayPaint);
+    // Ray 3: angled up-right
+    canvas.drawLine(Offset(cx + 6, cy - 8), Offset(cx + 14, cy - 16), rayPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
