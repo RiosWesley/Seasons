@@ -46,10 +46,21 @@ class _SwissCardState extends State<SwissCard> {
 
     final effectiveBorderColor = widget.borderColor ??
         (widget.highlight
-            ? SwissColors.emeraldPrimary
+            ? SwissColors.irisPrimary
             : (isDark ? SwissColors.darkBorder : SwissColors.lightBorder));
 
     final effectiveBorderWidth = widget.highlight ? 1.5 : 1.0;
+
+    final effectiveShadows = widget.highlight
+        ? [
+            BoxShadow(
+              color: SwissColors.irisPrimary.withValues(alpha: 0.20),
+              blurRadius: 24,
+              offset: const Offset(0, 8),
+              spreadRadius: -4,
+            ),
+          ]
+        : null;
 
     final cardContent = Container(
       width: widget.width,
@@ -58,6 +69,7 @@ class _SwissCardState extends State<SwissCard> {
       padding: widget.padding,
       decoration: ShapeDecoration(
         color: effectiveBg,
+        shadows: effectiveShadows,
         shape: SquircleBorder.radius(
           widget.borderRadius,
           side: BorderSide(color: effectiveBorderColor, width: effectiveBorderWidth),

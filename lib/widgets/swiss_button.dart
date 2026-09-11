@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../theme/squircle_border.dart';
 import '../theme/swiss_colors.dart';
 import '../theme/swiss_typography.dart';
@@ -50,18 +51,40 @@ class _SwissButtonState extends State<SwissButton> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    Color backgroundColor;
+    Color? backgroundColor;
+    Gradient? backgroundGradient;
     Color foregroundColor;
     BorderSide borderSide = BorderSide.none;
+    List<BoxShadow>? shadows;
 
     switch (widget.type) {
       case SwissButtonType.primary:
-        backgroundColor = _isEnabled
-            ? SwissColors.emeraldPrimary
-            : (isDark ? SwissColors.darkSurfaceSubdued : SwissColors.lightSurfaceSubdued);
-        foregroundColor = _isEnabled
-            ? Colors.black
-            : (isDark ? SwissColors.darkTextMuted : SwissColors.lightTextMuted);
+        if (_isEnabled) {
+          backgroundGradient = const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              SwissColors.irisPrimary,
+              SwissColors.violetSecondary,
+            ],
+          );
+          foregroundColor = Colors.white;
+          shadows = [
+            BoxShadow(
+              color: SwissColors.irisPrimary.withValues(alpha: 0.35),
+              blurRadius: 18,
+              offset: const Offset(0, 4),
+              spreadRadius: -2,
+            ),
+          ];
+        } else {
+          backgroundColor = isDark
+              ? SwissColors.darkSurfaceSubdued
+              : SwissColors.lightSurfaceSubdued;
+          foregroundColor = isDark
+              ? SwissColors.darkTextMuted
+              : SwissColors.lightTextMuted;
+        }
         break;
 
       case SwissButtonType.secondary:
@@ -132,6 +155,7 @@ class _SwissButtonState extends State<SwissButton> {
           style: SwissTypography.labelLarge.copyWith(
             color: foregroundColor,
             fontWeight: FontWeight.w600,
+            letterSpacing: 0.2,
           ),
         ),
       ],
@@ -139,7 +163,12 @@ class _SwissButtonState extends State<SwissButton> {
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTapDown: _isEnabled ? (_) => setState(() => _isPressed = true) : null,
+      onTapDown: _isEnabled
+          ? (_) {
+              HapticFeedback.selectionClick();
+              setState(() => _isPressed = true);
+            }
+          : null,
       onTapUp: _isEnabled ? (_) => setState(() => _isPressed = false) : null,
       onTapCancel: _isEnabled ? () => setState(() => _isPressed = false) : null,
       onTap: _isEnabled ? widget.onPressed : null,
@@ -151,6 +180,8 @@ class _SwissButtonState extends State<SwissButton> {
           padding: widget.padding,
           decoration: ShapeDecoration(
             color: backgroundColor,
+            gradient: backgroundGradient,
+            shadows: shadows,
             shape: SquircleBorder.button(side: borderSide),
           ),
           child: widget.fullWidth

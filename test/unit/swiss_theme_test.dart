@@ -8,33 +8,33 @@ import 'package:chat_wrapped/theme/swiss_typography.dart';
 void main() {
   group('SwissColors Unit Tests', () {
     test('Monotone neutral dark palette tokens match exact specifications', () {
-      expect(SwissColors.darkBackground.toARGB32(), equals(0xFF0B0C0E));
-      expect(SwissColors.darkSurface.toARGB32(), equals(0xFF14171A));
-      expect(SwissColors.darkSurfaceCard.toARGB32(), equals(0xFF181D27));
-      expect(SwissColors.darkBorder.toARGB32(), equals(0xFF24292E));
+      expect(SwissColors.darkBackground.toARGB32(), equals(0xFF090A10));
+      expect(SwissColors.darkSurface.toARGB32(), equals(0xFF0F111A));
+      expect(SwissColors.darkSurfaceCard.toARGB32(), equals(0xFF131624));
+      expect(SwissColors.darkBorder.toARGB32(), equals(0xFF1E2238));
     });
 
     test('Monotone neutral light palette tokens match exact specifications', () {
-      expect(SwissColors.lightBackground.toARGB32(), equals(0xFFF8F9FA));
+      expect(SwissColors.lightBackground.toARGB32(), equals(0xFFFBF9F5));
       expect(SwissColors.lightSurface.toARGB32(), equals(0xFFFFFFFF));
       expect(SwissColors.lightSurfaceCard.toARGB32(), equals(0xFFFFFFFF));
-      expect(SwissColors.lightBorder.toARGB32(), equals(0xFFE5E7EB));
+      expect(SwissColors.lightBorder.toARGB32(), equals(0xFFEBE6DF));
     });
 
-    test('Disciplined emerald accent tokens match specifications', () {
-      expect(SwissColors.emeraldPrimary.toARGB32(), equals(0xFF00DC82));
-      expect(SwissColors.emeraldSecondary.toARGB32(), equals(0xFF10B981));
-      expect(SwissColors.accent, equals(SwissColors.emeraldPrimary));
+    test('Disciplined electric iris & radiant violet accent tokens match specifications', () {
+      expect(SwissColors.irisPrimary.toARGB32(), equals(0xFF6366F1));
+      expect(SwissColors.violetSecondary.toARGB32(), equals(0xFF8B5CF6));
+      expect(SwissColors.accent, equals(SwissColors.irisPrimary));
     });
 
     test('Luminance and color channel relationships verify Swiss precision', () {
-      // Emerald green channel dominates red and blue
-      final emeraldInt = SwissColors.emeraldPrimary.toARGB32();
-      final red = (emeraldInt >> 16) & 0xFF;
-      final green = (emeraldInt >> 8) & 0xFF;
-      final blue = emeraldInt & 0xFF;
-      expect(green, greaterThan(red));
-      expect(green, greaterThan(blue));
+      // Iris blue channel dominates red and green
+      final irisInt = SwissColors.irisPrimary.toARGB32();
+      final red = (irisInt >> 16) & 0xFF;
+      final green = (irisInt >> 8) & 0xFF;
+      final blue = irisInt & 0xFF;
+      expect(blue, greaterThan(red));
+      expect(blue, greaterThan(green));
 
       // Neutral contrast hierarchy
       expect(SwissColors.darkBackground.toARGB32() < SwissColors.darkSurface.toARGB32(), isTrue);

@@ -52,11 +52,11 @@ void main() {
       await tester.pumpWidget(wrapWithApp(const HomeScreen()));
       await tester.pumpAndSettle();
 
-      expect(find.text('CHAT WRAPPED'), findsOneWidget);
-      expect(find.text('100% Offline'), findsOneWidget);
-      expect(find.text('Importar Conversa'), findsOneWidget);
-      expect(find.text('Demonstração'), findsOneWidget);
-      expect(find.text('Como Exportar'), findsOneWidget);
+      expect(find.text('Chat Wrapped'), findsOneWidget);
+      expect(find.text('100% OFFLINE'), findsOneWidget);
+      expect(find.text('Selecionar arquivo'), findsOneWidget);
+      expect(find.text('Experimentar com uma conversa de exemplo'), findsOneWidget);
+      expect(find.text('ESCOLHA UMA LENTE DE ANÁLISE'), findsOneWidget);
     });
 
     testWidgets('Triggers demo retrospective and transitions to ModeSelectionScreen', (tester) async {
@@ -65,7 +65,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Tap demo button
-      await tester.tap(find.text('Demonstração'));
+      await tester.tap(find.text('Experimentar com uma conversa de exemplo'));
       await tester.pump(const Duration(milliseconds: 300));
       await tester.pump(const Duration(milliseconds: 300));
       await tester.pumpAndSettle();

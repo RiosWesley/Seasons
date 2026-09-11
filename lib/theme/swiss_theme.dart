@@ -9,15 +9,15 @@ import 'swiss_typography.dart';
 class SwissTheme {
   SwissTheme._();
 
-  /// Dark theme adhering to cool graphite palette.
+  /// Dark theme adhering to cool obsidian & cosmic glass palette.
   static ThemeData get darkTheme {
     final colorScheme = const ColorScheme.dark().copyWith(
-      primary: SwissColors.emeraldPrimary,
-      secondary: SwissColors.emeraldSecondary,
+      primary: SwissColors.irisPrimary,
+      secondary: SwissColors.violetSecondary,
       surface: SwissColors.darkSurface,
       error: SwissColors.danger,
-      onPrimary: Colors.black,
-      onSecondary: Colors.black,
+      onPrimary: Colors.white,
+      onSecondary: Colors.white,
       onSurface: SwissColors.darkTextPrimary,
       onError: Colors.white,
       outline: SwissColors.darkBorder,
@@ -50,8 +50,8 @@ class SwissTheme {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           elevation: 0,
-          backgroundColor: SwissColors.emeraldPrimary,
-          foregroundColor: Colors.black,
+          backgroundColor: SwissColors.irisPrimary,
+          foregroundColor: Colors.white,
           textStyle: SwissTypography.labelLarge,
           shape: SquircleBorder.button(),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
@@ -72,12 +72,12 @@ class SwissTheme {
   /// Light theme adhering to crisp off-white palette.
   static ThemeData get lightTheme {
     final colorScheme = const ColorScheme.light().copyWith(
-      primary: SwissColors.emeraldPrimary,
-      secondary: SwissColors.emeraldSecondary,
+      primary: SwissColors.irisPrimary,
+      secondary: SwissColors.violetSecondary,
       surface: SwissColors.lightSurface,
       error: SwissColors.danger,
-      onPrimary: Colors.black,
-      onSecondary: Colors.black,
+      onPrimary: Colors.white,
+      onSecondary: Colors.white,
       onSurface: SwissColors.lightTextPrimary,
       onError: Colors.white,
       outline: SwissColors.lightBorder,
@@ -110,8 +110,8 @@ class SwissTheme {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           elevation: 0,
-          backgroundColor: SwissColors.emeraldPrimary,
-          foregroundColor: Colors.black,
+          backgroundColor: SwissColors.irisPrimary,
+          foregroundColor: Colors.white,
           textStyle: SwissTypography.labelLarge,
           shape: SquircleBorder.button(),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
