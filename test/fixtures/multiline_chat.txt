@@ -1,0 +1,13 @@
+12/06/2025 14:00 - Bruno Souza: Olá a todos!
+Aqui está a ata da reunião de hoje:
+- Ponto 1: Definir o escopo do projeto
+- Ponto 2: Alinhar os prazos com os stakeholders
+- Ponto 3: Iniciar os testes automatizados na sexta-feira.
+Qualquer dúvida me avisem!
+12/06/2025 14:05 - Camila Duarte: Excelente Bruno!
+Eu revisei os pontos e concordo integralmente.
+Apenas uma observação:
+Precisamos incluir o módulo de exportação social.
+12/06/2025 14:08 - Bruno Souza: Perfeito Camila!
+Anotado aqui.
+Abraços.
