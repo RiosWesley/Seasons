@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:chat_wrapped/theme/swiss_colors.dart';
 import 'package:chat_wrapped/theme/swiss_theme.dart';
 import 'package:chat_wrapped/widgets/count_up_text.dart';
@@ -190,7 +191,7 @@ void main() {
 
       expect(find.text('Erro no Processamento'), findsOneWidget);
       expect(find.text('Arquivo corrompido'), findsOneWidget);
-      expect(find.byIcon(Icons.warning_amber_rounded), findsOneWidget);
+      expect(find.byIcon(LucideIcons.alertCircle), findsOneWidget);
     });
   });
 }

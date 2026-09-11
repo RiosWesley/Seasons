@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../core/models/general_stats.dart';
 import '../export/story_export_service.dart';
 import '../theme/swiss_colors.dart';
@@ -262,7 +263,7 @@ class _StoriesViewerScreenState extends State<StoriesViewerScreen>
                                 // Close button
                                 IconButton(
                                   icon: const Icon(
-                                    Icons.close_rounded,
+                                    LucideIcons.x,
                                     color: Colors.white,
                                     size: 24,
                                   ),
@@ -299,7 +300,7 @@ class _StoriesViewerScreenState extends State<StoriesViewerScreen>
                                               ),
                                             )
                                           : const Icon(
-                                              Icons.share_rounded,
+                                              LucideIcons.share2,
                                               color: Colors.white,
                                               size: 22,
                                             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:chat_wrapped/core/analytics/chat_analyzer.dart';
 import 'package:chat_wrapped/core/models/general_stats.dart';
 import 'package:chat_wrapped/core/parser/chat_parser.dart';
@@ -132,8 +133,8 @@ void main() {
 
       expect(find.byType(StoriesViewerScreen), findsOneWidget);
       expect(find.byType(StoryProgressBar), findsOneWidget);
-      expect(find.byIcon(Icons.close_rounded), findsOneWidget);
-      expect(find.byIcon(Icons.share_rounded), findsOneWidget);
+      expect(find.byIcon(LucideIcons.x), findsOneWidget);
+      expect(find.byIcon(LucideIcons.share2), findsOneWidget);
       expect(find.text('1/18'), findsOneWidget);
     });
 
@@ -281,7 +282,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 600));
 
       // Tap close button (X)
-      await tester.tap(find.byIcon(Icons.close_rounded));
+      await tester.tap(find.byIcon(LucideIcons.x));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 600));
 

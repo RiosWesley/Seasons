@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:chat_wrapped/core/analytics/chat_analyzer.dart';
 import 'package:chat_wrapped/core/models/general_stats.dart';
 import 'package:chat_wrapped/core/parser/chat_parser.dart';
@@ -207,7 +208,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Find the action icon in AppBar
-      final shareIconFinder = find.byIcon(Icons.share_rounded);
+      final shareIconFinder = find.byIcon(LucideIcons.share2);
       expect(shareIconFinder, findsOneWidget);
 
       await tester.tap(shareIconFinder);

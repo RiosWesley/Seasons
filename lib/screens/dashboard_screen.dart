@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../core/models/amigos_stats.dart';
 import '../core/models/casal_stats.dart';
 import '../core/models/general_stats.dart';
@@ -58,15 +59,15 @@ class DashboardScreen extends StatelessWidget {
     String modeName;
     switch (analysis.mode) {
       case ChatMode.casal:
-        modeIcon = Icons.favorite_rounded;
+        modeIcon = LucideIcons.heart;
         modeName = 'Modo Casal';
         break;
       case ChatMode.amigos:
-        modeIcon = Icons.people_alt_rounded;
+        modeIcon = LucideIcons.users;
         modeName = 'Modo Amigos';
         break;
       case ChatMode.grupo:
-        modeIcon = Icons.groups_rounded;
+        modeIcon = LucideIcons.users;
         modeName = 'Modo Grupo';
         break;
     }
@@ -90,7 +91,7 @@ class DashboardScreen extends StatelessWidget {
         title: Text('Relatório Completo', style: SwissTypography.titleMedium),
         actions: [
           IconButton(
-            icon: const Icon(Icons.share_rounded),
+            icon: const Icon(LucideIcons.share2),
             tooltip: 'Exportar Relatório',
             onPressed: () {
               Navigator.of(context).push(
@@ -197,7 +198,7 @@ class DashboardScreen extends StatelessWidget {
                   // Primary CTA: Start 9:16 Stories Experience
                   SwissButton(
                     label: 'Iniciar Wrapped (9:16 Stories)',
-                    icon: Icons.auto_awesome_rounded,
+                    icon: LucideIcons.sparkles,
                     type: SwissButtonType.primary,
                     fullWidth: true,
                     onPressed: () {
@@ -229,7 +230,7 @@ class DashboardScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.calendar_today_rounded, size: 16, color: SwissColors.emeraldPrimary),
+                        const Icon(LucideIcons.calendar, size: 16, color: SwissColors.emeraldPrimary),
                         const SizedBox(height: 10),
                         Text(
                           'Dias Ativos',
@@ -253,7 +254,7 @@ class DashboardScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.schedule_rounded, size: 16, color: SwissColors.emeraldPrimary),
+                        const Icon(LucideIcons.clock, size: 16, color: SwissColors.emeraldPrimary),
                         const SizedBox(height: 10),
                         Text(
                           'Resposta Média',
@@ -283,7 +284,7 @@ class DashboardScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.chat_bubble_outline_rounded, size: 16, color: SwissColors.emeraldPrimary),
+                        const Icon(LucideIcons.messageCircle, size: 16, color: SwissColors.emeraldPrimary),
                         const SizedBox(height: 10),
                         Text(
                           'Top Palavra',
@@ -309,7 +310,7 @@ class DashboardScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.sentiment_satisfied_alt_rounded, size: 16, color: SwissColors.emeraldPrimary),
+                        const Icon(LucideIcons.smile, size: 16, color: SwissColors.emeraldPrimary),
                         const SizedBox(height: 10),
                         Text(
                           'Top Emojis',
@@ -346,7 +347,7 @@ class DashboardScreen extends StatelessWidget {
             // Return to Home CTA
             SwissButton(
               label: 'Voltar ao Início',
-              icon: Icons.home_rounded,
+              icon: LucideIcons.house,
               type: SwissButtonType.secondary,
               fullWidth: true,
               onPressed: () {
@@ -382,7 +383,7 @@ class DashboardScreen extends StatelessWidget {
                 title: 'Corações & Emojis de Afeto',
                 count: ll.hearts,
                 pct: (ll.hearts / safeTotal * 100).round(),
-                icon: Icons.favorite_rounded,
+                icon: LucideIcons.heart,
               ),
               const Divider(height: 20),
               _buildLoveLanguageRow(
@@ -390,7 +391,7 @@ class DashboardScreen extends StatelessWidget {
                 title: 'Palavras Românticas',
                 count: ll.romanticWords,
                 pct: (ll.romanticWords / safeTotal * 100).round(),
-                icon: Icons.chat_bubble_outline_rounded,
+                icon: LucideIcons.messageCircle,
               ),
               const Divider(height: 20),
               _buildLoveLanguageRow(
@@ -398,7 +399,7 @@ class DashboardScreen extends StatelessWidget {
                 title: 'Memes & Risadas',
                 count: ll.memes,
                 pct: (ll.memes / safeTotal * 100).round(),
-                icon: Icons.sentiment_satisfied_alt_rounded,
+                icon: LucideIcons.smile,
               ),
               const Divider(height: 20),
               _buildLoveLanguageRow(
@@ -406,7 +407,7 @@ class DashboardScreen extends StatelessWidget {
                 title: 'Conversas Diretas & Textos',
                 count: ll.directTexts,
                 pct: (ll.directTexts / safeTotal * 100).round(),
-                icon: Icons.send_rounded,
+                icon: LucideIcons.send,
               ),
             ],
           ),

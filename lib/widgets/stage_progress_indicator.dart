@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../theme/squircle_border.dart';
 import '../theme/swiss_colors.dart';
 import '../theme/swiss_typography.dart';
@@ -75,10 +76,10 @@ class StageProgressIndicator extends StatelessWidget {
     final progressVal = (customProgress ?? stage.progress).clamp(0.0, 1.0);
 
     const stageSteps = [
-      (PipelineStage.decompressing, Icons.archive_outlined, 'Extrair'),
-      (PipelineStage.parsing, Icons.description_outlined, 'Ler'),
-      (PipelineStage.analyzing, Icons.bar_chart_rounded, 'Analisar'),
-      (PipelineStage.complete, Icons.check_circle_outline_rounded, 'Pronto'),
+      (PipelineStage.decompressing, LucideIcons.archive, 'Extrair'),
+      (PipelineStage.parsing, LucideIcons.fileText, 'Ler'),
+      (PipelineStage.analyzing, LucideIcons.chartBar, 'Analisar'),
+      (PipelineStage.complete, LucideIcons.checkCircle, 'Pronto'),
     ];
 
     return Container(
@@ -102,10 +103,10 @@ class StageProgressIndicator extends StatelessWidget {
             children: [
               Icon(
                 isError
-                    ? Icons.warning_amber_rounded
+                    ? LucideIcons.alertCircle
                     : (stage == PipelineStage.complete
-                        ? Icons.check_circle_outline_rounded
-                        : Icons.sync_rounded),
+                        ? LucideIcons.checkCircle
+                        : LucideIcons.refreshCw),
                 size: 20,
                 color: isError
                     ? SwissColors.danger

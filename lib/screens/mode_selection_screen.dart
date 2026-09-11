@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../core/analytics/chat_analyzer.dart';
 import '../core/models/general_stats.dart';
 import '../core/models/raw_chat_export.dart';
@@ -72,7 +73,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
       (
         mode: ChatMode.casal,
         title: 'Modo Casal',
-        icon: Icons.favorite_rounded,
+        icon: LucideIcons.heart,
         participantHint: '2 participantes',
         description:
             'Índice de sintonia amorosa, love language (corações, afeto, memes), horários a dois e métricas de resposta.',
@@ -80,7 +81,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
       (
         mode: ChatMode.amigos,
         title: 'Modo Amigos',
-        icon: Icons.people_alt_rounded,
+        icon: LucideIcons.users,
         participantHint: '3 a 5 participantes',
         description:
             'Arquétipos de comunicação (Tagarela, Fantasma, Áudio-maníaco), dinâmicas do squad, ghosting e quem inicia conversas.',
@@ -88,7 +89,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
       (
         mode: ChatMode.grupo,
         title: 'Modo Grupo',
-        icon: Icons.groups_rounded,
+        icon: LucideIcons.users,
         participantHint: '6 ou mais participantes',
         description:
             'Leaderboard geral com pódios e porcentagens, matriz de interação, ranking de vibes e corujas da madrugada.',
@@ -111,7 +112,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                   Row(
                     children: [
                       const Icon(
-                        Icons.group_outlined,
+                        LucideIcons.users,
                         size: 18,
                         color: SwissColors.emeraldPrimary,
                       ),
@@ -139,7 +140,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const Icon(
-                              Icons.person_outline_rounded,
+                              LucideIcons.user,
                               size: 13,
                               color: SwissColors.emeraldPrimary,
                             ),
@@ -269,7 +270,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                             ),
                             child: isSelected
                                 ? const Icon(
-                                    Icons.check_rounded,
+                                    LucideIcons.check,
                                     size: 14,
                                     color: Colors.black,
                                   )
@@ -298,7 +299,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
             // Proceed CTA
             SwissButton(
               label: 'Continuar para o Dashboard',
-              icon: Icons.arrow_forward_rounded,
+              icon: LucideIcons.arrowRight,
               type: SwissButtonType.primary,
               fullWidth: true,
               onPressed: _proceedToDashboard,

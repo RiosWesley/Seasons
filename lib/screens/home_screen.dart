@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../core/analytics/chat_analyzer.dart';
 import '../core/models/general_stats.dart';
 import '../core/models/raw_chat_export.dart';
@@ -245,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Theme.of(context).cardColor,
         title: Row(
           children: [
-            const Icon(Icons.error_outline_rounded, color: SwissColors.danger, size: 20),
+            const Icon(LucideIcons.alertCircle, color: SwissColors.danger, size: 20),
             const SizedBox(width: 8),
             Text('Falha na Leitura', style: SwissTypography.titleMedium),
           ],
@@ -256,15 +257,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           SwissButton(
-            label: 'Compreendi',
-            type: SwissButtonType.secondary,
-            onPressed: () {
-              Navigator.of(context).pop();
-              setState(() {
-                _currentStage = PipelineStage.idle;
-                _errorMessage = null;
-              });
-            },
+            label: 'OK',
+            type: SwissButtonType.primary,
+            onPressed: () => Navigator.of(context).pop(),
           ),
         ],
       ),
@@ -316,7 +311,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 20),
               _buildModelDetailTile(
-                icon: Icons.favorite_border_rounded,
+                icon: LucideIcons.heart,
                 title: 'Casal (2 participantes)',
                 subtitle: 'Sincronia de respostas, horários mais íntimos, equilíbrio de mensagens e linguagens de afeto.',
                 color: const Color(0xFFF43F5E),
@@ -328,7 +323,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 12),
               _buildModelDetailTile(
-                icon: Icons.people_alt_outlined,
+                icon: LucideIcons.users,
                 title: 'Amigos (3 a 5 participantes)',
                 subtitle: 'Índice de vácuo, tempos médios de resposta, quem envia mais áudios e memes do squad.',
                 color: const Color(0xFF0284C7),
@@ -340,7 +335,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 12),
               _buildModelDetailTile(
-                icon: Icons.groups_outlined,
+                icon: LucideIcons.users,
                 title: 'Grupo (6+ participantes)',
                 subtitle: 'Leaderboard de mensagens, radar de vibe, horários caóticos e análise de rede.',
                 color: const Color(0xFF8B5CF6),
@@ -411,7 +406,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right_rounded, color: Color(0xFF94A3B8)),
+            const Icon(LucideIcons.chevronRight, color: Color(0xFF94A3B8), size: 18),
           ],
         ),
       ),
@@ -423,55 +418,71 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: SwissColors.lightBackground, // Warm Ivory #FBF9F5
       bottomNavigationBar: _buildBottomNavigationBar(),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
-          children: [
-            // 1. Editorial Brand Header with 100% Offline Pill
-            _buildTopBar(),
-
-            const SizedBox(height: 24),
-
-            // 2. Hero Greeting + Editorial Headline + 3D Cards Illustration
-            _buildHeroSection(),
-
-            const SizedBox(height: 20),
-
-            // 3. Three Guarantee Feature Badges
-            _buildFeatureBadgesRow(),
-
-            const SizedBox(height: 24),
-
-            // 4. Central Dashed Ingestion Card ("Importe sua conversa")
-            _buildMainIngestionCard(),
-
-            const SizedBox(height: 20),
-
-            // Pipeline Progress Indicator (during decompression/parsing)
-            if (_currentStage != PipelineStage.idle) ...[
-              StageProgressIndicator(
-                stage: _currentStage,
-                customMessage: _statusMessage,
+      body: Stack(
+        children: [
+          // Subtle Crumpled Paper Texture Background Layer
+          Positioned.fill(
+            child: Opacity(
+              opacity: 0.55,
+              child: Image.asset(
+                'assets/images/home_paper_texture.jpg',
+                fit: BoxFit.cover,
               ),
-              const SizedBox(height: 20),
-            ],
+            ),
+          ),
 
-            // 5. Retrospectivas Recentes
-            _buildRecentRetrospectivesSection(),
+          // Primary Scrollable Editorial Content
+          SafeArea(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+              children: [
+                // 1. Editorial Brand Header with 100% Offline Pill
+                _buildTopBar(),
 
-            const SizedBox(height: 26),
+                const SizedBox(height: 24),
 
-            // 6. Escolha uma Lente de Análise (2-Column Bento Grid)
-            _buildLenteDeAnaliseSection(),
+                // 2. Hero Greeting + Editorial Headline + 3D Cards Illustration
+                _buildHeroSection(),
 
-            const SizedBox(height: 28),
+                const SizedBox(height: 20),
 
-            // 7. Footer Tagline
-            _buildFooterTagline(),
+                // 3. Three Guarantee Feature Badges
+                _buildFeatureBadgesRow(),
 
-            const SizedBox(height: 24),
-          ],
-        ),
+                const SizedBox(height: 24),
+
+                // 4. Central Dashed Ingestion Card ("Importe sua conversa")
+                _buildMainIngestionCard(),
+
+                const SizedBox(height: 20),
+
+                // Pipeline Progress Indicator (during decompression/parsing)
+                if (_currentStage != PipelineStage.idle) ...[
+                  StageProgressIndicator(
+                    stage: _currentStage,
+                    customMessage: _statusMessage,
+                  ),
+                  const SizedBox(height: 20),
+                ],
+
+                // 5. Retrospectivas Recentes
+                _buildRecentRetrospectivesSection(),
+
+                const SizedBox(height: 26),
+
+                // 6. Escolha uma Lente de Análise (2-Column Bento Grid)
+                _buildLenteDeAnaliseSection(),
+
+                const SizedBox(height: 28),
+
+                // 7. Footer Tagline
+                _buildFooterTagline(),
+
+                const SizedBox(height: 24),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -509,9 +520,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               child: const Center(
                 child: Icon(
-                  Icons.auto_awesome_rounded,
+                  LucideIcons.sparkles,
                   color: Colors.white,
-                  size: 18,
+                  size: 20,
                 ),
               ),
             ),
@@ -559,8 +570,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: const [
                   Icon(
-                    Icons.lock_rounded,
-                    size: 12,
+                    LucideIcons.lock,
+                    size: 13,
                     color: Color(0xFF4F46E5),
                   ),
                   SizedBox(width: 4),
@@ -659,17 +670,17 @@ class _HomeScreenState extends State<HomeScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         _buildFeatureBadgeItem(
-          icon: Icons.shield_outlined,
+          icon: LucideIcons.shieldCheck,
           line1: 'Privacidade',
           line2: 'garantida',
         ),
         _buildFeatureBadgeItem(
-          icon: Icons.cloud_off_outlined,
+          icon: LucideIcons.cloudOff,
           line1: 'Funciona',
           line2: '100% offline',
         ),
         _buildFeatureBadgeItem(
-          icon: Icons.bar_chart_rounded,
+          icon: LucideIcons.chartBar,
           line1: 'Seus dados,',
           line2: 'suas histórias',
         ),
@@ -748,9 +759,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             child: const Center(
               child: Icon(
-                Icons.drive_folder_upload_outlined,
+                LucideIcons.fileUp,
                 color: SwissColors.irisPrimary,
-                size: 26,
+                size: 28,
               ),
             ),
           ),
@@ -816,9 +827,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: const [
                               Icon(
-                                Icons.file_upload_outlined,
+                                LucideIcons.upload,
                                 color: Colors.white,
-                                size: 20,
+                                size: 19,
                               ),
                               SizedBox(width: 8),
                               Text(
@@ -881,8 +892,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Row(
                   children: const [
                     Icon(
-                      Icons.play_circle_outline_rounded,
-                      size: 18,
+                      LucideIcons.circlePlay,
+                      size: 19,
                       color: SwissColors.irisPrimary,
                     ),
                     SizedBox(width: 8),
@@ -897,7 +908,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     Icon(
-                      Icons.arrow_forward_rounded,
+                      LucideIcons.arrowRight,
                       size: 14,
                       color: SwissColors.irisPrimary,
                     ),
@@ -911,7 +922,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // ==========================================
   // ==========================================
   // SECTION 5: RETROSPECTIVAS RECENTES
   // ==========================================
@@ -945,9 +955,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Color(0xFF4F46E5),
                     ),
                   ),
-                  SizedBox(width: 3),
+                  SizedBox(width: 4),
                   Icon(
-                    Icons.arrow_forward_rounded,
+                    LucideIcons.arrowRight,
                     size: 13,
                     color: Color(0xFF4F46E5),
                   ),
@@ -963,7 +973,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildRecentWrappedCard(
           avatarBg: const Color(0xFFFDE8EA),
           iconColor: const Color(0xFFE11D48),
-          icon: Icons.favorite_border_rounded,
+          icon: LucideIcons.heart,
           title: 'Meu Amor 💕',
           subtitle: '1.248 mensagens  •  12 de mar. de 2024',
           onTap: () => _handleDemoRetrospective(_demoChatCasal, 'Meu Amor 💕'),
@@ -975,7 +985,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildRecentWrappedCard(
           avatarBg: const Color(0xFFE0EDFD),
           iconColor: const Color(0xFF2563EB),
-          icon: Icons.people_alt_outlined,
+          icon: LucideIcons.users,
           title: 'Resenha do Squad',
           subtitle: '8.732 mensagens  •  3 de mar. de 2024',
           onTap: () => _handleDemoRetrospective(_demoChatAmigos, 'Resenha do Squad'),
@@ -993,8 +1003,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ? const Color(0xFFE11D48)
                   : const Color(0xFF2563EB),
               icon: saved.mode == ChatMode.casal
-                  ? Icons.favorite_border_rounded
-                  : Icons.people_alt_outlined,
+                  ? LucideIcons.heart
+                  : LucideIcons.users,
               title: saved.title,
               subtitle: '${saved.messageCount} mensagens  •  ${saved.dateText}',
               onTap: () {
@@ -1119,7 +1129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(width: 4),
                     Icon(
-                      Icons.arrow_forward_rounded,
+                      LucideIcons.arrowRight,
                       size: 12,
                       color: Color(0xFF0F172A),
                     ),
@@ -1140,7 +1150,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: const Padding(
                 padding: EdgeInsets.all(4.0),
                 child: Icon(
-                  Icons.more_vert_rounded,
+                  LucideIcons.moreVertical,
                   size: 20,
                   color: Color(0xFF64748B),
                 ),
@@ -1185,9 +1195,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Color(0xFF4F46E5),
                     ),
                   ),
-                  SizedBox(width: 3),
+                  SizedBox(width: 4),
                   Icon(
-                    Icons.arrow_forward_rounded,
+                    LucideIcons.arrowRight,
                     size: 13,
                     color: Color(0xFF4F46E5),
                   ),
@@ -1213,7 +1223,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 borderColor: const Color(0xFFFCD3D8),
                 accentColor: const Color(0xFFE11D48),
                 eyebrowColor: const Color(0xFFE11D48),
-                icon: Icons.favorite_border_rounded,
+                icon: LucideIcons.heart,
                 avatarBg: const Color(0xFFFDE8EA),
                 onTap: () => _handleDemoRetrospective(_demoChatCasal, 'Mariana & Lucas (Casal)'),
               ),
@@ -1232,7 +1242,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 borderColor: const Color(0xFFBAE6FD),
                 accentColor: const Color(0xFF2563EB),
                 eyebrowColor: const Color(0xFF2563EB),
-                icon: Icons.people_alt_outlined,
+                icon: LucideIcons.users,
                 avatarBg: const Color(0xFFE0EDFD),
                 onTap: () => _handleDemoRetrospective(_demoChatAmigos, 'Resenha do Squad (Amigos)'),
               ),
@@ -1381,7 +1391,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         child: Center(
                           child: Icon(
-                            Icons.arrow_forward_rounded,
+                            LucideIcons.arrowRight,
                             size: 16,
                             color: accentColor,
                           ),
@@ -1406,7 +1416,7 @@ class _HomeScreenState extends State<HomeScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: const [
         Icon(
-          Icons.auto_awesome_rounded,
+          LucideIcons.sparkles,
           size: 14,
           color: Color(0xFF818CF8),
         ),
@@ -1443,25 +1453,25 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             _buildNavItem(
               index: 0,
-              icon: Icons.home_rounded,
+              icon: LucideIcons.house,
               label: 'Início',
               isActive: _selectedTabIndex == 0,
             ),
             _buildNavItem(
               index: 1,
-              icon: Icons.bar_chart_rounded,
+              icon: LucideIcons.trendingUp,
               label: 'Minhas Análises',
               isActive: _selectedTabIndex == 1,
             ),
             _buildNavItem(
               index: 2,
-              icon: Icons.menu_book_outlined,
+              icon: LucideIcons.layoutGrid,
               label: 'Modelos',
               isActive: _selectedTabIndex == 2,
             ),
             _buildNavItem(
               index: 3,
-              icon: Icons.settings_outlined,
+              icon: LucideIcons.settings,
               label: 'Configurações',
               isActive: _selectedTabIndex == 3,
             ),
@@ -1671,7 +1681,7 @@ class _HeroChatIllustration extends StatelessWidget {
                     ],
                   ),
                   const Icon(
-                    Icons.favorite_rounded,
+                    LucideIcons.heart,
                     size: 13,
                     color: Color(0xFFEF4444),
                   ),
@@ -1705,7 +1715,7 @@ class _HeroChatIllustration extends StatelessWidget {
             ),
             child: const Center(
               child: Icon(
-                Icons.chat_bubble_rounded,
+                LucideIcons.messageCircle,
                 color: Colors.white,
                 size: 16,
               ),

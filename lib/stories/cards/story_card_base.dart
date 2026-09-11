@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../../theme/squircle_border.dart';
 import '../../theme/swiss_colors.dart';
 import '../../theme/swiss_typography.dart';
@@ -117,7 +118,7 @@ class StoryCardBase extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(
-                Icons.shield_outlined,
+                LucideIcons.shieldCheck,
                 size: 13,
                 color: SwissColors.darkTextMuted,
               ),
