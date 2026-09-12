@@ -430,5 +430,35 @@ void main() {
       expect(find.text('Fechar'), findsOneWidget);
       expect(find.text('Suas conversas guardam histórias inesquecíveis.'), findsOneWidget);
     });
+
+    testWidgets('Tapping Modelos tab renders Bento cards matching ModeSelectionScreen styling', (tester) async {
+      setMobileViewport(tester);
+      await tester.pumpWidget(wrapWithApp(const HomeScreen()));
+      await tester.pumpAndSettle();
+
+      // Tap tab 2 'Modelos'
+      await tester.tap(find.text('Modelos'));
+      await tester.pumpAndSettle();
+
+      // Verify title & subtitle
+      expect(find.text('Modelos de Análise'), findsOneWidget);
+      expect(find.text('Algoritmos calibrados para cada dinâmica de relacionamento.'), findsOneWidget);
+
+      // Verify all 3 Bento cards are rendered with their eyebrows and badges
+      expect(find.text('AFINIDADE & RITMO A DOIS'), findsOneWidget);
+      expect(find.text('Modo Casal'), findsOneWidget);
+      expect(find.text('Ritmo a dois & Afinidade'), findsOneWidget);
+
+      expect(find.text('SQUAD & ARQUÉTIPOS'), findsOneWidget);
+      expect(find.text('Modo Amigos'), findsOneWidget);
+      expect(find.text('Arquétipos do squad & Dinâmica'), findsOneWidget);
+
+      expect(find.text('LEADERBOARD GERAL & VIBES'), findsOneWidget);
+      expect(find.text('Modo Grupo'), findsOneWidget);
+      expect(find.text('Leaderboard geral & Radar de vibes'), findsOneWidget);
+
+      // Verify 3 demo action buttons are present
+      expect(find.text('Experimentar com conversa de exemplo'), findsNWidgets(3));
+    });
   });
 }

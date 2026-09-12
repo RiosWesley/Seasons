@@ -670,146 +670,332 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          _buildModelExpandedCard(
-            title: 'Modo Casal (2 participantes)',
-            subtitle: 'Sincronia de respostas, horários mais íntimos, equilíbrio de mensagens e linguagens de afeto.',
-            badges: ['❤️ Love Language', '⚡ Sincronia a Dois', '📈 Índice de Afeto'],
-            color: const Color(0xFFF43F5E),
-            bgColor: const Color(0xFFFFF1F2),
+          _buildModelBentoCard(
+            title: 'Modo Casal',
+            eyebrow: 'AFINIDADE & RITMO A DOIS',
+            participantHint: '2 participantes',
             icon: LucideIcons.heart,
+            microBadgeIcon: LucideIcons.heartHandshake,
+            microBadgeLabel: 'Ritmo a dois & Afinidade',
+            description:
+                'Índice de sintonia amorosa, love language (corações, afeto, memes), horários a dois e métricas de resposta.',
+            accentColor: const Color(0xFFE11D48),
+            bgLightGradient: const [Color(0xFFFFF1F2), Color(0xFFFFE4E6)],
+            bgDarkGradient: const [Color(0xFF1E1015), Color(0xFF2D121B)],
+            borderLight: const Color(0xFFFECDD3),
+            borderDark: const Color(0xFF4C1D2A),
+            avatarBgLight: const Color(0xFFFDE8EA),
+            avatarBgDark: const Color(0xFF3B121E),
+            doodlePainter: _HeartDoodlePainter(),
             onTap: () => _handleDemoRetrospective(_demoChatCasal, 'Mariana & Lucas (Casal)'),
           ),
-          const SizedBox(height: 14),
-          _buildModelExpandedCard(
-            title: 'Modo Amigos (3 a 5 participantes)',
-            subtitle: 'Índice de vácuo, tempos médios de resposta, quem envia mais áudios e memes do squad.',
-            badges: ['👻 Vácuômetro', '👑 O Agitador', '😂 Top Memes'],
-            color: const Color(0xFF0284C7),
-            bgColor: const Color(0xFFF0F9FF),
+          const SizedBox(height: 16),
+          _buildModelBentoCard(
+            title: 'Modo Amigos',
+            eyebrow: 'SQUAD & ARQUÉTIPOS',
+            participantHint: '3 a 5 participantes',
             icon: LucideIcons.users,
+            microBadgeIcon: LucideIcons.sparkles,
+            microBadgeLabel: 'Arquétipos do squad & Dinâmica',
+            description:
+                'Arquétipos de comunicação (Tagarela, Fantasma, Áudio-maníaco), dinâmicas do squad, ghosting e quem inicia conversas.',
+            accentColor: const Color(0xFF2563EB),
+            bgLightGradient: const [Color(0xFFF0F9FF), Color(0xFFE0F2FE)],
+            bgDarkGradient: const [Color(0xFF0C192E), Color(0xFF112240)],
+            borderLight: const Color(0xFFBAE6FD),
+            borderDark: const Color(0xFF1E3A8A),
+            avatarBgLight: const Color(0xFFE0EDFD),
+            avatarBgDark: const Color(0xFF13274A),
+            doodlePainter: _AmigosDoodlePainter(),
             onTap: () => _handleDemoRetrospective(_demoChatAmigos, 'Resenha do Squad (Amigos)'),
           ),
-          const SizedBox(height: 14),
-          _buildModelExpandedCard(
-            title: 'Modo Grupo (6+ participantes)',
-            subtitle: 'Leaderboard de mensagens, radar de vibe, horários caóticos e análise de rede.',
-            badges: ['🏆 Leaderboard', '🌙 Madrugadores', '📊 Radar de Vibes'],
-            color: const Color(0xFF8B5CF6),
-            bgColor: const Color(0xFFF5F3FF),
+          const SizedBox(height: 16),
+          _buildModelBentoCard(
+            title: 'Modo Grupo',
+            eyebrow: 'LEADERBOARD GERAL & VIBES',
+            participantHint: '6 ou mais participantes',
             icon: LucideIcons.messagesSquare,
+            microBadgeIcon: LucideIcons.trophy,
+            microBadgeLabel: 'Leaderboard geral & Radar de vibes',
+            description:
+                'Leaderboard geral com pódios e porcentagens, matriz de interação, ranking de vibes e corujas da madrugada.',
+            accentColor: const Color(0xFF7C3AED),
+            bgLightGradient: const [Color(0xFFF5F3FF), Color(0xFFEDE9FE)],
+            bgDarkGradient: const [Color(0xFF1A102E), Color(0xFF251642)],
+            borderLight: const Color(0xFFDDD6FE),
+            borderDark: const Color(0xFF4C1D95),
+            avatarBgLight: const Color(0xFFEDE9FE),
+            avatarBgDark: const Color(0xFF251445),
+            doodlePainter: _GrupoDoodlePainter(),
             onTap: () => _handleDemoRetrospective(_demoChatGrupo, 'Turma Completa (Grupo)'),
           ),
+          const SizedBox(height: 20),
         ],
       ),
     );
   }
 
-  Widget _buildModelExpandedCard({
+  Widget _buildModelBentoCard({
     required String title,
-    required String subtitle,
-    required List<String> badges,
-    required Color color,
-    required Color bgColor,
+    required String eyebrow,
+    required String participantHint,
     required IconData icon,
+    required IconData microBadgeIcon,
+    required String microBadgeLabel,
+    required String description,
+    required Color accentColor,
+    required List<Color> bgLightGradient,
+    required List<Color> bgDarkGradient,
+    required Color borderLight,
+    required Color borderDark,
+    required Color avatarBgLight,
+    required Color avatarBgDark,
+    required CustomPainter doodlePainter,
     required VoidCallback onTap,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withValues(alpha: 0.25), width: 1.2),
-        boxShadow: [
+      decoration: ShapeDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: isDark ? bgDarkGradient : bgLightGradient,
+        ),
+        shadows: [
           BoxShadow(
-            color: color.withValues(alpha: 0.06),
-            blurRadius: 14,
+            color: accentColor.withValues(alpha: 0.12),
+            blurRadius: 18,
             offset: const Offset(0, 4),
           ),
         ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: bgColor,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Center(
-                  child: Icon(icon, color: color, size: 20),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 15.5,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF0F172A),
-                  ),
-                ),
-              ),
-            ],
+        shape: SquircleBorder.radius(
+          22,
+          side: BorderSide(
+            color: isDark ? borderDark : borderLight,
+            width: 1.2,
           ),
-          const SizedBox(height: 10),
-          Text(
-            subtitle,
-            style: const TextStyle(
-              fontSize: 13,
-              color: Color(0xFF475569),
-              height: 1.4,
+        ),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Stack(
+        children: [
+          // Vector Doodle layer
+          Positioned.fill(
+            child: CustomPaint(
+              painter: doodlePainter,
             ),
           ),
-          const SizedBox(height: 12),
-          Wrap(
-            spacing: 6,
-            runSpacing: 6,
-            children: badges
-                .map(
-                  (b) => Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: bgColor,
-                      borderRadius: BorderRadius.circular(8),
+
+          // Foreground Content
+          Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Top Row: Avatar squircle + Eyebrow/Title + Participant Pill
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // Avatar Squircle
+                    Container(
+                      width: 44,
+                      height: 44,
+                      decoration: ShapeDecoration(
+                        color: isDark ? avatarBgDark : avatarBgLight,
+                        shape: SquircleBorder.radius(
+                          14,
+                          side: BorderSide(
+                            color: accentColor.withValues(alpha: 0.35),
+                            width: 1.0,
+                          ),
+                        ),
+                      ),
+                      child: Center(
+                        child: Icon(
+                          icon,
+                          size: 22,
+                          color: accentColor,
+                        ),
+                      ),
                     ),
-                    child: Text(
-                      b,
-                      style: TextStyle(
-                        fontSize: 11.5,
-                        fontWeight: FontWeight.w600,
-                        color: color,
+                    const SizedBox(width: 12),
+
+                    // Eyebrow & Title Column
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            eyebrow,
+                            style: TextStyle(
+                              fontSize: 9.5,
+                              letterSpacing: 1.1,
+                              fontWeight: FontWeight.w800,
+                              color: accentColor,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 2),
+                          Row(
+                            children: [
+                              Text(
+                                title,
+                                style: TextStyle(
+                                  fontFamily: 'serif',
+                                  fontSize: 19,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: -0.3,
+                                  color: isDark
+                                      ? SwissColors.darkTextPrimary
+                                      : SwissColors.lightTextPrimary,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 7,
+                                  vertical: 2,
+                                ),
+                                decoration: ShapeDecoration(
+                                  color: isDark
+                                      ? Colors.white.withValues(alpha: 0.08)
+                                      : Colors.black.withValues(alpha: 0.05),
+                                  shape: SquircleBorder.radius(6),
+                                ),
+                                child: Text(
+                                  participantHint,
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w600,
+                                    color: isDark
+                                        ? SwissColors.darkTextMuted
+                                        : SwissColors.lightTextMuted,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 12),
+
+                // Micro-Badge of specific lens capability
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                  decoration: ShapeDecoration(
+                    color: isDark
+                        ? Colors.white.withValues(alpha: 0.07)
+                        : Colors.white.withValues(alpha: 0.70),
+                    shape: SquircleBorder.radius(
+                      8,
+                      side: BorderSide(
+                        color: accentColor.withValues(alpha: 0.25),
+                        width: 0.8,
                       ),
                     ),
                   ),
-                )
-                .toList(),
-          ),
-          const SizedBox(height: 14),
-          InkWell(
-            onTap: onTap,
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.10),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(
-                child: Text(
-                  'Experimentar com exemplo →',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: color,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        microBadgeIcon,
+                        size: 11.5,
+                        color: accentColor,
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        microBadgeLabel,
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0.1,
+                          color: isDark
+                              ? SwissColors.darkTextPrimary
+                              : const Color(0xFF1E293B),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
+
+                const SizedBox(height: 10),
+
+                // Narrative Description
+                Text(
+                  description,
+                  style: SwissTypography.bodyMedium.copyWith(
+                    fontSize: 13,
+                    height: 1.45,
+                    color: isDark
+                        ? SwissColors.darkTextSecondary
+                        : SwissColors.lightTextSecondary,
+                  ),
+                ),
+
+                const SizedBox(height: 14),
+
+                // Tactile Action Button: "Experimentar com conversa de exemplo →"
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      HapticFeedback.mediumImpact();
+                      onTap();
+                    },
+                    borderRadius: BorderRadius.circular(12),
+                    child: Ink(
+                      decoration: ShapeDecoration(
+                        color: accentColor,
+                        shape: SquircleBorder.radius(12),
+                        shadows: [
+                          BoxShadow(
+                            color: accentColor.withValues(alpha: 0.28),
+                            blurRadius: 10,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(
+                            LucideIcons.circlePlay,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                          SizedBox(width: 8),
+                          Flexible(
+                            child: Text(
+                              'Experimentar com conversa de exemplo',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: -0.1,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 6),
+                          Icon(
+                            LucideIcons.arrowRight,
+                            color: Colors.white,
+                            size: 14,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -2070,4 +2256,45 @@ class _AmigosDoodlePainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
+
+/// Custom painter that draws radar pulse arcs and connected interaction nodes on the Grupo Bento card
+class _GrupoDoodlePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    // 1. Concentric radar pulse arcs in lower right corner
+    final arcPaint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.25)
+      ..strokeWidth = 1.6
+      ..style = PaintingStyle.stroke;
+
+    final center = Offset(size.width * 0.90, size.height * 0.76);
+    canvas.drawCircle(center, 22, arcPaint);
+    canvas.drawCircle(center, 44, arcPaint);
+
+    // 2. Connected network triad nodes in upper right
+    final nodePaint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.85)
+      ..style = PaintingStyle.fill;
+
+    final linePaint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.45)
+      ..strokeWidth = 1.3;
+
+    final n1 = Offset(size.width * 0.80, size.height * 0.28);
+    final n2 = Offset(size.width * 0.92, size.height * 0.18);
+    final n3 = Offset(size.width * 0.88, size.height * 0.40);
+
+    canvas.drawLine(n1, n2, linePaint);
+    canvas.drawLine(n2, n3, linePaint);
+    canvas.drawLine(n1, n3, linePaint);
+
+    canvas.drawCircle(n1, 3.5, nodePaint);
+    canvas.drawCircle(n2, 3.0, nodePaint);
+    canvas.drawCircle(n3, 3.2, nodePaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
 
