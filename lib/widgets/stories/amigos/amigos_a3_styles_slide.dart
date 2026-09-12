@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/amigos_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
+import 'amigos_background_variants.dart';
 import 'amigos_theme.dart';
 
 class AmigosA3StylesSlide extends StatelessWidget {
@@ -14,6 +15,7 @@ class AmigosA3StylesSlide extends StatelessWidget {
     final styles = adapter.communicationStyles;
 
     return StoryCardBase(
+      background: AmigosBackgroundVariants.a3Styles(),
       backgroundColor: AmigosTheme.paperBase,
       category: 'Arquétipos do Squad',
       categoryIcon: Icons.badge_outlined,

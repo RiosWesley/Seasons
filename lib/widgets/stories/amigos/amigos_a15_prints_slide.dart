@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/amigos_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
+import 'amigos_background_variants.dart';
 import 'amigos_theme.dart';
 
 class AmigosA15PrintsSlide extends StatelessWidget {
@@ -15,7 +16,9 @@ class AmigosA15PrintsSlide extends StatelessWidget {
     final investigator = adapter.printInvestigator;
 
     return StoryCardBase(
-      backgroundColor: AmigosTheme.paperBase,
+      background: AmigosBackgroundVariants.a15Prints(),
+      isDarkTheme: true,
+      backgroundColor: const Color(0xFF0F172A),
       category: 'Registro Histórico',
       categoryIcon: Icons.camera_alt_outlined,
       title: 'Dossiê de\nFofoca',

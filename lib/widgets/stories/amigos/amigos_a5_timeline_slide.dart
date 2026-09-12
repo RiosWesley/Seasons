@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/amigos_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
+import 'amigos_background_variants.dart';
 import 'amigos_theme.dart';
 
 class AmigosA5TimelineSlide extends StatelessWidget {
@@ -16,7 +17,9 @@ class AmigosA5TimelineSlide extends StatelessWidget {
     final maxCount = peak != null && peak.count > 0 ? peak.count : 1;
 
     return StoryCardBase(
-      backgroundColor: AmigosTheme.paperBase,
+      background: AmigosBackgroundVariants.a5Timeline(),
+      isDarkTheme: true,
+      backgroundColor: const Color(0xFF0A1128),
       category: 'Histórico Mensal',
       categoryIcon: Icons.show_chart_rounded,
       title: 'Sismógrafo de\nResenhas',

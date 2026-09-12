@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/amigos_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
+import 'amigos_background_variants.dart';
 import 'amigos_theme.dart';
 
 class AmigosA17DraftSlide extends StatelessWidget {
@@ -14,7 +15,9 @@ class AmigosA17DraftSlide extends StatelessWidget {
     final drafts = adapter.unsentDrafts;
 
     return StoryCardBase(
-      backgroundColor: AmigosTheme.paperBase,
+      background: AmigosBackgroundVariants.a17Draft(),
+      isDarkTheme: true,
+      backgroundColor: const Color(0xFF111827),
       category: 'Textos Cancelados',
       categoryIcon: Icons.backspace_outlined,
       title: 'Quase Crise\nDiplomática',

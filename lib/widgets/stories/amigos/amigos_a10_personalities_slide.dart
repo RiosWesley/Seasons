@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/amigos_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
+import 'amigos_background_variants.dart';
 import 'amigos_theme.dart';
 
 class AmigosA10PersonalitiesSlide extends StatelessWidget {
@@ -33,6 +34,7 @@ class AmigosA10PersonalitiesSlide extends StatelessWidget {
     ];
 
     return StoryCardBase(
+      background: AmigosBackgroundVariants.a10Personalities(),
       backgroundColor: AmigosTheme.paperBase,
       category: 'Personalidades',
       categoryIcon: Icons.psychology_rounded,

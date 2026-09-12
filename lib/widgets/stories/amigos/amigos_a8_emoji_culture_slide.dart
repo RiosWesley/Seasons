@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/amigos_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
+import 'amigos_background_variants.dart';
 import 'amigos_theme.dart';
 
 class AmigosA8EmojiCultureSlide extends StatelessWidget {
@@ -14,6 +15,7 @@ class AmigosA8EmojiCultureSlide extends StatelessWidget {
     final emojis = adapter.topEmojis.take(5).toList();
 
     return StoryCardBase(
+      background: AmigosBackgroundVariants.a8EmojiCulture(),
       backgroundColor: AmigosTheme.paperBase,
       category: 'Cultura do Squad',
       categoryIcon: Icons.mood_rounded,

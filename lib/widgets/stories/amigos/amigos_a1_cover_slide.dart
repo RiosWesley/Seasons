@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/amigos_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../shared/editorial_stamp.dart';
+import 'amigos_background_variants.dart';
 import 'amigos_theme.dart';
 
 class AmigosA1CoverSlide extends StatelessWidget {
@@ -16,6 +17,7 @@ class AmigosA1CoverSlide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoryCardBase(
+      background: AmigosBackgroundVariants.a1Cover(),
       backgroundColor: AmigosTheme.paperBase,
       category: 'Modo Amigos',
       categoryIcon: Icons.group_rounded,

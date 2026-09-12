@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/amigos_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../shared/monumental_count_up.dart';
+import 'amigos_background_variants.dart';
 import 'amigos_theme.dart';
 
 class AmigosA2TotalImpactSlide extends StatelessWidget {
@@ -19,6 +20,7 @@ class AmigosA2TotalImpactSlide extends StatelessWidget {
     final sortedMembers = adapter.sortedMemberVolumes;
 
     return StoryCardBase(
+      background: AmigosBackgroundVariants.a2TotalImpact(),
       backgroundColor: AmigosTheme.paperBase,
       category: 'Movimentação do Squad',
       categoryIcon: Icons.chat_bubble_outline_rounded,

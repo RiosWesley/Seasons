@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/amigos_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../shared/story_gauge_meter.dart';
+import 'amigos_background_variants.dart';
 import 'amigos_theme.dart';
 
 class AmigosA4CompatibilitySlide extends StatelessWidget {
@@ -15,6 +16,7 @@ class AmigosA4CompatibilitySlide extends StatelessWidget {
     final score = adapter.compatibilityScore.toDouble().clamp(0.0, 100.0);
 
     return StoryCardBase(
+      background: AmigosBackgroundVariants.a4Compatibility(),
       backgroundColor: AmigosTheme.paperBase,
       category: 'Harmonia do Grupo',
       categoryIcon: Icons.diversity_3_rounded,

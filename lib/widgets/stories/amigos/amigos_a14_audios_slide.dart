@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/amigos_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
+import 'amigos_background_variants.dart';
 import 'amigos_theme.dart';
 
 class AmigosA14AudiosSlide extends StatelessWidget {
@@ -16,7 +17,9 @@ class AmigosA14AudiosSlide extends StatelessWidget {
     final mins = adapter.estimatedAudioMinutes;
 
     return StoryCardBase(
-      backgroundColor: AmigosTheme.paperBase,
+      background: AmigosBackgroundVariants.a14Audios(),
+      isDarkTheme: true,
+      backgroundColor: const Color(0xFF0D1527),
       category: 'Podcast do WhatsApp',
       categoryIcon: Icons.mic_rounded,
       title: 'O Podcaster do\nSquad',

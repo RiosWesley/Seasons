@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/amigos_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
+import 'amigos_background_variants.dart';
 import 'amigos_theme.dart';
 
 class AmigosA12InsightSlide extends StatelessWidget {
@@ -14,7 +15,9 @@ class AmigosA12InsightSlide extends StatelessWidget {
     final text = adapter.primaryInsight;
 
     return StoryCardBase(
-      backgroundColor: AmigosTheme.paperBase,
+      background: AmigosBackgroundVariants.a12Insight(),
+      isDarkTheme: true,
+      backgroundColor: const Color(0xFF0F172A),
       category: 'Diagnóstico da Amizade',
       categoryIcon: Icons.lightbulb_outline_rounded,
       title: 'Manifesto do\nSquad',

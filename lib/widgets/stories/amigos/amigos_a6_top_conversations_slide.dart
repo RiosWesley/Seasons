@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/amigos_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
+import 'amigos_background_variants.dart';
 import 'amigos_theme.dart';
 
 class AmigosA6TopConversationsSlide extends StatelessWidget {
@@ -14,6 +15,7 @@ class AmigosA6TopConversationsSlide extends StatelessWidget {
     final words = adapter.topWords.take(4).toList();
 
     return StoryCardBase(
+      background: AmigosBackgroundVariants.a6TopConversations(),
       backgroundColor: AmigosTheme.paperBase,
       category: 'Assuntos em Alta',
       categoryIcon: Icons.topic_rounded,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/amigos_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
+import 'amigos_background_variants.dart';
 import 'amigos_theme.dart';
 
 class AmigosA9FloodMomentsSlide extends StatelessWidget {
@@ -15,7 +16,9 @@ class AmigosA9FloodMomentsSlide extends StatelessWidget {
     final count = adapter.biggestFloodCount;
 
     return StoryCardBase(
-      backgroundColor: AmigosTheme.paperBase,
+      background: AmigosBackgroundVariants.a9FloodMoments(),
+      isDarkTheme: true,
+      backgroundColor: const Color(0xFF1D4ED8),
       category: 'Inundação de Mensagens',
       categoryIcon: Icons.waves_rounded,
       title: 'O Rei do\nMonólogo',

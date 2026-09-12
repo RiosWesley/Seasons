@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/amigos_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
+import 'amigos_background_variants.dart';
 import 'amigos_theme.dart';
 
 class AmigosA7HeatmapSlide extends StatelessWidget {
@@ -23,7 +24,9 @@ class AmigosA7HeatmapSlide extends StatelessWidget {
     }
 
     return StoryCardBase(
-      backgroundColor: AmigosTheme.paperBase,
+      background: AmigosBackgroundVariants.a7Heatmap(),
+      isDarkTheme: true,
+      backgroundColor: const Color(0xFF0B0F19),
       category: 'Picos de Atividade',
       categoryIcon: Icons.access_time_rounded,
       title: 'O Horário do\nSquad',

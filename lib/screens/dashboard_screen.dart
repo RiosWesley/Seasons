@@ -6,6 +6,7 @@ import '../core/models/casal_stats.dart';
 import '../core/models/general_stats.dart';
 import '../core/models/grupo_stats.dart';
 import '../core/models/raw_chat_export.dart';
+import '../stories/adapters/amigos_story_adapter.dart';
 import '../stories/adapters/casal_story_adapter.dart';
 import '../stories/stories_viewer_screen.dart';
 import '../theme/squircle_border.dart';
@@ -1348,19 +1349,150 @@ class DashboardScreen extends StatelessWidget {
   // ==========================================================================
   // AMIGOS SECTION (PRESERVES EXISTING TEST EXPECTATIONS)
   // ==========================================================================
+  // AMIGOS SECTION (PRESERVES EXISTING TEST EXPECTATIONS + EDITORIAL DEPTH)
+  // ==========================================================================
   Widget _buildAmigosSection(BuildContext context, AmigosAnalysisResult amigos) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final cardBg = isDark ? SwissColors.darkSurfaceCard : Colors.white;
     const border = Color(0xFFBFDBFE);
+    const accent = Color(0xFF2563EB);
+    final adapter = AmigosStoryAdapter(amigos);
+    final totalMsgs = adapter.totalMessages > 0 ? adapter.totalMessages : 1;
+
+    final memberColors = [
+      const Color(0xFF2563EB), // Electric Royal Blue
+      const Color(0xFF38BDF8), // Vivid Sky Blue
+      const Color(0xFFFACC15), // Amber / Yellow
+      const Color(0xFF10B981), // Emerald Green
+      const Color(0xFFF43F5E), // Rose Coral
+      const Color(0xFF8B5CF6), // Purple
+    ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // 1. ROSTER & DISTRIBUIÇÃO DE VOZ DO SQUAD
+        Text(
+          'Distribuição de Voz do Squad',
+          style: TextStyle(
+            fontFamily: 'serif',
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            color: isDark ? Colors.white : const Color(0xFF0F172A),
+          ),
+        ),
+        const SizedBox(height: 12),
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: cardBg,
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(color: border, width: 0.8),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
+                blurRadius: 16,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Segmented voice distribution bar
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: SizedBox(
+                  height: 14,
+                  child: Row(
+                    children: adapter.sortedMemberVolumes.asMap().entries.map((entry) {
+                      final idx = entry.key;
+                      final count = entry.value.value;
+                      final flex = ((count / totalMsgs) * 1000).round().clamp(1, 1000);
+                      return Expanded(
+                        flex: flex,
+                        child: Container(
+                          color: memberColors[idx % memberColors.length],
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              // Member rows
+              ...adapter.sortedMemberVolumes.asMap().entries.map((entry) {
+                final idx = entry.key;
+                final name = entry.value.key;
+                final count = entry.value.value;
+                final pct = ((count / totalMsgs) * 100).toStringAsFixed(1);
+                final col = memberColors[idx % memberColors.length];
+
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6.0),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: col,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          name,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: isDark ? Colors.white : const Color(0xFF0F172A),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Text(
+                        '$count msgs',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: col.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          '$pct%',
+                          style: TextStyle(
+                            fontFamily: 'monospace',
+                            fontSize: 11,
+                            fontWeight: FontWeight.w800,
+                            color: col,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }),
+            ],
+          ),
+        ),
+
+        const SizedBox(height: 24),
+
+        // 2. ESTILOS DE COMUNICAÇÃO DO SQUAD (Exact string expected by tests)
         Text(
           'Estilos de Comunicação do Squad',
           style: TextStyle(
             fontFamily: 'serif',
-            fontSize: 18,
+            fontSize: 20,
             fontWeight: FontWeight.w700,
             color: isDark ? Colors.white : const Color(0xFF0F172A),
           ),
@@ -1379,28 +1511,34 @@ class DashboardScreen extends StatelessWidget {
               child: Row(
                 children: [
                   Container(
-                    width: 36,
-                    height: 36,
+                    width: 42,
+                    height: 42,
                     decoration: BoxDecoration(
                       color: isDark ? SwissColors.darkSurfaceSubdued : const Color(0xFFEFF6FF),
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: border.withValues(alpha: 0.5)),
                     ),
                     child: Center(
                       child: Text(
                         style.emoji,
-                        style: const TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: 20),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 14),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           style.name,
-                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w800,
+                            color: isDark ? Colors.white : const Color(0xFF0F172A),
+                          ),
                         ),
+                        const SizedBox(height: 2),
                         Text(
                           'Arquétipo: ${style.style}',
                           style: TextStyle(
@@ -1416,12 +1554,15 @@ class DashboardScreen extends StatelessWidget {
             ),
           );
         }),
-        const SizedBox(height: 16),
+
+        const SizedBox(height: 24),
+
+        // 3. DINÂMICA DO GRUPO (Exact strings expected by tests)
         Text(
           'Dinâmica do Grupo',
           style: TextStyle(
             fontFamily: 'serif',
-            fontSize: 18,
+            fontSize: 20,
             fontWeight: FontWeight.w700,
             color: isDark ? Colors.white : const Color(0xFF0F172A),
           ),
@@ -1431,7 +1572,71 @@ class DashboardScreen extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: cardBg,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(color: border, width: 0.8),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
+                blurRadius: 16,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              _buildMetricRow(
+                context,
+                icon: LucideIcons.flame,
+                iconColor: const Color(0xFFF97316),
+                title: 'Iniciador de Conversas',
+                value: amigos.groupDynamics.conversationStarter,
+              ),
+              const Divider(height: 24),
+              _buildMetricRow(
+                context,
+                icon: LucideIcons.sparkles,
+                iconColor: const Color(0xFF3B82F6),
+                title: 'Mais Interativo',
+                value: amigos.groupDynamics.mostInteractive,
+              ),
+              const Divider(height: 24),
+              _buildMetricRow(
+                context,
+                icon: LucideIcons.zap,
+                iconColor: const Color(0xFFEAB308),
+                title: 'Mais Rápido na Resposta',
+                value: amigos.friendStats.fastestReplyName,
+              ),
+              const Divider(height: 24),
+              _buildMetricRow(
+                context,
+                icon: LucideIcons.messageSquareDashed,
+                iconColor: const Color(0xFFEF4444),
+                title: 'Recorde de Flood',
+                value: '${adapter.biggestFloodAuthor} (${adapter.biggestFloodCount} msgs)',
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(height: 24),
+
+        // 4. TELEMETRIA & DIPLOMACIA DO VÁCUO
+        Text(
+          'Telemetria de Respostas & Vácuo',
+          style: TextStyle(
+            fontFamily: 'serif',
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            color: isDark ? Colors.white : const Color(0xFF0F172A),
+          ),
+        ),
+        const SizedBox(height: 12),
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: cardBg,
+            borderRadius: BorderRadius.circular(22),
             border: Border.all(color: border, width: 0.8),
           ),
           child: Column(
@@ -1440,14 +1645,36 @@ class DashboardScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Iniciador de Conversas',
+                    'Tempo Médio de Resposta',
                     style: TextStyle(
                       fontSize: 13,
                       color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
                     ),
                   ),
                   Text(
-                    amigos.groupDynamics.conversationStarter,
+                    adapter.averageResponseTimeFormatted,
+                    style: const TextStyle(
+                      fontFamily: 'serif',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                      color: accent,
+                    ),
+                  ),
+                ],
+              ),
+              const Divider(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'O Fantasma (Mais deixa no vácuo)',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
+                    ),
+                  ),
+                  Text(
+                    adapter.vacuumKing,
                     style: const TextStyle(fontFamily: 'serif', fontWeight: FontWeight.w800),
                   ),
                 ],
@@ -1457,36 +1684,254 @@ class DashboardScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Mais Interativo',
+                    'O Mais Paciente (Mais ignorado)',
                     style: TextStyle(
                       fontSize: 13,
                       color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
                     ),
                   ),
                   Text(
-                    amigos.groupDynamics.mostInteractive,
-                    style: const TextStyle(fontFamily: 'serif', fontWeight: FontWeight.w800),
-                  ),
-                ],
-              ),
-              const Divider(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Mais Rápido na Resposta',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
-                    ),
-                  ),
-                  Text(
-                    amigos.friendStats.fastestReplyName,
+                    adapter.vacuumVictim,
                     style: const TextStyle(fontFamily: 'serif', fontWeight: FontWeight.w800),
                   ),
                 ],
               ),
             ],
+          ),
+        ),
+
+        const SizedBox(height: 24),
+
+        // 5. CENTRAL DE MÍDIAS, PODCAST & MEMES
+        Text(
+          'Central de Mídias & Podcasts',
+          style: TextStyle(
+            fontFamily: 'serif',
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            color: isDark ? Colors.white : const Color(0xFF0F172A),
+          ),
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: cardBg,
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(color: border, width: 0.8),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(LucideIcons.mic, size: 20, color: Color(0xFF2563EB)),
+                    const SizedBox(height: 10),
+                    Text(
+                      '${adapter.totalAudios} áudios',
+                      style: const TextStyle(
+                        fontFamily: 'serif',
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    Text(
+                      '~${adapter.estimatedAudioMinutes} min (${adapter.podcasterAuthor})',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: cardBg,
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(color: border, width: 0.8),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(LucideIcons.image, size: 20, color: Color(0xFF06B6D4)),
+                    const SizedBox(height: 10),
+                    Text(
+                      '${adapter.estimatedPrints} prints',
+                      style: const TextStyle(
+                        fontFamily: 'serif',
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    Text(
+                      'Detetive: ${adapter.printInvestigator}',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+
+        const SizedBox(height: 24),
+
+        // 6. JARGÕES & VOCABULÁRIO DO SQUAD
+        if (adapter.topWords.isNotEmpty) ...[
+          Text(
+            'Jargões & Vocabulário do Squad',
+            style: TextStyle(
+              fontFamily: 'serif',
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: isDark ? Colors.white : const Color(0xFF0F172A),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              color: cardBg,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: border, width: 0.8),
+            ),
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 10,
+              children: adapter.topWords.take(10).toList().asMap().entries.map((entry) {
+                final idx = entry.key;
+                final w = entry.value;
+
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: idx < 3
+                        ? const Color(0xFFEFF6FF)
+                        : (isDark ? SwissColors.darkSurfaceSubdued : const Color(0xFFF8FAFC)),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: idx < 3 ? border : Colors.transparent,
+                      width: 0.8,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        '#${idx + 1}',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w800,
+                          color: idx < 3 ? accent : (isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary),
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        w.word,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: isDark ? Colors.white : const Color(0xFF0F172A),
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        '(${w.count})',
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+          const SizedBox(height: 24),
+        ],
+
+        // 7. CRÔNICA DO SQUAD
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: isDark ? SwissColors.darkSurfaceSubdued : const Color(0xFFF0F7FF),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: border, width: 0.8),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Icon(LucideIcons.quote, size: 22, color: accent),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Text(
+                  adapter.primaryInsight,
+                  style: TextStyle(
+                    fontFamily: 'serif',
+                    fontSize: 14,
+                    height: 1.5,
+                    fontStyle: FontStyle.italic,
+                    color: isDark ? Colors.white : const Color(0xFF1E293B),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMetricRow(
+    BuildContext context, {
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required String value,
+  }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Row(
+      children: [
+        Container(
+          width: 32,
+          height: 32,
+          decoration: BoxDecoration(
+            color: iconColor.withValues(alpha: 0.12),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(icon, size: 16, color: iconColor),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: 13,
+              color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
+            ),
+          ),
+        ),
+        Text(
+          value,
+          style: TextStyle(
+            fontFamily: 'serif',
+            fontSize: 14,
+            fontWeight: FontWeight.w800,
+            color: isDark ? Colors.white : const Color(0xFF0F172A),
           ),
         ),
       ],

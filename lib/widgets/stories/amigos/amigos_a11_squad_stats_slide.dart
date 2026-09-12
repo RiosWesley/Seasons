@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/amigos_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
+import 'amigos_background_variants.dart';
 import 'amigos_theme.dart';
 
 class AmigosA11SquadStatsSlide extends StatelessWidget {
@@ -20,6 +21,7 @@ class AmigosA11SquadStatsSlide extends StatelessWidget {
     final dailyAvg = (adapter.totalMessages / days).round();
 
     return StoryCardBase(
+      background: AmigosBackgroundVariants.a11SquadStats(),
       backgroundColor: AmigosTheme.paperBase,
       category: 'Destaques do Squad',
       categoryIcon: Icons.speed_rounded,

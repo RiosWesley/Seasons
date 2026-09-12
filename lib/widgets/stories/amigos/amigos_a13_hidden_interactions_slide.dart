@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/amigos_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
+import 'amigos_background_variants.dart';
 import 'amigos_theme.dart';
 
 class AmigosA13HiddenInteractionsSlide extends StatelessWidget {
@@ -16,7 +17,9 @@ class AmigosA13HiddenInteractionsSlide extends StatelessWidget {
     final count = adapter.ignoringStats.ignoredCount;
 
     return StoryCardBase(
-      backgroundColor: AmigosTheme.paperBase,
+      background: AmigosBackgroundVariants.a13HiddenInteractions(),
+      isDarkTheme: true,
+      backgroundColor: const Color(0xFF0F172A),
       category: 'Interações Ocultas',
       categoryIcon: Icons.timer_off_outlined,
       title: 'Cartaz de\nProcurado',
