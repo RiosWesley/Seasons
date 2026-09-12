@@ -272,7 +272,10 @@ class DashboardScreen extends StatelessWidget {
                           MetricBadge(
                             label: modeName,
                             icon: modeIcon,
-                            isAccent: true,
+                            backgroundColor: isDark ? SwissColors.darkSurfaceSubdued : modeCardBg,
+                            borderColor: isDark ? SwissColors.darkBorder : modeBorder,
+                            textColor: modeAccent,
+                            iconColor: modeAccent,
                           ),
                           Text(
                             dateRange,

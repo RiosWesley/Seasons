@@ -438,7 +438,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                               decoration: ShapeDecoration(
                                 gradient: const LinearGradient(
-                                  colors: [Color(0xFF6366F1), Color(0xFF4F46E5)],
+                                  colors: [Color(0xFF2563EB), Color(0xFF1D4ED8)],
                                 ),
                                 shape: SquircleBorder.radius(12),
                               ),
@@ -510,8 +510,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
                 _buildValuePropRow(
                   icon: LucideIcons.sparkles,
-                  iconColor: SwissColors.irisPrimary,
-                  bgColor: const Color(0xFFEEF2FF),
+                  iconColor: const Color(0xFF2563EB),
+                  bgColor: const Color(0xFFEFF6FF),
                   title: 'Análise Instantânea',
                   subtitle: 'Cálculos estatísticos processados em milissegundos localmente.',
                 ),
@@ -651,11 +651,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             title: 'Modo Casal',
             badgeText: '2 PARTICIPANTES',
             icon: LucideIcons.heart,
-            accentColor: const Color(0xFFF43F5E),
+            accentColor: const Color(0xFFE11D48),
             bgColors: const [Color(0xFFFFF1F2), Color(0xFFFFE4E6)],
             borderColor: const Color(0xFFFECDD3),
             description:
-                'Índice de sintonia & compatibilidade, linguagens do amor (corações, apelidos carinhosos), equilíbrio de mensagens e horários favoritos.',
+                'Sintonia do casal, linguagens do afeto, horários a dois, carinhos e equilíbrio de mensagens.',
           ),
 
           const SizedBox(height: 12),
@@ -663,13 +663,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           // Mode 2: Amigos Bento Card
           _buildModelCard(
             title: 'Modo Amigos',
-            badgeText: '3 A 5 PARTICIPANTES',
+            badgeText: '2 PARTICIPANTES (DUPLA)',
             icon: LucideIcons.users,
-            accentColor: const Color(0xFF0284C7),
+            accentColor: const Color(0xFF2563EB),
             bgColors: const [Color(0xFFF0F9FF), Color(0xFFE0F2FE)],
             borderColor: const Color(0xFFBAE6FD),
             description:
-                'Arquétipos de comunicação, índice de vácuo, velocidade de resposta, campeão de áudios e memes do squad.',
+                'A amizade a dois: duelo de estilos, quem responde mais rápido, áudios intermináveis de podcast, vácuos históricos e cumplicidade.',
           ),
 
           const SizedBox(height: 12),
@@ -677,13 +677,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           // Mode 3: Grupo Bento Card
           _buildModelCard(
             title: 'Modo Grupo',
-            badgeText: '6+ PARTICIPANTES',
-            icon: LucideIcons.layoutGrid,
-            accentColor: const Color(0xFF7C3AED),
+            badgeText: '3 OU MAIS PARTICIPANTES',
+            icon: LucideIcons.messagesSquare,
+            accentColor: const Color(0xFF1D4ED8),
             bgColors: const [Color(0xFFF5F3FF), Color(0xFFEDE9FE)],
             borderColor: const Color(0xFFDDD6FE),
             description:
-                'Leaderboard geral de mensagens, pódio de engajamento, radar de vibes e horários da madrugada (22h–06h).',
+                'Leaderboard geral de mensagens, pódio de engajamento, radar de vibes, matriz coletiva e corujas da madrugada.',
           ),
 
           const SizedBox(height: 14),
@@ -693,14 +693,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             padding: const EdgeInsets.all(16),
             decoration: ShapeDecoration(
               gradient: const LinearGradient(
-                colors: [Color(0xFF1E1B4B), Color(0xFF312E81)],
+                colors: [Color(0xFF0F172A), Color(0xFF1E293B)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               shape: SquircleBorder.card(),
               shadows: [
                 BoxShadow(
-                  color: const Color(0xFF1E1B4B).withValues(alpha: 0.25),
+                  color: const Color(0xFF0F172A).withValues(alpha: 0.18),
                   blurRadius: 16,
                   offset: const Offset(0, 6),
                 ),
@@ -1195,11 +1195,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             decoration: ShapeDecoration(
               color: Colors.white,
               shape: SquircleBorder.card(
-                side: const BorderSide(color: Color(0xFFC7D2FE), width: 1.2),
+                side: const BorderSide(color: Color(0xFFA7F3D0), width: 1.2),
               ),
               shadows: [
                 BoxShadow(
-                  color: SwissColors.irisPrimary.withValues(alpha: 0.12),
+                  color: const Color(0xFF059669).withValues(alpha: 0.08),
                   blurRadius: 20,
                   offset: const Offset(0, 6),
                 ),
@@ -1214,14 +1214,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     height: 58,
                     decoration: ShapeDecoration(
                       gradient: const LinearGradient(
-                        colors: [SwissColors.irisPrimary, SwissColors.violetSecondary],
+                        colors: [Color(0xFF059669), Color(0xFF10B981)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
                       shape: SquircleBorder.radius(18),
                       shadows: [
                         BoxShadow(
-                          color: SwissColors.irisPrimary.withValues(alpha: 0.35),
+                          color: const Color(0xFF10B981).withValues(alpha: 0.35),
                           blurRadius: 16,
                           offset: const Offset(0, 5),
                         ),
@@ -1299,7 +1299,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
             child: Row(
               children: const [
-                Icon(LucideIcons.plane, size: 18, color: Color(0xFF6366F1)),
+                Icon(LucideIcons.plane, size: 18, color: Color(0xFF059669)),
                 SizedBox(width: 10),
                 Expanded(
                   child: Text(
@@ -1332,11 +1332,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           width: 32,
           height: 32,
           decoration: ShapeDecoration(
-            color: const Color(0xFFEEF2FF),
+            color: const Color(0xFFECFDF5),
             shape: SquircleBorder.radius(8),
           ),
           child: Center(
-            child: Icon(icon, size: 16, color: SwissColors.irisPrimary),
+            child: Icon(icon, size: 16, color: const Color(0xFF059669)),
           ),
         ),
         const SizedBox(width: 10),
@@ -1443,7 +1443,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               width: isActive ? 28.0 : 8.0,
               height: 8.0,
               decoration: BoxDecoration(
-                color: isActive ? SwissColors.irisPrimary : const Color(0xFFCBD5E1),
+                color: isActive ? SwissColors.brandCobalt : const Color(0xFFCBD5E1),
                 borderRadius: BorderRadius.circular(4.0),
               ),
             ),
