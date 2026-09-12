@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/casal_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../shared/seasons_story_footer.dart';
+import 'casal_background_variants.dart';
 import 'casal_story_theme.dart';
 
 /// Slide c10: Comparação de Hábitos (Lado a Lado / Quem é Quem no Papo)
@@ -22,7 +23,7 @@ class CasalC10HabitsComparisonSlide extends StatelessWidget {
       categoryIcon: Icons.compare_arrows_rounded,
       title: 'Quem é Quem\nno Papo?',
       subtitle: 'Os estilos e hábitos individuais de cada um.',
-      backgroundColor: CasalStoryTheme.paperBase,
+      background: CasalBackgroundVariants.c10Habits(),
       footer: const SeasonsStoryFooter(editionTag: "mémoire d'amour"),
       child: SingleChildScrollView(
         child: Column(

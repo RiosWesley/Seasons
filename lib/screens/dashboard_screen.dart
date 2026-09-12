@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../core/models/amigos_stats.dart';
 import '../core/models/casal_stats.dart';
 import '../core/models/general_stats.dart';
 import '../core/models/grupo_stats.dart';
 import '../core/models/raw_chat_export.dart';
+import '../stories/adapters/casal_story_adapter.dart';
+import '../stories/stories_viewer_screen.dart';
 import '../theme/squircle_border.dart';
 import '../theme/swiss_colors.dart';
 import '../theme/swiss_typography.dart';
 import '../widgets/count_up_text.dart';
 import '../widgets/metric_badge.dart';
 import '../widgets/swiss_button.dart';
-import '../widgets/swiss_card.dart';
-import '../stories/stories_viewer_screen.dart';
 
-/// Architectural Swiss-Minimalist Dashboard Screen.
-/// Displays comprehensive offline retrospective statistics, mode-specific deep insights,
-/// tabular numeral counters, and a prominent trigger to launch the 9:16 Stories experience.
-/// Completely unlocked: 100% free with zero paywalls or subscription gates.
+/// Architectural Swiss-Editorial Dashboard Screen.
+/// Displays comprehensive offline retrospective statistics, deep relationship analytics,
+/// mode-specific Bento cards, tabular numerals, and a prominent trigger to launch the 9:16 Stories.
+/// 100% Free with zero paywalls.
 class DashboardScreen extends StatelessWidget {
   final ChatAnalysisResult analysis;
   final RawChatExport? rawExport;
@@ -30,7 +31,7 @@ class DashboardScreen extends StatelessWidget {
     this.onStartStories,
   });
 
-  String _formatResponseTime(double ms) {
+  static String _formatResponseTime(double ms) {
     if (ms <= 0) return 'Instantâneo';
     final seconds = (ms / 1000).round();
     if (seconds < 60) return '$seconds s';
@@ -40,11 +41,26 @@ class DashboardScreen extends StatelessWidget {
     return '$hours h';
   }
 
-  String _formatDate(DateTime date) {
+  static String _formatDate(DateTime date) {
     final day = date.day.toString().padLeft(2, '0');
     final month = date.month.toString().padLeft(2, '0');
     final year = date.year;
     return '$day/$month/$year';
+  }
+
+  void _launchStories(BuildContext context) {
+    HapticFeedback.selectionClick();
+    if (onStartStories != null) {
+      onStartStories!();
+    } else {
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (context) => StoriesViewerScreen(
+            analysis: analysis,
+          ),
+        ),
+      );
+    }
   }
 
   @override
@@ -57,327 +73,826 @@ class DashboardScreen extends StatelessWidget {
 
     IconData modeIcon;
     String modeName;
+    Color modeAccent;
+    Color modeCardBg;
+    Color modeBorder;
+
     switch (analysis.mode) {
       case ChatMode.casal:
         modeIcon = LucideIcons.heart;
         modeName = 'Modo Casal';
+        modeAccent = const Color(0xFFE11D48);
+        modeCardBg = const Color(0xFFFFF1F2);
+        modeBorder = const Color(0xFFFECDD3);
         break;
       case ChatMode.amigos:
         modeIcon = LucideIcons.users;
         modeName = 'Modo Amigos';
+        modeAccent = const Color(0xFF2563EB);
+        modeCardBg = const Color(0xFFEFF6FF);
+        modeBorder = const Color(0xFFBFDBFE);
         break;
       case ChatMode.grupo:
         modeIcon = LucideIcons.users;
         modeName = 'Modo Grupo';
+        modeAccent = const Color(0xFF7C3AED);
+        modeCardBg = const Color(0xFFFAF5FF);
+        modeBorder = const Color(0xFFE9D5FF);
         break;
     }
 
-    // Affinity percentage calculation
     int affinityScore = 85;
     String affinityLabel = 'Sintonia';
+    String affinityDesc = 'Conexão calibrada e fluida';
     if (analysis is CasalAnalysisResult) {
-      affinityScore = (analysis as CasalAnalysisResult).compatibility.score;
+      final casal = analysis as CasalAnalysisResult;
+      affinityScore = casal.compatibility.score;
       affinityLabel = 'Compatibilidade';
+      affinityDesc = casal.compatibility.description;
     } else if (analysis is AmigosAnalysisResult) {
-      affinityScore = (analysis as AmigosAnalysisResult).compatibility.score;
+      final amigos = analysis as AmigosAnalysisResult;
+      affinityScore = amigos.compatibility.score;
       affinityLabel = 'Harmonia do Squad';
+      affinityDesc = amigos.compatibility.description;
     } else if (analysis is GrupoAnalysisResult) {
       affinityScore = 90;
       affinityLabel = 'Vitalidade do Grupo';
+      affinityDesc = 'Comunidade ativa com engajamento constante';
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Relatório Completo', style: SwissTypography.titleMedium),
-        actions: [
-          IconButton(
-            icon: const Icon(LucideIcons.share2),
-            tooltip: 'Exportar Relatório',
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (context) => StoriesViewerScreen(
-                    analysis: analysis,
-                  ),
+      backgroundColor: isDark ? SwissColors.darkBackground : const Color(0xFFFBF9F5),
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          // Background Paper Texture & Studio Lighting
+          if (!isDark) ...[
+            Positioned.fill(
+              child: Opacity(
+                opacity: 0.35,
+                child: Image.asset(
+                  'assets/images/home_paper_texture.jpg',
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
                 ),
-              );
-            },
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
-          children: [
-            // Metadata bar
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                MetricBadge(
-                  label: modeName,
-                  icon: modeIcon,
-                  isAccent: true,
-                ),
-                Text(
-                  dateRange,
-                  style: SwissTypography.labelSmall.copyWith(
-                    color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 14),
-
-            // Hero Card: Total Messages & Affinity
-            SwissCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    participantsLabel,
-                    style: SwissTypography.labelSmall.copyWith(
-                      color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
-                      letterSpacing: 0.5,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    textBaseline: TextBaseline.alphabetic,
-                    children: [
-                      CountUpText(
-                        targetValue: general.totalMessages,
-                        style: SwissTypography.metricLarge.copyWith(fontSize: 44),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        'mensagens',
-                        style: SwissTypography.titleMedium.copyWith(
-                          color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  // Affinity bar
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        affinityLabel,
-                        style: SwissTypography.labelSmall.copyWith(
-                          color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
-                        ),
-                      ),
-                      Text(
-                        '$affinityScore%',
-                        style: SwissTypography.labelSmall.copyWith(
-                          color: SwissColors.emeraldPrimary,
-                          fontWeight: FontWeight.w700,
-                          fontFeatures: SwissTypography.tabularFigures,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: LinearProgressIndicator(
-                      value: affinityScore / 100.0,
-                      minHeight: 6,
-                      backgroundColor: isDark
-                          ? SwissColors.darkSurfaceSubdued
-                          : SwissColors.lightSurfaceSubdued,
-                      valueColor: const AlwaysStoppedAnimation<Color>(SwissColors.emeraldPrimary),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  // Primary CTA: Start 9:16 Stories Experience
-                  SwissButton(
-                    label: 'Iniciar Wrapped (9:16 Stories)',
-                    icon: LucideIcons.sparkles,
-                    type: SwissButtonType.primary,
-                    fullWidth: true,
-                    onPressed: () {
-                      if (onStartStories != null) {
-                        onStartStories!();
-                      } else {
-                        Navigator.of(context).push(
-                          MaterialPageRoute<void>(
-                            builder: (context) => StoriesViewerScreen(
-                              analysis: analysis,
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                ],
               ),
             ),
-
-            const SizedBox(height: 16),
-
-            // Quick Metrics 2x2 Grid
-            Row(
-              children: [
-                Expanded(
-                  child: SwissCard(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Icon(LucideIcons.calendar, size: 16, color: SwissColors.emeraldPrimary),
-                        const SizedBox(height: 10),
-                        Text(
-                          'Dias Ativos',
-                          style: SwissTypography.labelSmall.copyWith(
-                            color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        CountUpText(
-                          targetValue: general.activeDaysCount > 0 ? general.activeDaysCount : 1,
-                          style: SwissTypography.metricSmall,
-                        ),
-                      ],
-                    ),
+            Positioned.fill(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: RadialGradient(
+                    center: Alignment.topRight,
+                    radius: 1.5,
+                    colors: [
+                      modeAccent.withValues(alpha: 0.08),
+                      Colors.transparent,
+                    ],
                   ),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: SwissCard(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Icon(LucideIcons.clock, size: 16, color: SwissColors.emeraldPrimary),
-                        const SizedBox(height: 10),
-                        Text(
-                          'Resposta Média',
-                          style: SwissTypography.labelSmall.copyWith(
-                            color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          _formatResponseTime(general.averageResponseTimeMs),
-                          style: SwissTypography.metricSmall,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 12),
-
-            Row(
-              children: [
-                Expanded(
-                  child: SwissCard(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Icon(LucideIcons.messageCircle, size: 16, color: SwissColors.emeraldPrimary),
-                        const SizedBox(height: 10),
-                        Text(
-                          'Top Palavra',
-                          style: SwissTypography.labelSmall.copyWith(
-                            color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          general.topWords.isNotEmpty ? general.topWords.first.word : 'N/A',
-                          style: SwissTypography.metricSmall,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: SwissCard(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Icon(LucideIcons.smile, size: 16, color: SwissColors.emeraldPrimary),
-                        const SizedBox(height: 10),
-                        Text(
-                          'Top Emojis',
-                          style: SwissTypography.labelSmall.copyWith(
-                            color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          general.topEmojis.isNotEmpty
-                              ? general.topEmojis.take(4).map((e) => e.emoji).join(' ')
-                              : 'Nenhum',
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 24),
-
-            // Mode-specific analytical breakdown
-            if (analysis is CasalAnalysisResult)
-              _buildCasalSection(context, analysis as CasalAnalysisResult)
-            else if (analysis is AmigosAnalysisResult)
-              _buildAmigosSection(context, analysis as AmigosAnalysisResult)
-            else if (analysis is GrupoAnalysisResult)
-              _buildGrupoSection(context, analysis as GrupoAnalysisResult),
-
-            const SizedBox(height: 24),
-
-            // Return to Home CTA
-            SwissButton(
-              label: 'Voltar ao Início',
-              icon: LucideIcons.house,
-              type: SwissButtonType.secondary,
-              fullWidth: true,
-              onPressed: () {
-                Navigator.of(context).popUntil((route) => route.isFirst);
-              },
+              ),
             ),
           ],
-        ),
+
+          // Main Scrollable Content
+          SafeArea(
+            child: CustomScrollView(
+              physics: const BouncingScrollPhysics(),
+              slivers: [
+                // Editorial Top Bar
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Back Button
+                        Material(
+                          color: isDark ? SwissColors.darkSurfaceCard : Colors.white,
+                          shape: SquircleBorder.radius(14),
+                          clipBehavior: Clip.antiAlias,
+                          child: InkWell(
+                            onTap: () {
+                              HapticFeedback.lightImpact();
+                              Navigator.of(context).pop();
+                            },
+                            child: Container(
+                              width: 42,
+                              height: 42,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: isDark ? SwissColors.darkBorder : SwissColors.lightBorder,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              child: Icon(
+                                LucideIcons.arrowLeft,
+                                size: 18,
+                                color: isDark ? Colors.white : const Color(0xFF0F172A),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // Title Branding
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'seasons',
+                              style: TextStyle(
+                                fontFamily: 'serif',
+                                fontSize: 19,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: -0.5,
+                                color: isDark ? Colors.white : const Color(0xFF0F172A),
+                              ),
+                            ),
+                            Text(
+                              'Relatório Completo',
+                              style: SwissTypography.labelSmall.copyWith(
+                                fontSize: 10,
+                                letterSpacing: 1.2,
+                                fontWeight: FontWeight.w700,
+                                color: modeAccent,
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        // Share / Stories Action
+                        Material(
+                          color: isDark ? SwissColors.darkSurfaceCard : Colors.white,
+                          shape: SquircleBorder.radius(14),
+                          clipBehavior: Clip.antiAlias,
+                          child: InkWell(
+                            onTap: () => _launchStories(context),
+                            child: Container(
+                              width: 42,
+                              height: 42,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: isDark ? SwissColors.darkBorder : SwissColors.lightBorder,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              child: IconButton(
+                                icon: Icon(
+                                  LucideIcons.share2,
+                                  size: 18,
+                                  color: modeAccent,
+                                ),
+                                tooltip: 'Exportar Relatório',
+                                onPressed: () => _launchStories(context),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                // Report Body
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                  sliver: SliverList(
+                    delegate: SliverChildListDelegate([
+                      // Mode badge & date range bar
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          MetricBadge(
+                            label: modeName,
+                            icon: modeIcon,
+                            isAccent: true,
+                          ),
+                          Text(
+                            dateRange,
+                            style: SwissTypography.labelSmall.copyWith(
+                              color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // HERO BENTO CARD: Total Messages & Affinity Score
+                      _buildHeroBentoCard(
+                        context: context,
+                        participantsLabel: participantsLabel,
+                        totalMessages: general.totalMessages,
+                        affinityLabel: affinityLabel,
+                        affinityScore: affinityScore,
+                        affinityDesc: affinityDesc,
+                        modeAccent: modeAccent,
+                        modeCardBg: modeCardBg,
+                        modeBorder: modeBorder,
+                        isDark: isDark,
+                      ),
+
+                      const SizedBox(height: 18),
+
+                      // QUICK METRICS 2x2 GRID
+                      _buildQuickMetricsGrid(
+                        context: context,
+                        general: general,
+                        modeAccent: modeAccent,
+                        isDark: isDark,
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // MODE-SPECIFIC EXPANDED ANALYTICAL SECTIONS
+                      if (analysis is CasalAnalysisResult)
+                        _buildCasalComprehensiveReport(
+                          context,
+                          analysis as CasalAnalysisResult,
+                          modeAccent,
+                          isDark,
+                        )
+                      else if (analysis is AmigosAnalysisResult)
+                        _buildAmigosSection(context, analysis as AmigosAnalysisResult)
+                      else if (analysis is GrupoAnalysisResult)
+                        _buildGrupoSection(context, analysis as GrupoAnalysisResult),
+
+                      const SizedBox(height: 28),
+
+                      // Bottom Return Button
+                      SwissButton(
+                        label: 'Voltar ao Início',
+                        icon: LucideIcons.house,
+                        type: SwissButtonType.secondary,
+                        fullWidth: true,
+                        onPressed: () {
+                          HapticFeedback.lightImpact();
+                          Navigator.of(context).popUntil((route) => route.isFirst);
+                        },
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // Minimal Offline Security Stamp
+                      Center(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              LucideIcons.shieldCheck,
+                              size: 13,
+                              color: isDark ? SwissColors.darkTextMuted : SwissColors.lightTextMuted,
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              'SEASONS • ANÁLISE 100% LOCAL & OFFLINE',
+                              style: TextStyle(
+                                fontSize: 9.5,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 1.0,
+                                color: isDark ? SwissColors.darkTextMuted : SwissColors.lightTextMuted,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 32),
+                    ]),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildCasalSection(BuildContext context, CasalAnalysisResult casal) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+  // ==========================================================================
+  // HERO BENTO CARD
+  // ==========================================================================
+  Widget _buildHeroBentoCard({
+    required BuildContext context,
+    required String participantsLabel,
+    required int totalMessages,
+    required String affinityLabel,
+    required int affinityScore,
+    required String affinityDesc,
+    required Color modeAccent,
+    required Color modeCardBg,
+    required Color modeBorder,
+    required bool isDark,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(22),
+      decoration: BoxDecoration(
+        color: isDark ? SwissColors.darkSurfaceCard : Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: isDark ? SwissColors.darkBorder : modeBorder,
+          width: 1.2,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: modeAccent.withValues(alpha: isDark ? 0.08 : 0.06),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Eyebrow with participants
+          Row(
+            children: [
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: modeAccent,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  participantsLabel,
+                  style: TextStyle(
+                    fontFamily: 'serif',
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: isDark ? Colors.white : const Color(0xFF1E1B4B),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 14),
+
+          // Monumental Counter
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              CountUpText(
+                targetValue: totalMessages,
+                style: TextStyle(
+                  fontFamily: 'serif',
+                  fontSize: 48,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: -1.5,
+                  color: isDark ? Colors.white : const Color(0xFF0F172A),
+                  fontFeatures: const [FontFeature.tabularFigures()],
+                ),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                'mensagens',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 18),
+
+          // Affinity Meter
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: isDark ? SwissColors.darkSurfaceSubdued : modeCardBg,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: isDark ? SwissColors.darkBorder : modeBorder,
+                width: 0.8,
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      affinityLabel,
+                      style: TextStyle(
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.3,
+                        color: isDark ? Colors.white : const Color(0xFF1E1B4B),
+                      ),
+                    ),
+                    Text(
+                      '$affinityScore%',
+                      style: TextStyle(
+                        fontFamily: 'serif',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        color: modeAccent,
+                        fontFeatures: const [FontFeature.tabularFigures()],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: LinearProgressIndicator(
+                    value: affinityScore / 100.0,
+                    minHeight: 7,
+                    backgroundColor: isDark ? const Color(0xFF2D1620) : Colors.white,
+                    valueColor: AlwaysStoppedAnimation<Color>(modeAccent),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  affinityDesc,
+                  style: TextStyle(
+                    fontFamily: 'serif',
+                    fontStyle: FontStyle.italic,
+                    fontSize: 12,
+                    color: isDark ? SwissColors.darkTextSecondary : const Color(0xFF64748B),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 20),
+
+          // Primary Stories CTA Button
+          SwissButton(
+            label: 'Iniciar Wrapped (9:16 Stories)',
+            icon: LucideIcons.sparkles,
+            type: SwissButtonType.primary,
+            fullWidth: true,
+            onPressed: () => _launchStories(context),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ==========================================================================
+  // QUICK METRICS 2x2 GRID
+  // ==========================================================================
+  Widget _buildQuickMetricsGrid({
+    required BuildContext context,
+    required GeneralStats general,
+    required Color modeAccent,
+    required bool isDark,
+  }) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: _buildMetricTile(
+                icon: LucideIcons.calendar,
+                title: 'Dias Ativos',
+                value: '${general.activeDaysCount > 0 ? general.activeDaysCount : 1}',
+                unit: 'dias',
+                accentColor: modeAccent,
+                isDark: isDark,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _buildMetricTile(
+                icon: LucideIcons.clock,
+                title: 'Resposta Média',
+                value: _formatResponseTime(general.averageResponseTimeMs),
+                unit: 'velocidade',
+                accentColor: modeAccent,
+                isDark: isDark,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: _buildMetricTile(
+                icon: LucideIcons.messageCircle,
+                title: 'Top Palavra',
+                value: general.topWords.isNotEmpty ? general.topWords.first.word : 'N/A',
+                unit: general.topWords.isNotEmpty ? '${general.topWords.first.count}x' : '',
+                accentColor: modeAccent,
+                isDark: isDark,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _buildMetricTile(
+                icon: LucideIcons.smile,
+                title: 'Top Emojis',
+                value: general.topEmojis.isNotEmpty
+                    ? general.topEmojis.take(3).map((e) => e.emoji).join(' ')
+                    : 'Nenhum',
+                unit: 'expressão',
+                accentColor: modeAccent,
+                isDark: isDark,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMetricTile({
+    required IconData icon,
+    required String title,
+    required String value,
+    required String unit,
+    required Color accentColor,
+    required bool isDark,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: isDark ? SwissColors.darkSurfaceCard : Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: isDark ? SwissColors.darkBorder : SwissColors.lightBorder,
+          width: 1.0,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Icon(icon, size: 16, color: accentColor),
+              if (unit.isNotEmpty)
+                Text(
+                  unit.toUpperCase(),
+                  style: TextStyle(
+                    fontSize: 9,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.8,
+                    color: isDark ? SwissColors.darkTextMuted : SwissColors.lightTextMuted,
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: TextStyle(
+              fontFamily: 'serif',
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+              color: isDark ? Colors.white : const Color(0xFF0F172A),
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ==========================================================================
+  // CASAL COMPREHENSIVE REPORT (BESPOKE EDITORIAL SYSTEM)
+  // ==========================================================================
+  Widget _buildCasalComprehensiveReport(
+    BuildContext context,
+    CasalAnalysisResult casal,
+    Color modeAccent,
+    bool isDark,
+  ) {
+    final adapter = CasalStoryAdapter(casal);
     final ll = casal.loveLanguage;
     final totalLl = ll.hearts + ll.romanticWords + ll.memes + ll.directTexts;
     final safeTotal = totalLl > 0 ? totalLl : 1;
 
+    final cardBg = isDark ? SwissColors.darkSurfaceCard : Colors.white;
+    final border = isDark ? SwissColors.darkBorder : const Color(0xFFFECDD3);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // --------------------------------------------------------------------
+        // 1. BALANÇO DO CASAL (QUEM FALA MAIS)
+        // --------------------------------------------------------------------
+        _buildSectionHeader('Balanço da Parceria', 'Quem fala mais e o ritmo de cada um', modeAccent, isDark),
+        const SizedBox(height: 12),
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: cardBg,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: border, width: 1.0),
+          ),
+          child: Column(
+            children: [
+              // Dual percentage visual bar
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: SizedBox(
+                  height: 14,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: adapter.partner1Percentage.clamp(5, 95),
+                        child: Container(color: modeAccent),
+                      ),
+                      const SizedBox(width: 2),
+                      Expanded(
+                        flex: adapter.partner2Percentage.clamp(5, 95),
+                        child: Container(color: const Color(0xFFFB7185)),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              // Partner 1 & Partner 2 columns
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              width: 8,
+                              height: 8,
+                              decoration: BoxDecoration(shape: BoxShape.circle, color: modeAccent),
+                            ),
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: Text(
+                                adapter.partner1,
+                                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '${adapter.partner1Messages} msgs (${adapter.partner1Percentage}%)',
+                          style: TextStyle(
+                            fontFamily: 'serif',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w800,
+                            color: modeAccent,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                adapter.partner2,
+                                textAlign: TextAlign.end,
+                                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            Container(
+                              width: 8,
+                              height: 8,
+                              decoration: const BoxDecoration(shape: BoxShape.circle, color: Color(0xFFFB7185)),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '${adapter.partner2Messages} msgs (${adapter.partner2Percentage}%)',
+                          style: const TextStyle(
+                            fontFamily: 'serif',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w800,
+                            color: Color(0xFFFB7185),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const Divider(height: 28),
+              // Daily pace & days together
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Ritmo Diário de Mensagens',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
+                    ),
+                  ),
+                  Text(
+                    '${adapter.dailyMessagePaceFormatted} msgs/dia',
+                    style: TextStyle(
+                      fontFamily: 'serif',
+                      fontWeight: FontWeight.w800,
+                      color: isDark ? Colors.white : const Color(0xFF0F172A),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(height: 24),
+
+        // --------------------------------------------------------------------
+        // 2. LINGUAGEM DO AMOR (LOVE LANGUAGE) - REQUIRED FOR TESTS
+        // --------------------------------------------------------------------
         Text(
           'Linguagem do Amor (Love Language)',
-          style: SwissTypography.titleLarge.copyWith(fontSize: 18),
+          style: TextStyle(
+            fontFamily: 'serif',
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: isDark ? Colors.white : const Color(0xFF0F172A),
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          'Como o afeto se manifestou numericamente nas conversas.',
+          style: TextStyle(
+            fontSize: 12.5,
+            color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
+          ),
         ),
         const SizedBox(height: 12),
-        SwissCard(
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: cardBg,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: border, width: 1.0),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Dominant banner
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: isDark ? SwissColors.darkSurfaceSubdued : const Color(0xFFFFF1F2),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: border, width: 0.8),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(LucideIcons.sparkles, size: 14, color: Color(0xFFE11D48)),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Predominante: ${adapter.dominantLoveLanguageName} (${adapter.dominantLoveLanguagePercentage}%)',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFFE11D48),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 18),
               _buildLoveLanguageRow(
                 context,
                 title: 'Corações & Emojis de Afeto',
@@ -412,13 +927,37 @@ class DashboardScreen extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 16),
+
+        const SizedBox(height: 24),
+
+        // --------------------------------------------------------------------
+        // 3. ESTATÍSTICAS DE RESPOSTA & VÁCUO - REQUIRED FOR TESTS
+        // --------------------------------------------------------------------
         Text(
           'Estatísticas de Resposta & Vácuo',
-          style: SwissTypography.titleLarge.copyWith(fontSize: 18),
+          style: TextStyle(
+            fontFamily: 'serif',
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: isDark ? Colors.white : const Color(0xFF0F172A),
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          'A velocidade da conversa e momentos em que o mundo real chamou.',
+          style: TextStyle(
+            fontSize: 12.5,
+            color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
+          ),
         ),
         const SizedBox(height: 12),
-        SwissCard(
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: cardBg,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: border, width: 1.0),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -427,13 +966,18 @@ class DashboardScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Vácuos Registrados (>2h)',
-                    style: SwissTypography.bodyMedium.copyWith(
+                    style: TextStyle(
+                      fontSize: 13,
                       color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
                     ),
                   ),
                   Text(
                     '${casal.ignoringStats.ignoredCount}',
-                    style: SwissTypography.metricSmall,
+                    style: const TextStyle(
+                      fontFamily: 'serif',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ],
               ),
@@ -443,13 +987,18 @@ class DashboardScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Maior Tempo de Espera',
-                    style: SwissTypography.bodyMedium.copyWith(
+                    style: TextStyle(
+                      fontSize: 13,
                       color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
                     ),
                   ),
                   Text(
                     _formatResponseTime(casal.ignoringStats.longestIgnoredTimeMs.toDouble()),
-                    style: SwissTypography.metricSmall,
+                    style: const TextStyle(
+                      fontFamily: 'serif',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ],
               ),
@@ -459,17 +1008,290 @@ class DashboardScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Áudios não respondidos (>1h)',
-                    style: SwissTypography.bodyMedium.copyWith(
+                    style: TextStyle(
+                      fontSize: 13,
                       color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
                     ),
                   ),
                   Text(
                     '${casal.audioIgnoringStats.ignoredAudios}',
-                    style: SwissTypography.metricSmall,
+                    style: const TextStyle(
+                      fontFamily: 'serif',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
+              ),
+              const Divider(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Resposta Mais Rápida',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
+                    ),
+                  ),
+                  Text(
+                    adapter.fastestResponseFormatted,
+                    style: TextStyle(
+                      fontFamily: 'serif',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                      color: modeAccent,
+                    ),
                   ),
                 ],
               ),
             ],
+          ),
+        ),
+
+        const SizedBox(height: 24),
+
+        // --------------------------------------------------------------------
+        // 4. "A NOSSA HORA" (PICO DE INTIMIDADE & HORÁRIOS)
+        // --------------------------------------------------------------------
+        _buildSectionHeader('A Nossa Hora', 'O horário sagrado em que a conversa mais esquenta', modeAccent, isDark),
+        const SizedBox(height: 12),
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: cardBg,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: border, width: 1.0),
+          ),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: isDark ? SwissColors.darkSurfaceSubdued : const Color(0xFFFFF1F2),
+                      border: Border.all(color: border, width: 1.0),
+                    ),
+                    child: Icon(LucideIcons.clock, color: modeAccent, size: 20),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Pico Diário do Casal',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.5,
+                            color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
+                          ),
+                        ),
+                        Text(
+                          adapter.peakIntimacyFormatted,
+                          style: TextStyle(
+                            fontFamily: 'serif',
+                            fontSize: 22,
+                            fontWeight: FontWeight.w800,
+                            color: modeAccent,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 14),
+              Text(
+                'É nessa janela horária que ocorrem as conversas mais longas, trocas de áudio e desabafos do casal.',
+                style: TextStyle(
+                  fontFamily: 'serif',
+                  fontStyle: FontStyle.italic,
+                  fontSize: 12.5,
+                  color: isDark ? SwissColors.darkTextSecondary : const Color(0xFF64748B),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(height: 24),
+
+        // --------------------------------------------------------------------
+        // 5. ÁUDIOS & PODCASTS DO CASAL
+        // --------------------------------------------------------------------
+        _buildSectionHeader('Áudios & Podcasts', 'A minutagem de voz acumulada', modeAccent, isDark),
+        const SizedBox(height: 12),
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: cardBg,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: border, width: 1.0),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: isDark ? SwissColors.darkSurfaceSubdued : const Color(0xFFFFF1F2),
+                ),
+                child: const Icon(LucideIcons.mic, color: Color(0xFFE11D48), size: 22),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${adapter.totalAudios} áudios gravados',
+                      style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      'Aproximadamente ${adapter.estimatedAudioMinutesFormatted} de voz compartilhada.',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(height: 24),
+
+        // --------------------------------------------------------------------
+        // 6. TOP PALAVRAS & VOCABULÁRIO AFETIVO
+        // --------------------------------------------------------------------
+        _buildSectionHeader('Vocabulário Afetivo', 'As palavras que definem o dialeto a dois', modeAccent, isDark),
+        const SizedBox(height: 12),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: cardBg,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: border, width: 1.0),
+          ),
+          child: adapter.topWords.isEmpty
+              ? const Text('Sem palavras suficientes para gerar nuvem.')
+              : Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: adapter.topWords.take(10).map((w) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: isDark ? SwissColors.darkSurfaceSubdued : const Color(0xFFFFF1F2),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: border, width: 0.8),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            w.word,
+                            style: TextStyle(
+                              fontFamily: 'serif',
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                              color: isDark ? Colors.white : const Color(0xFF1E1B4B),
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            '${w.count}',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              color: modeAccent,
+                              fontFeatures: const [FontFeature.tabularFigures()],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                ),
+        ),
+
+        const SizedBox(height: 24),
+
+        // --------------------------------------------------------------------
+        // 7. CRÔNICA EDITORIAL & INSIGHT
+        // --------------------------------------------------------------------
+        if (casal.insights.isNotEmpty) ...[
+          _buildSectionHeader('Crônica do Casal', 'Diagnóstico sociológico e afetivo da relação', modeAccent, isDark),
+          const SizedBox(height: 12),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(22),
+            decoration: BoxDecoration(
+              color: isDark ? SwissColors.darkSurfaceCard : const Color(0xFFFFF9F5),
+              borderRadius: BorderRadius.circular(22),
+              border: Border.all(color: border, width: 1.2),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '“',
+                  style: TextStyle(
+                    fontFamily: 'serif',
+                    fontSize: 38,
+                    height: 0.8,
+                    color: Color(0xFFE11D48),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  casal.insights.first,
+                  style: TextStyle(
+                    fontFamily: 'serif',
+                    fontStyle: FontStyle.italic,
+                    fontSize: 14.5,
+                    height: 1.5,
+                    color: isDark ? Colors.white : const Color(0xFF1E1B4B),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildSectionHeader(String title, String subtitle, Color accent, bool isDark) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            fontFamily: 'serif',
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: isDark ? Colors.white : const Color(0xFF0F172A),
+          ),
+        ),
+        const SizedBox(height: 3),
+        Text(
+          subtitle,
+          style: TextStyle(
+            fontSize: 12.5,
+            color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
           ),
         ),
       ],
@@ -490,19 +1312,21 @@ class DashboardScreen extends StatelessWidget {
       children: [
         Row(
           children: [
-            Icon(icon, size: 14, color: SwissColors.emeraldPrimary),
+            Icon(icon, size: 14, color: const Color(0xFFE11D48)),
             const SizedBox(width: 8),
             Expanded(
               child: Text(
                 title,
-                style: SwissTypography.titleMedium.copyWith(fontSize: 14),
+                style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
               ),
             ),
             Text(
               '$count ($pct%)',
-              style: SwissTypography.labelSmall.copyWith(
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
                 color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
-                fontFeatures: SwissTypography.tabularFigures,
+                fontFeatures: const [FontFeature.tabularFigures()],
               ),
             ),
           ],
@@ -512,43 +1336,54 @@ class DashboardScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(3),
           child: LinearProgressIndicator(
             value: pct / 100.0,
-            minHeight: 4,
-            backgroundColor: isDark
-                ? SwissColors.darkSurfaceSubdued
-                : SwissColors.lightSurfaceSubdued,
-            valueColor: const AlwaysStoppedAnimation<Color>(SwissColors.emeraldPrimary),
+            minHeight: 5,
+            backgroundColor: isDark ? SwissColors.darkSurfaceSubdued : const Color(0xFFFEE2E2),
+            valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFFE11D48)),
           ),
         ),
       ],
     );
   }
 
+  // ==========================================================================
+  // AMIGOS SECTION (PRESERVES EXISTING TEST EXPECTATIONS)
+  // ==========================================================================
   Widget _buildAmigosSection(BuildContext context, AmigosAnalysisResult amigos) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardBg = isDark ? SwissColors.darkSurfaceCard : Colors.white;
+    const border = Color(0xFFBFDBFE);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Estilos de Comunicação do Squad',
-          style: SwissTypography.titleLarge.copyWith(fontSize: 18),
+          style: TextStyle(
+            fontFamily: 'serif',
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: isDark ? Colors.white : const Color(0xFF0F172A),
+          ),
         ),
         const SizedBox(height: 12),
         ...amigos.communicationStyles.map((style) {
           return Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
-            child: SwissCard(
+            child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: cardBg,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: border, width: 0.8),
+              ),
               child: Row(
                 children: [
                   Container(
                     width: 36,
                     height: 36,
-                    decoration: ShapeDecoration(
-                      color: isDark
-                          ? SwissColors.darkSurfaceSubdued
-                          : SwissColors.lightSurfaceSubdued,
-                      shape: SquircleBorder.radius(10),
+                    decoration: BoxDecoration(
+                      color: isDark ? SwissColors.darkSurfaceSubdued : const Color(0xFFEFF6FF),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: Center(
                       child: Text(
@@ -564,15 +1399,13 @@ class DashboardScreen extends StatelessWidget {
                       children: [
                         Text(
                           style.name,
-                          style: SwissTypography.titleMedium.copyWith(fontSize: 15),
+                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
                         ),
                         Text(
                           'Arquétipo: ${style.style}',
-                          style: SwissTypography.bodyMedium.copyWith(
+                          style: TextStyle(
                             fontSize: 12,
-                            color: isDark
-                                ? SwissColors.darkTextSecondary
-                                : SwissColors.lightTextSecondary,
+                            color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
                           ),
                         ),
                       ],
@@ -586,10 +1419,21 @@ class DashboardScreen extends StatelessWidget {
         const SizedBox(height: 16),
         Text(
           'Dinâmica do Grupo',
-          style: SwissTypography.titleLarge.copyWith(fontSize: 18),
+          style: TextStyle(
+            fontFamily: 'serif',
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: isDark ? Colors.white : const Color(0xFF0F172A),
+          ),
         ),
         const SizedBox(height: 12),
-        SwissCard(
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: cardBg,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: border, width: 0.8),
+          ),
           child: Column(
             children: [
               Row(
@@ -597,13 +1441,14 @@ class DashboardScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Iniciador de Conversas',
-                    style: SwissTypography.bodyMedium.copyWith(
+                    style: TextStyle(
+                      fontSize: 13,
                       color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
                     ),
                   ),
                   Text(
                     amigos.groupDynamics.conversationStarter,
-                    style: SwissTypography.metricSmall,
+                    style: const TextStyle(fontFamily: 'serif', fontWeight: FontWeight.w800),
                   ),
                 ],
               ),
@@ -613,13 +1458,14 @@ class DashboardScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Mais Interativo',
-                    style: SwissTypography.bodyMedium.copyWith(
+                    style: TextStyle(
+                      fontSize: 13,
                       color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
                     ),
                   ),
                   Text(
                     amigos.groupDynamics.mostInteractive,
-                    style: SwissTypography.metricSmall,
+                    style: const TextStyle(fontFamily: 'serif', fontWeight: FontWeight.w800),
                   ),
                 ],
               ),
@@ -629,13 +1475,14 @@ class DashboardScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Mais Rápido na Resposta',
-                    style: SwissTypography.bodyMedium.copyWith(
+                    style: TextStyle(
+                      fontSize: 13,
                       color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
                     ),
                   ),
                   Text(
                     amigos.friendStats.fastestReplyName,
-                    style: SwissTypography.metricSmall,
+                    style: const TextStyle(fontFamily: 'serif', fontWeight: FontWeight.w800),
                   ),
                 ],
               ),
@@ -646,18 +1493,34 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
+  // ==========================================================================
+  // GRUPO SECTION (PRESERVES EXISTING TEST EXPECTATIONS)
+  // ==========================================================================
   Widget _buildGrupoSection(BuildContext context, GrupoAnalysisResult grupo) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardBg = isDark ? SwissColors.darkSurfaceCard : Colors.white;
+    const border = Color(0xFFE9D5FF);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Leaderboard de Membros Mais Ativos',
-          style: SwissTypography.titleLarge.copyWith(fontSize: 18),
+          style: TextStyle(
+            fontFamily: 'serif',
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: isDark ? Colors.white : const Color(0xFF0F172A),
+          ),
         ),
         const SizedBox(height: 12),
-        SwissCard(
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: cardBg,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: border, width: 0.8),
+          ),
           child: Column(
             children: grupo.memberRanking.map((member) {
               return Padding(
@@ -674,15 +1537,15 @@ class DashboardScreen extends StatelessWidget {
                         Expanded(
                           child: Text(
                             member.name,
-                            style: SwissTypography.titleMedium.copyWith(fontSize: 14),
+                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                           ),
                         ),
                         Text(
                           '${member.percentage}%',
-                          style: SwissTypography.labelSmall.copyWith(
-                            color: SwissColors.emeraldPrimary,
-                            fontWeight: FontWeight.w700,
-                            fontFeatures: SwissTypography.tabularFigures,
+                          style: const TextStyle(
+                            fontFamily: 'serif',
+                            fontWeight: FontWeight.w800,
+                            color: Color(0xFF7C3AED),
                           ),
                         ),
                       ],
@@ -693,10 +1556,8 @@ class DashboardScreen extends StatelessWidget {
                       child: LinearProgressIndicator(
                         value: member.percentage / 100.0,
                         minHeight: 4,
-                        backgroundColor: isDark
-                            ? SwissColors.darkSurfaceSubdued
-                            : SwissColors.lightSurfaceSubdued,
-                        valueColor: const AlwaysStoppedAnimation<Color>(SwissColors.emeraldPrimary),
+                        backgroundColor: isDark ? SwissColors.darkSurfaceSubdued : const Color(0xFFF3E8FF),
+                        valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF7C3AED)),
                       ),
                     ),
                   ],
@@ -708,10 +1569,21 @@ class DashboardScreen extends StatelessWidget {
         const SizedBox(height: 16),
         Text(
           'Destaques de Interação',
-          style: SwissTypography.titleLarge.copyWith(fontSize: 18),
+          style: TextStyle(
+            fontFamily: 'serif',
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: isDark ? Colors.white : const Color(0xFF0F172A),
+          ),
         ),
         const SizedBox(height: 12),
-        SwissCard(
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: cardBg,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: border, width: 0.8),
+          ),
           child: Column(
             children: [
               Row(
@@ -719,13 +1591,14 @@ class DashboardScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Campeão de Reações',
-                    style: SwissTypography.bodyMedium.copyWith(
+                    style: TextStyle(
+                      fontSize: 13,
                       color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
                     ),
                   ),
                   Text(
                     grupo.memberInteraction.reactionChampionName,
-                    style: SwissTypography.metricSmall,
+                    style: const TextStyle(fontFamily: 'serif', fontWeight: FontWeight.w800),
                   ),
                 ],
               ),
@@ -735,13 +1608,14 @@ class DashboardScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Campeão de Respostas',
-                    style: SwissTypography.bodyMedium.copyWith(
+                    style: TextStyle(
+                      fontSize: 13,
                       color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
                     ),
                   ),
                   Text(
                     grupo.memberInteraction.replyChampionName,
-                    style: SwissTypography.metricSmall,
+                    style: const TextStyle(fontFamily: 'serif', fontWeight: FontWeight.w800),
                   ),
                 ],
               ),
@@ -751,13 +1625,14 @@ class DashboardScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Coruja da Madrugada',
-                    style: SwissTypography.bodyMedium.copyWith(
+                    style: TextStyle(
+                      fontSize: 13,
                       color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
                     ),
                   ),
                   Text(
                     grupo.groupDynamics.nightOwl,
-                    style: SwissTypography.metricSmall,
+                    style: const TextStyle(fontFamily: 'serif', fontWeight: FontWeight.w800),
                   ),
                 ],
               ),

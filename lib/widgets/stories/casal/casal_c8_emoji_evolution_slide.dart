@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/casal_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../shared/seasons_story_footer.dart';
+import 'casal_background_variants.dart';
 import 'casal_story_theme.dart';
 
 /// Slide c8: Evolução de Emojis (Altar & Pódio dos Emojis do Casal)
@@ -23,7 +24,7 @@ class CasalC8EmojiEvolutionSlide extends StatelessWidget {
       categoryIcon: Icons.sentiment_satisfied_alt_rounded,
       title: 'Top Emojis do\nCasal',
       subtitle: 'As reações que dispensaram palavras e marcaram o ano.',
-      backgroundColor: CasalStoryTheme.paperBase,
+      background: CasalBackgroundVariants.c8EmojiEvolution(),
       footer: const SeasonsStoryFooter(editionTag: "mémoire d'amour"),
       child: SingleChildScrollView(
         child: Column(

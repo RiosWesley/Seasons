@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/casal_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../shared/seasons_story_footer.dart';
+import 'casal_background_variants.dart';
 import 'casal_story_theme.dart';
 
 /// Slide c3: Love Language (As 4 Linguagens do Amor do Casal)
@@ -24,7 +25,7 @@ class CasalC3LoveLanguageSlide extends StatelessWidget {
       categoryIcon: Icons.favorite_border_rounded,
       title: 'A Linguagem do\nAmor de Vocês',
       subtitle: 'Como o afeto se traduziu em palavras e sinais.',
-      backgroundColor: CasalStoryTheme.paperBase,
+      background: CasalBackgroundVariants.c3LoveLanguage(),
       footer: const SeasonsStoryFooter(editionTag: "mémoire d'amour"),
       child: SingleChildScrollView(
         child: Column(

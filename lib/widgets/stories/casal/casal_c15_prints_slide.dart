@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/casal_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../shared/seasons_story_footer.dart';
+import 'casal_background_variants.dart';
 import 'casal_story_theme.dart';
 
 /// Slide c15: Prints e Arquivos (Moldura Polaroid do Casal)
@@ -20,8 +21,13 @@ class CasalC15PrintsSlide extends StatelessWidget {
       categoryIcon: Icons.screenshot_monitor_rounded,
       title: 'Prints Tirados\nda Conversa',
       subtitle: 'Estimativa dos momentos eternizados na galeria de fotos.',
-      backgroundColor: CasalStoryTheme.paperBase,
-      footer: const SeasonsStoryFooter(editionTag: "mémoire d'amour"),
+      background: CasalBackgroundVariants.c15Prints(),
+      isDarkTheme: true,
+      footer: const SeasonsStoryFooter(
+        editionTag: "mémoire d'amour",
+        inkPrimary: Colors.white,
+        inkSecondary: Color(0xFFFB7185),
+      ),
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

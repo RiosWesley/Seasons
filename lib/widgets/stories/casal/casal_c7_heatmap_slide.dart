@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/casal_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../shared/seasons_story_footer.dart';
+import 'casal_background_variants.dart';
 import 'casal_story_theme.dart';
 
 /// Slide c7: Heatmap ("A Nossa Hora" - Grade 24h & Horário Sagrado)
@@ -23,8 +24,13 @@ class CasalC7HeatmapSlide extends StatelessWidget {
       categoryIcon: Icons.access_time_rounded,
       title: 'A Nossa Hora',
       subtitle: 'O momento em que o dia desacelera e a conversa flui.',
-      backgroundColor: CasalStoryTheme.paperBase,
-      footer: const SeasonsStoryFooter(editionTag: "mémoire d'amour"),
+      background: CasalBackgroundVariants.c7Heatmap(),
+      isDarkTheme: true,
+      footer: const SeasonsStoryFooter(
+        editionTag: "mémoire d'amour",
+        inkPrimary: Colors.white,
+        inkSecondary: Color(0xFFFB7185),
+      ),
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

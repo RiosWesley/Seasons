@@ -4,6 +4,7 @@ import '../../../stories/adapters/casal_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../shared/seasons_story_footer.dart';
 import '../shared/story_gauge_meter.dart';
+import 'casal_background_variants.dart';
 import 'casal_story_theme.dart';
 
 /// Slide c4: Compatibilidade (StoryGaugeMeter & Diagnóstico Lírico do Casal)
@@ -19,7 +20,7 @@ class CasalC4CompatibilitySlide extends StatelessWidget {
       categoryIcon: Icons.auto_awesome_rounded,
       title: 'Compatibilidade',
       subtitle: 'Algoritmo de afinidade baseado em resposta e estilo.',
-      backgroundColor: CasalStoryTheme.paperBase,
+      background: CasalBackgroundVariants.c4Compatibility(),
       footer: const SeasonsStoryFooter(editionTag: "mémoire d'amour"),
       child: SingleChildScrollView(
         child: Column(

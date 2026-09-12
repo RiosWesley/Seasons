@@ -5,6 +5,7 @@ import '../../../stories/cards/story_card_base.dart';
 import '../shared/editorial_stamp.dart';
 import '../shared/seasons_story_footer.dart';
 import '../shared/story_share_action.dart';
+import 'casal_background_variants.dart';
 import 'casal_story_theme.dart';
 
 /// Slide c18: Conclusão & Passaporte ("Passaporte do Casal")
@@ -25,7 +26,7 @@ class CasalC18PassportSlide extends StatelessWidget {
       categoryIcon: Icons.card_membership_rounded,
       title: 'Passaporte do Casal',
       subtitle: 'O registro oficial e permanente da sintonia a dois.',
-      backgroundColor: CasalStoryTheme.paperBase,
+      background: CasalBackgroundVariants.c18Passport(),
       footer: const SeasonsStoryFooter(editionTag: "mémoire d'amour"),
       child: SingleChildScrollView(
         child: Column(

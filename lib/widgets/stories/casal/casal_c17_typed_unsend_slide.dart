@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/casal_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../shared/seasons_story_footer.dart';
+import 'casal_background_variants.dart';
 import 'casal_story_theme.dart';
 
 /// Slide c17: Digitou mas não enviou (Rascunhos & Hesitações do Casal)
@@ -20,8 +21,13 @@ class CasalC17TypedUnsendSlide extends StatelessWidget {
       categoryIcon: Icons.keyboard_alt_outlined,
       title: 'Digitou e\nApagou...',
       subtitle: 'Textos que foram repensados e guardados no rascunho.',
-      backgroundColor: CasalStoryTheme.paperBase,
-      footer: const SeasonsStoryFooter(editionTag: "mémoire d'amour"),
+      background: CasalBackgroundVariants.c17TypedUnsend(),
+      isDarkTheme: true,
+      footer: const SeasonsStoryFooter(
+        editionTag: "mémoire d'amour",
+        inkPrimary: Colors.white,
+        inkSecondary: Color(0xFFFB7185),
+      ),
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

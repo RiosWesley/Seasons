@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/casal_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../shared/seasons_story_footer.dart';
+import 'casal_background_variants.dart';
 import 'casal_story_theme.dart';
 
 /// Slide c14: Áudios no Vácuo (Encarte de Vinil / Fita Cassete do Casal)
@@ -22,8 +23,13 @@ class CasalC14AudiosSlide extends StatelessWidget {
       categoryIcon: Icons.mic_none_rounded,
       title: 'Áudios no Vácuo',
       subtitle: 'Minutos de voz, risadas e conversas que poderiam ser podcasts.',
-      backgroundColor: CasalStoryTheme.paperBase,
-      footer: const SeasonsStoryFooter(editionTag: "mémoire d'amour"),
+      background: CasalBackgroundVariants.c14Audios(),
+      isDarkTheme: true,
+      footer: const SeasonsStoryFooter(
+        editionTag: "mémoire d'amour",
+        inkPrimary: Colors.white,
+        inkSecondary: Color(0xFFFB7185),
+      ),
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

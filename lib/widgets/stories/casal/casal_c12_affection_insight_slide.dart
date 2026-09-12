@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/casal_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../shared/seasons_story_footer.dart';
+import 'casal_background_variants.dart';
 import 'casal_story_theme.dart';
 
 /// Slide c12: Insight de Afeto (Crônica & Diagnóstico Profundo do Casal)
@@ -18,8 +19,13 @@ class CasalC12AffectionInsightSlide extends StatelessWidget {
       categoryIcon: Icons.psychology_alt_rounded,
       title: 'Insight da Sintonia',
       subtitle: 'A essência poética do ritmo e da conversa a dois.',
-      backgroundColor: CasalStoryTheme.paperBase,
-      footer: const SeasonsStoryFooter(editionTag: "mémoire d'amour"),
+      background: CasalBackgroundVariants.c12Insight(),
+      isDarkTheme: true,
+      footer: const SeasonsStoryFooter(
+        editionTag: "mémoire d'amour",
+        inkPrimary: Colors.white,
+        inkSecondary: Color(0xFFFB7185),
+      ),
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/casal_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../shared/seasons_story_footer.dart';
+import 'casal_background_variants.dart';
 import 'casal_story_theme.dart';
 
 /// Slide c6: Top Palavras (Letterpress & Vocabulário Afetivo do Casal)
@@ -20,7 +21,7 @@ class CasalC6TopWordsSlide extends StatelessWidget {
       categoryIcon: Icons.font_download_rounded,
       title: 'Palavras Mais\nFaladas',
       subtitle: 'O dialeto único e os apelidos da relação.',
-      backgroundColor: CasalStoryTheme.paperBase,
+      background: CasalBackgroundVariants.c6TopWords(),
       footer: const SeasonsStoryFooter(editionTag: "mémoire d'amour"),
       child: SingleChildScrollView(
         child: Column(

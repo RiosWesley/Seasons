@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/casal_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../shared/seasons_story_footer.dart';
+import 'casal_background_variants.dart';
 import 'casal_story_theme.dart';
 
 /// Slide c9: Momentos Especiais (Álbum de Memórias & Dias Marcantes)
@@ -23,7 +24,7 @@ class CasalC9SpecialMomentsSlide extends StatelessWidget {
       categoryIcon: Icons.star_border_rounded,
       title: 'Dias Memoráveis',
       subtitle: 'Momentos que ficaram eternizados no arquivo do casal.',
-      backgroundColor: CasalStoryTheme.paperBase,
+      background: CasalBackgroundVariants.c9SpecialMoments(),
       footer: const SeasonsStoryFooter(editionTag: "mémoire d'amour"),
       child: SingleChildScrollView(
         child: Column(

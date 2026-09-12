@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/casal_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../shared/seasons_story_footer.dart';
+import 'casal_background_variants.dart';
 import 'casal_story_theme.dart';
 
 /// Slide c13: Interações Ocultas (O Famoso Vácuo & Carimbo Desculpa a Demora)
@@ -30,7 +31,7 @@ class CasalC13HiddenInteractionsSlide extends StatelessWidget {
       categoryIcon: Icons.timer_off_outlined,
       title: 'O Famoso Vácuo',
       subtitle: 'Quando a vida real chamou e a resposta demorou um pouco mais.',
-      backgroundColor: CasalStoryTheme.paperBase,
+      background: CasalBackgroundVariants.c13HiddenInteractions(),
       footer: const SeasonsStoryFooter(editionTag: "mémoire d'amour"),
       child: SingleChildScrollView(
         child: Column(

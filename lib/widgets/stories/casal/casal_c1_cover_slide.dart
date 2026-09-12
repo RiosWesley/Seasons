@@ -4,6 +4,7 @@ import '../../../stories/adapters/casal_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../shared/editorial_stamp.dart';
 import '../shared/seasons_story_footer.dart';
+import 'casal_background_variants.dart';
 import 'casal_story_theme.dart';
 
 /// Slide c1: Capa (Pôster de Livro Clássico / Cinema do Casal)
@@ -22,15 +23,20 @@ class CasalC1CoverSlide extends StatelessWidget {
       categoryIcon: Icons.favorite_rounded,
       title: 'A História de\nVocês Dois',
       subtitle: '${_formatDate(adapter.startDate)} até ${_formatDate(adapter.endDate)}',
-      backgroundColor: CasalStoryTheme.paperBase,
-      footer: const SeasonsStoryFooter(editionTag: "mémoire d'amour"),
+      background: CasalBackgroundVariants.c1Cover(),
+      isDarkTheme: true,
+      footer: const SeasonsStoryFooter(
+        editionTag: "mémoire d'amour",
+        inkPrimary: Colors.white,
+        inkSecondary: Color(0xFFFB7185),
+      ),
       child: Center(
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
           decoration: CasalStoryTheme.cardDecoration(
-            backgroundColor: CasalStoryTheme.cardSurface.withValues(alpha: 0.92),
-            borderColor: CasalStoryTheme.hairlineBorder,
+            backgroundColor: const Color(0xFFFFF9F5).withValues(alpha: 0.95),
+            borderColor: const Color(0xFFFECDD3),
             radius: 24,
           ),
           child: Column(

@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/casal_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../shared/seasons_story_footer.dart';
+import 'casal_background_variants.dart';
 import 'casal_story_theme.dart';
 
 /// Slide c16: Encaminhamentos (Envelope Airmail "Par Avion" do Casal)
@@ -20,7 +21,7 @@ class CasalC16ForwardedSlide extends StatelessWidget {
       categoryIcon: Icons.forward_rounded,
       title: 'Fofocas &\nEncaminhamentos',
       subtitle: 'Memes, vídeos e links que moldaram o humor do casal.',
-      backgroundColor: CasalStoryTheme.paperBase,
+      background: CasalBackgroundVariants.c16Forwarded(),
       footer: const SeasonsStoryFooter(editionTag: "mémoire d'amour"),
       child: SingleChildScrollView(
         child: Column(

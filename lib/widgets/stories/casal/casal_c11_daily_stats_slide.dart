@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/casal_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../shared/seasons_story_footer.dart';
+import 'casal_background_variants.dart';
 import 'casal_story_theme.dart';
 
 /// Slide c11: Estatísticas do Cotidiano (Constância & Tempo de Resposta)
@@ -18,7 +19,7 @@ class CasalC11DailyStatsSlide extends StatelessWidget {
       categoryIcon: Icons.bolt_rounded,
       title: 'Ritmo do Cotidiano',
       subtitle: 'A rapidez e a constância da presença um do outro.',
-      backgroundColor: CasalStoryTheme.paperBase,
+      background: CasalBackgroundVariants.c11DailyStats(),
       footer: const SeasonsStoryFooter(editionTag: "mémoire d'amour"),
       child: SingleChildScrollView(
         child: Column(

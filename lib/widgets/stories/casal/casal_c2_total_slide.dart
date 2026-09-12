@@ -4,6 +4,7 @@ import '../../../stories/adapters/casal_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../shared/monumental_count_up.dart';
 import '../shared/seasons_story_footer.dart';
+import 'casal_background_variants.dart';
 import 'casal_story_theme.dart';
 
 /// Slide c2: Total de Mensagens (Monumental Count Up & Balanço do Casal)
@@ -19,7 +20,7 @@ class CasalC2TotalSlide extends StatelessWidget {
       categoryIcon: Icons.forum_rounded,
       title: 'Vocês Falaram\nBastante!',
       subtitle: 'Cada mensagem foi um pedacinho da história.',
-      backgroundColor: CasalStoryTheme.paperBase,
+      background: CasalBackgroundVariants.c2Total(),
       footer: const SeasonsStoryFooter(editionTag: "mémoire d'amour"),
       child: SingleChildScrollView(
         child: Column(

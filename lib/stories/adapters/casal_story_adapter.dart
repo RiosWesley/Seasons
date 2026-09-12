@@ -69,6 +69,21 @@ class CasalStoryAdapter {
     return sorted.first.key;
   }
 
+  int get dominantLoveLanguagePercentage {
+    final ll = result.loveLanguage;
+    final total = ll.hearts + ll.romanticWords + ll.memes + ll.directTexts;
+    if (total == 0) return 25;
+    final map = {
+      'Corações & Emojis': ll.hearts,
+      'Palavras de Afeto': ll.romanticWords,
+      'Memes & Risadas': ll.memes,
+      'Mensagens Diretas': ll.directTexts,
+    };
+    final sorted = map.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+    return ((sorted.first.value / total) * 100).round();
+  }
+
   CompatibilityScore get compatibility => result.compatibility;
   int get compatibilityScore => result.compatibility.score;
   String get compatibilityDescription => result.compatibility.description;
@@ -113,6 +128,17 @@ class CasalStoryAdapter {
       return '$secs seg';
     }
     return '${mins.toStringAsFixed(1)} min';
+  }
+
+  int get fastestResponseSeconds =>
+      (responseTimeStats.fastestResponseMs / 1000).round();
+
+  String get fastestResponseFormatted {
+    final secs = fastestResponseSeconds;
+    if (secs < 60) {
+      return '$secs seg';
+    }
+    return '${(secs / 60).toStringAsFixed(1)} min';
   }
 
   IgnoringStats get ignoringStats => result.ignoringStats;
