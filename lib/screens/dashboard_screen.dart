@@ -8,6 +8,7 @@ import '../core/models/grupo_stats.dart';
 import '../core/models/raw_chat_export.dart';
 import '../stories/adapters/amigos_story_adapter.dart';
 import '../stories/adapters/casal_story_adapter.dart';
+import '../stories/adapters/grupo_story_adapter.dart';
 import '../stories/stories_viewer_screen.dart';
 import '../theme/squircle_border.dart';
 import '../theme/swiss_colors.dart';
@@ -1939,21 +1940,99 @@ class DashboardScreen extends StatelessWidget {
   }
 
   // ==========================================================================
-  // GRUPO SECTION (PRESERVES EXISTING TEST EXPECTATIONS)
+  // GRUPO SECTION (PRESERVES EXISTING TEST EXPECTATIONS + BROADSHEET DEPTH)
   // ==========================================================================
   Widget _buildGrupoSection(BuildContext context, GrupoAnalysisResult grupo) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final cardBg = isDark ? SwissColors.darkSurfaceCard : Colors.white;
-    const border = Color(0xFFE9D5FF);
+    const border = Color(0xFFDDD6FE);
+    const accent = Color(0xFF7C3AED);
+    final adapter = GrupoStoryAdapter(grupo);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // 1. PÓDIO DOS CAMPEÕES (Top 3 Members)
+        if (adapter.top3Members.isNotEmpty) ...[
+          Text(
+            'Pódio da Comunidade',
+            style: TextStyle(
+              fontFamily: 'serif',
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: isDark ? Colors.white : const Color(0xFF0F172A),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: adapter.top3Members.asMap().entries.map((entry) {
+              final idx = entry.key;
+              final m = entry.value;
+              final medals = ['🥇', '🥈', '🥉'];
+              final medal = medals[idx % medals.length];
+              final borderCol = idx == 0
+                  ? const Color(0xFFEAB308)
+                  : (idx == 1 ? const Color(0xFF94A3B8) : const Color(0xFFB45309));
+
+              return Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(
+                    left: idx == 0 ? 0 : 6,
+                    right: idx == adapter.top3Members.length - 1 ? 0 : 6,
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 14),
+                  decoration: BoxDecoration(
+                    color: cardBg,
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(color: borderCol.withValues(alpha: 0.6), width: 1.2),
+                    boxShadow: [
+                      BoxShadow(
+                        color: borderCol.withValues(alpha: isDark ? 0.15 : 0.08),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      Text(medal, style: const TextStyle(fontSize: 24)),
+                      const SizedBox(height: 6),
+                      Text(
+                        m.name,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w800,
+                          color: isDark ? Colors.white : const Color(0xFF0F172A),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        '${m.percentage}%',
+                        style: TextStyle(
+                          fontFamily: 'serif',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w800,
+                          color: borderCol,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 24),
+        ],
+
+        // 2. LEADERBOARD DE MEMBROS MAIS ATIVOS (Exact string expected by tests)
         Text(
           'Leaderboard de Membros Mais Ativos',
           style: TextStyle(
             fontFamily: 'serif',
-            fontSize: 18,
+            fontSize: 20,
             fontWeight: FontWeight.w700,
             color: isDark ? Colors.white : const Color(0xFF0F172A),
           ),
@@ -1963,13 +2042,20 @@ class DashboardScreen extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: cardBg,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(22),
             border: Border.all(color: border, width: 0.8),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
+                blurRadius: 16,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
           child: Column(
             children: grupo.memberRanking.map((member) {
               return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6.0),
+                padding: const EdgeInsets.symmetric(vertical: 7.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -1982,7 +2068,11 @@ class DashboardScreen extends StatelessWidget {
                         Expanded(
                           child: Text(
                             member.name,
-                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: isDark ? Colors.white : const Color(0xFF0F172A),
+                            ),
                           ),
                         ),
                         Text(
@@ -1990,19 +2080,19 @@ class DashboardScreen extends StatelessWidget {
                           style: const TextStyle(
                             fontFamily: 'serif',
                             fontWeight: FontWeight.w800,
-                            color: Color(0xFF7C3AED),
+                            color: accent,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 5),
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(3),
+                      borderRadius: BorderRadius.circular(4),
                       child: LinearProgressIndicator(
                         value: member.percentage / 100.0,
-                        minHeight: 4,
+                        minHeight: 5,
                         backgroundColor: isDark ? SwissColors.darkSurfaceSubdued : const Color(0xFFF3E8FF),
-                        valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF7C3AED)),
+                        valueColor: const AlwaysStoppedAnimation<Color>(accent),
                       ),
                     ),
                   ],
@@ -2011,12 +2101,15 @@ class DashboardScreen extends StatelessWidget {
             }).toList(),
           ),
         ),
-        const SizedBox(height: 16),
+
+        const SizedBox(height: 24),
+
+        // 3. DESTAQUES DE INTERAÇÃO (Exact strings expected by tests)
         Text(
           'Destaques de Interação',
           style: TextStyle(
             fontFamily: 'serif',
-            fontSize: 18,
+            fontSize: 20,
             fontWeight: FontWeight.w700,
             color: isDark ? Colors.white : const Color(0xFF0F172A),
           ),
@@ -2026,60 +2119,246 @@ class DashboardScreen extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: cardBg,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(color: border, width: 0.8),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
+                blurRadius: 16,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              _buildMetricRow(
+                context,
+                icon: LucideIcons.heart,
+                iconColor: const Color(0xFFEC4899),
+                title: 'Campeão de Reações',
+                value: grupo.memberInteraction.reactionChampionName,
+              ),
+              const Divider(height: 24),
+              _buildMetricRow(
+                context,
+                icon: LucideIcons.messageSquare,
+                iconColor: const Color(0xFF7C3AED),
+                title: 'Campeão de Respostas',
+                value: grupo.memberInteraction.replyChampionName,
+              ),
+              const Divider(height: 24),
+              _buildMetricRow(
+                context,
+                icon: LucideIcons.moon,
+                iconColor: const Color(0xFF6366F1),
+                title: 'Coruja da Madrugada',
+                value: grupo.groupDynamics.nightOwl,
+              ),
+              if (grupo.groupDynamics.silent.isNotEmpty) ...[
+                const Divider(height: 24),
+                _buildMetricRow(
+                  context,
+                  icon: LucideIcons.eye,
+                  iconColor: const Color(0xFF64748B),
+                  title: 'Infiltrado / Observador',
+                  value: grupo.groupDynamics.silent,
+                ),
+              ],
+            ],
+          ),
+        ),
+
+        const SizedBox(height: 24),
+
+        // 4. VOLUME LITERÁRIO & REGRA DE PARETO (80/20)
+        Text(
+          'Equivalência & Balança de Poder',
+          style: TextStyle(
+            fontFamily: 'serif',
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            color: isDark ? Colors.white : const Color(0xFF0F172A),
+          ),
+        ),
+        const SizedBox(height: 12),
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: cardBg,
+            borderRadius: BorderRadius.circular(22),
             border: Border.all(color: border, width: 0.8),
           ),
           child: Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Campeão de Reações',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
+                  const Icon(LucideIcons.bookOpen, size: 20, color: Color(0xFF7C3AED)),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Volume Literário',
+                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                        ),
+                        Text(
+                          adapter.literaryBookDescription,
+                          style: TextStyle(
+                            fontFamily: 'serif',
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: isDark ? Colors.white : const Color(0xFF0F172A),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  Text(
-                    grupo.memberInteraction.reactionChampionName,
-                    style: const TextStyle(fontFamily: 'serif', fontWeight: FontWeight.w800),
                   ),
                 ],
               ),
               const Divider(height: 20),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Campeão de Respostas',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
+                  const Icon(LucideIcons.pieChart, size: 20, color: Color(0xFFEAB308)),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Balança de Poder (Regra 80/20)',
+                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                        ),
+                        Text(
+                          'O topo da lista concentra ${adapter.paretoTopSharePercentage}% de todo o volume do grupo.',
+                          style: TextStyle(
+                            fontFamily: 'serif',
+                            fontSize: 13,
+                            color: isDark ? Colors.white : const Color(0xFF0F172A),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  Text(
-                    grupo.memberInteraction.replyChampionName,
-                    style: const TextStyle(fontFamily: 'serif', fontWeight: FontWeight.w800),
                   ),
                 ],
               ),
-              const Divider(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Coruja da Madrugada',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
+            ],
+          ),
+        ),
+
+        const SizedBox(height: 24),
+
+        // 5. TROFÉUS ESPECIAIS DO GRUPO
+        Text(
+          'Dossiê & Troféus Especiais',
+          style: TextStyle(
+            fontFamily: 'serif',
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            color: isDark ? Colors.white : const Color(0xFF0F172A),
+          ),
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: cardBg,
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(color: border, width: 0.8),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(LucideIcons.trophy, size: 20, color: Color(0xFFEAB308)),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Vácuo de Ouro',
+                      style: TextStyle(
+                        fontFamily: 'serif',
+                        fontSize: 15,
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
+                    Text(
+                      '${adapter.vacuumChampion} (${adapter.vacuumCount} vácuos)',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: cardBg,
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(color: border, width: 0.8),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(LucideIcons.newspaper, size: 20, color: Color(0xFF7C3AED)),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Repórter / Mídias',
+                      style: TextStyle(
+                        fontFamily: 'serif',
+                        fontSize: 15,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    Text(
+                      '${adapter.reporterName} (${adapter.reporterPrintCount} prints)',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+
+        const SizedBox(height: 24),
+
+        // 6. CRÔNICA DA COMUNIDADE
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: isDark ? SwissColors.darkSurfaceSubdued : const Color(0xFFFBF8FF),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: border, width: 0.8),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Icon(LucideIcons.quote, size: 22, color: accent),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Text(
+                  adapter.primaryInsight,
+                  style: TextStyle(
+                    fontFamily: 'serif',
+                    fontSize: 14,
+                    height: 1.5,
+                    fontStyle: FontStyle.italic,
+                    color: isDark ? Colors.white : const Color(0xFF1E1B4B),
                   ),
-                  Text(
-                    grupo.groupDynamics.nightOwl,
-                    style: const TextStyle(fontFamily: 'serif', fontWeight: FontWeight.w800),
-                  ),
-                ],
+                ),
               ),
             ],
           ),

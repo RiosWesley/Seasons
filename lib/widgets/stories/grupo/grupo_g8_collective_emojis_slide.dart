@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/grupo_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../../../theme/squircle_border.dart';
+import 'grupo_background_variants.dart';
 import 'grupo_theme.dart';
 
 /// Slide g8: Evolução de Emojis (Painel de cotação da bolsa dos emojis disparados)
@@ -16,6 +17,7 @@ class GrupoG8CollectiveEmojisSlide extends StatelessWidget {
     final emojis = adapter.topEmojis.take(4).toList();
 
     return StoryCardBase(
+      background: GrupoBackgroundVariants.g8CollectiveEmojis(),
       category: 'Cotação de Reações',
       categoryIcon: Icons.currency_exchange_rounded,
       title: 'A Bolsa de\nEmojis',

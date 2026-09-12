@@ -4,6 +4,7 @@ import '../../../stories/adapters/grupo_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../../../theme/squircle_border.dart';
 import '../shared/monumental_count_up.dart';
+import 'grupo_background_variants.dart';
 import 'grupo_theme.dart';
 
 /// Slide g2: Total de Mensagens (Placa censitária monumental + equivalência literária em volumes de livros)
@@ -20,6 +21,7 @@ class GrupoG2LiteraryTotalSlide extends StatelessWidget {
         .replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]}.');
 
     return StoryCardBase(
+      background: GrupoBackgroundVariants.g2LiteraryTotal(),
       category: 'Censo Demográfico',
       categoryIcon: Icons.forum_rounded,
       title: 'A Memória\nEscrita',

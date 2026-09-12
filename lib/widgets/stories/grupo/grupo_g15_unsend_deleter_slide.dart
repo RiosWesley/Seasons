@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/grupo_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../../../theme/squircle_border.dart';
+import 'grupo_background_variants.dart';
 import 'grupo_theme.dart';
 
 /// Slide g15: Quem Mais Apaga (Fantasma do chat invisível com fumaça evanescente via adapter)
@@ -17,6 +18,9 @@ class GrupoG15UnsendDeleterSlide extends StatelessWidget {
     final delCount = adapter.unsendCount;
 
     return StoryCardBase(
+      background: GrupoBackgroundVariants.g15UnsendDeleter(),
+      isDarkTheme: true,
+      backgroundColor: const Color(0xFF0F0A18),
       category: 'Arquivo Invisível',
       categoryIcon: Icons.auto_delete_rounded,
       title: 'O Fantasma\ndo Chat',

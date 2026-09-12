@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/grupo_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../../../theme/squircle_border.dart';
+import 'grupo_background_variants.dart';
 import 'grupo_theme.dart';
 
 /// Slide g13: Quem Mais Tira Print (Crachá de repórter investigativo com tira de filme)
@@ -17,6 +18,9 @@ class GrupoG13ReporterPrintsSlide extends StatelessWidget {
     final printCount = adapter.reporterPrintCount;
 
     return StoryCardBase(
+      background: GrupoBackgroundVariants.g13ReporterPrints(),
+      isDarkTheme: true,
+      backgroundColor: const Color(0xFF0F0A1A),
       category: 'Arquivo Secreto',
       categoryIcon: Icons.camera_alt_rounded,
       title: 'O Repórter\nOficial',

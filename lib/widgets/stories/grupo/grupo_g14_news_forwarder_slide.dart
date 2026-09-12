@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/grupo_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../../../theme/squircle_border.dart';
+import 'grupo_background_variants.dart';
 import 'grupo_theme.dart';
 
 /// Slide g14: Quem Mais Encaminha (Estação central de notícias e memes via adapter)
@@ -17,6 +18,7 @@ class GrupoG14NewsForwarderSlide extends StatelessWidget {
     final forwardCount = adapter.forwardedCount;
 
     return StoryCardBase(
+      background: GrupoBackgroundVariants.g14NewsForwarder(),
       category: 'Central de Notícias',
       categoryIcon: Icons.forward_to_inbox_rounded,
       title: 'A Central de\nDespachos',

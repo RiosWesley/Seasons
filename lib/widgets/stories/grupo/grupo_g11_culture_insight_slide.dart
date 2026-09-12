@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/grupo_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../../../theme/squircle_border.dart';
+import 'grupo_background_variants.dart';
 import 'grupo_theme.dart';
 
 /// Slide g11: Insight Coletivo (Ensaio sociológico com drop-cap iluminada)
@@ -18,6 +19,7 @@ class GrupoG11CultureInsightSlide extends StatelessWidget {
     final remainingText = text.length > 1 ? text.substring(1) : '';
 
     return StoryCardBase(
+      background: GrupoBackgroundVariants.g11CultureInsight(),
       category: 'Ensaio de Domingo',
       categoryIcon: Icons.auto_stories_rounded,
       title: 'Retrato\nSociológico',

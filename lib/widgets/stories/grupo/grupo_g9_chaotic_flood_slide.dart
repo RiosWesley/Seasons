@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/grupo_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../../../theme/squircle_border.dart';
+import 'grupo_background_variants.dart';
 import 'grupo_theme.dart';
 
 /// Slide g9: Flood Moments (Edição extraordinária do minuto mais caótico da história do chat)
@@ -17,6 +18,9 @@ class GrupoG9ChaoticFloodSlide extends StatelessWidget {
     final estimatedFloodRush = (adapter.totalMessages * 0.015).round().clamp(15, 120);
 
     return StoryCardBase(
+      background: GrupoBackgroundVariants.g9ChaoticFlood(),
+      isDarkTheme: true,
+      backgroundColor: const Color(0xFF18081E),
       category: 'Plantão Urgente',
       categoryIcon: Icons.bolt_rounded,
       title: 'Edição\nExtraordinária',

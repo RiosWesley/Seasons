@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/grupo_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../../../theme/squircle_border.dart';
+import 'grupo_background_variants.dart';
 import 'grupo_theme.dart';
 
 /// Slide g12: Quem Mais Ignora ("Troféu Vácuo de Ouro" em pedestal de pedra)
@@ -17,6 +18,9 @@ class GrupoG12GhostingTrophySlide extends StatelessWidget {
     final count = adapter.vacuumCount;
 
     return StoryCardBase(
+      background: GrupoBackgroundVariants.g12GhostingTrophy(),
+      isDarkTheme: true,
+      backgroundColor: const Color(0xFF1B0B33),
       category: 'Gabinete do Silêncio',
       categoryIcon: Icons.hourglass_empty_rounded,
       title: 'O Troféu Vácuo\nde Ouro',

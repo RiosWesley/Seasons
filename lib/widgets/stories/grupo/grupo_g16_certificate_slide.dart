@@ -5,6 +5,7 @@ import '../../../stories/cards/story_card_base.dart';
 import '../../../theme/squircle_border.dart';
 import '../shared/editorial_stamp.dart';
 import '../shared/story_share_action.dart';
+import 'grupo_background_variants.dart';
 import 'grupo_theme.dart';
 
 /// Slide g16: Conclusão & Certificado Oficial da Comunidade (com bordas guilloche e botão de compartilhamento)
@@ -24,6 +25,7 @@ class GrupoG16CertificateSlide extends StatelessWidget {
     final topTopic = adapter.topics.isNotEmpty ? adapter.topics.first.topic : 'Debates Gerais';
 
     return StoryCardBase(
+      background: GrupoBackgroundVariants.g16Certificate(),
       category: 'Registro Oficial',
       categoryIcon: Icons.workspace_premium_rounded,
       title: 'Certificado de\nConvivência',

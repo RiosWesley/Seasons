@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/grupo_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../../../theme/squircle_border.dart';
+import 'grupo_background_variants.dart';
 import 'grupo_theme.dart';
 
 /// Slide g5: Timeline Coletiva (Calendário anual de 12 meses / ondas sazonais)
@@ -27,6 +28,9 @@ class GrupoG5TimelineSlide extends StatelessWidget {
     final displayItems = timeline.take(6).toList();
 
     return StoryCardBase(
+      background: GrupoBackgroundVariants.g5Timeline(),
+      isDarkTheme: true,
+      backgroundColor: const Color(0xFF15082E),
       category: 'Cronologia Comunitária',
       categoryIcon: Icons.calendar_month_rounded,
       title: 'As Ondas do Ano',

@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/grupo_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../../../theme/squircle_border.dart';
+import 'grupo_background_variants.dart';
 import 'grupo_theme.dart';
 
 /// Slide g3: Top 3 do Grupo (Pódio 3D monumental com medalhas ouro/prata/bronze e percentuais)
@@ -22,6 +23,9 @@ class GrupoG3Top3PodiumSlide extends StatelessWidget {
         (m1?.percentage ?? 0) + (m2?.percentage ?? 0) + (m3?.percentage ?? 0);
 
     return StoryCardBase(
+      background: GrupoBackgroundVariants.g3Podium(),
+      isDarkTheme: true,
+      backgroundColor: const Color(0xFF1E0A3C),
       category: 'Tribuna de Honra',
       categoryIcon: Icons.military_tech_rounded,
       title: 'O Pódio da\nAssembleia',

@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/grupo_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../../../theme/squircle_border.dart';
+import 'grupo_background_variants.dart';
 import 'grupo_theme.dart';
 
 /// Slide g10: Análise de Rede (Constelação/grafo estelar de interações de quem responde a quem mais)
@@ -24,6 +25,7 @@ class GrupoG10NetworkMatrixSlide extends StatelessWidget {
         : (adapter.top3Members.length > 1 ? adapter.top3Members[1].name : 'O Reator');
 
     return StoryCardBase(
+      background: GrupoBackgroundVariants.g10NetworkMatrix(),
       category: 'Cartografia Social',
       categoryIcon: Icons.hub_rounded,
       title: 'A Teia de\nConexões',

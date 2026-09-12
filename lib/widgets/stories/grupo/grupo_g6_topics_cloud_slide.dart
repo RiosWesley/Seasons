@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/grupo_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../../../theme/squircle_border.dart';
+import 'grupo_background_variants.dart';
 import 'grupo_theme.dart';
 
 /// Slide g6: Top Conversas (Pauta da assembleia com temas e nuvem léxica)
@@ -17,6 +18,7 @@ class GrupoG6TopicsCloudSlide extends StatelessWidget {
     final topWords = adapter.result.generalStats.topWords.take(6).toList();
 
     return StoryCardBase(
+      background: GrupoBackgroundVariants.g6TopicsCloud(),
       category: 'Ordem do Dia',
       categoryIcon: Icons.gavel_rounded,
       title: 'A Pauta da\nAssembleia',

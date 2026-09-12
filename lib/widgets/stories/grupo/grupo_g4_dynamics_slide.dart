@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/grupo_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../../../theme/squircle_border.dart';
+import 'grupo_background_variants.dart';
 import 'grupo_theme.dart';
 
 /// Slide g4: Dinâmicas do Grupo (Diagrama de Pareto 80/20: falantes ativos vs ouvintes silenciosos)
@@ -19,6 +20,7 @@ class GrupoG4DynamicsSlide extends StatelessWidget {
     final silent = adapter.groupDynamics.silent;
 
     return StoryCardBase(
+      background: GrupoBackgroundVariants.g4Dynamics(),
       category: 'Sociologia Coletiva',
       categoryIcon: Icons.pie_chart_outline_rounded,
       title: 'A Lei de Pareto\n(80/20)',

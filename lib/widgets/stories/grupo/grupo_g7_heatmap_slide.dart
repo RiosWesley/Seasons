@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../stories/adapters/grupo_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../../../theme/squircle_border.dart';
+import 'grupo_background_variants.dart';
 import 'grupo_theme.dart';
 
 /// Slide g7: Heatmap de Atividade (Matriz de temperatura 24h com rosa dos ventos)
@@ -17,6 +18,9 @@ class GrupoG7HeatmapSlide extends StatelessWidget {
     final topDay = adapter.result.generalStats.mostActiveDayOfWeek;
 
     return StoryCardBase(
+      background: GrupoBackgroundVariants.g7Heatmap(),
+      isDarkTheme: true,
+      backgroundColor: const Color(0xFF130826),
       category: 'Termômetro Coletivo',
       categoryIcon: Icons.access_time_filled_rounded,
       title: 'A Hora de Maior\nEbulição',

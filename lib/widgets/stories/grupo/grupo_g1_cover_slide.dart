@@ -4,6 +4,7 @@ import '../../../stories/adapters/grupo_story_adapter.dart';
 import '../../../stories/cards/story_card_base.dart';
 import '../../../theme/squircle_border.dart';
 import '../shared/editorial_stamp.dart';
+import 'grupo_background_variants.dart';
 import 'grupo_theme.dart';
 
 /// Slide g1: Capa da Gazeta (Cartaz de comunidade broadsheet com selo editorial e contagem de membros)
@@ -18,6 +19,7 @@ class GrupoG1CoverSlide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoryCardBase(
+      background: GrupoBackgroundVariants.g1Cover(),
       category: 'A Gazeta da Comunidade',
       categoryIcon: Icons.newspaper_rounded,
       title: 'Gazeta Oficial\ndos Membros',
