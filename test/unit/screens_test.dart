@@ -145,7 +145,7 @@ void main() {
 
       expect(find.text('Relatório Completo'), findsOneWidget);
       expect(find.text('Modo Casal'), findsOneWidget);
-      expect(find.text('Iniciar Wrapped (9:16 Stories)'), findsOneWidget);
+      expect(find.text('Iniciar Wrapped (Stories)'), findsOneWidget);
 
       await tester.ensureVisible(find.text('Linguagem do Amor (Love Language)'));
       expect(find.text('Linguagem do Amor (Love Language)'), findsOneWidget);

@@ -552,7 +552,7 @@ class DashboardScreen extends StatelessWidget {
 
           // Primary Stories CTA Button
           SwissButton(
-            label: 'Iniciar Wrapped (9:16 Stories)',
+            label: 'Iniciar Wrapped (Stories)',
             icon: LucideIcons.sparkles,
             type: SwissButtonType.primary,
             fullWidth: true,

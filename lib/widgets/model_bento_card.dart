@@ -11,8 +11,8 @@ class ModelBentoCard extends StatelessWidget {
   final String eyebrow;
   final String participantHint;
   final IconData icon;
-  final IconData microBadgeIcon;
-  final String microBadgeLabel;
+  final IconData? microBadgeIcon;
+  final String? microBadgeLabel;
   final String description;
   final List<String> featureTags;
   final Color accentColor;
@@ -34,8 +34,8 @@ class ModelBentoCard extends StatelessWidget {
     required this.eyebrow,
     required this.participantHint,
     required this.icon,
-    required this.microBadgeIcon,
-    required this.microBadgeLabel,
+    this.microBadgeIcon,
+    this.microBadgeLabel,
     required this.description,
     this.featureTags = const [],
     required this.accentColor,
@@ -286,46 +286,48 @@ class ModelBentoCard extends StatelessWidget {
                   ),
                 ],
 
-                const SizedBox(height: 10),
+                if (microBadgeLabel != null && microBadgeIcon != null) ...[
+                  const SizedBox(height: 10),
 
-                // Micro-Badge of specific lens capability
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
-                  decoration: ShapeDecoration(
-                    color: isDark
-                        ? Colors.white.withValues(alpha: 0.07)
-                        : Colors.white.withValues(alpha: 0.70),
-                    shape: SquircleBorder.radius(
-                      8,
-                      side: BorderSide(
-                        color: accentColor.withValues(alpha: 0.25),
-                        width: 0.8,
-                      ),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        microBadgeIcon,
-                        size: 11.5,
-                        color: accentColor,
-                      ),
-                      const SizedBox(width: 5),
-                      Text(
-                        microBadgeLabel,
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.1,
-                          color: isDark
-                              ? SwissColors.darkTextPrimary
-                              : const Color(0xFF1E293B),
+                  // Micro-Badge of specific lens capability
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                    decoration: ShapeDecoration(
+                      color: isDark
+                          ? Colors.white.withValues(alpha: 0.07)
+                          : Colors.white.withValues(alpha: 0.70),
+                      shape: SquircleBorder.radius(
+                        8,
+                        side: BorderSide(
+                          color: accentColor.withValues(alpha: 0.25),
+                          width: 0.8,
                         ),
                       ),
-                    ],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          microBadgeIcon,
+                          size: 11.5,
+                          color: accentColor,
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          microBadgeLabel!,
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.1,
+                            color: isDark
+                                ? SwissColors.darkTextPrimary
+                                : const Color(0xFF1E293B),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+                ],
 
                 const SizedBox(height: 10),
 

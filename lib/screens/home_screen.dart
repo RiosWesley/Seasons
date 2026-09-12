@@ -702,8 +702,6 @@ class _HomeScreenState extends State<HomeScreen> {
             eyebrow: 'AFINIDADE & RITMO A DOIS',
             participantHint: '2 participantes',
             icon: LucideIcons.heart,
-            microBadgeIcon: LucideIcons.heartHandshake,
-            microBadgeLabel: 'Ritmo a dois & Afinidade',
             description:
                 'Índice de sintonia amorosa, love language (corações, afeto, memes), horários a dois e métricas de resposta.',
             accentColor: const Color(0xFFE11D48),
@@ -722,8 +720,6 @@ class _HomeScreenState extends State<HomeScreen> {
             eyebrow: 'DUPLA & RESENHA A DOIS',
             participantHint: '2 amigos (dupla)',
             icon: LucideIcons.users,
-            microBadgeIcon: LucideIcons.sparkles,
-            microBadgeLabel: 'Duelo de estilos & Resenha a dois',
             description:
                 'A amizade a dois: quem responde mais rápido, duelo de estilos, áudios intermináveis de podcast, vácuos históricos e cumplicidade.',
             accentColor: const Color(0xFF2563EB),
@@ -742,8 +738,6 @@ class _HomeScreenState extends State<HomeScreen> {
             eyebrow: 'LEADERBOARD GERAL & VIBES',
             participantHint: '3 ou mais participantes',
             icon: LucideIcons.messagesSquare,
-            microBadgeIcon: LucideIcons.trophy,
-            microBadgeLabel: 'Leaderboard geral & Radar de vibes',
             description:
                 'Leaderboard geral com pódios e porcentagens, matriz de interação, ranking de vibes e corujas da madrugada.',
             accentColor: const Color(0xFF7C3AED),
@@ -767,8 +761,6 @@ class _HomeScreenState extends State<HomeScreen> {
     required String eyebrow,
     required String participantHint,
     required IconData icon,
-    required IconData microBadgeIcon,
-    required String microBadgeLabel,
     required String description,
     required Color accentColor,
     required List<Color> bgLightGradient,
@@ -910,46 +902,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
 
-                const SizedBox(height: 12),
 
-                // Micro-Badge of specific lens capability
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
-                  decoration: ShapeDecoration(
-                    color: isDark
-                        ? Colors.white.withValues(alpha: 0.07)
-                        : Colors.white.withValues(alpha: 0.70),
-                    shape: SquircleBorder.radius(
-                      8,
-                      side: BorderSide(
-                        color: accentColor.withValues(alpha: 0.25),
-                        width: 0.8,
-                      ),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        microBadgeIcon,
-                        size: 11.5,
-                        color: accentColor,
-                      ),
-                      const SizedBox(width: 5),
-                      Text(
-                        microBadgeLabel,
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.1,
-                          color: isDark
-                              ? SwissColors.darkTextPrimary
-                              : const Color(0xFF1E293B),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
 
                 const SizedBox(height: 10),
 
@@ -1486,8 +1439,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
         const SizedBox(height: 12),
 
-        // Static Showcase Card 1: "Meu Amor 💕"
+        // Static Showcase Card 1: "Meu Amor 💕" (Casal)
         _buildRecentWrappedCard(
+          mode: ChatMode.casal,
           avatarBg: const Color(0xFFFDE8EA),
           iconColor: const Color(0xFFE11D48),
           icon: LucideIcons.heart,
@@ -1498,8 +1452,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
         const SizedBox(height: 10),
 
-        // Static Showcase Card 2: "Resenha da Dupla"
+        // Static Showcase Card 2: "Resenha da Dupla" (Amigos)
         _buildRecentWrappedCard(
+          mode: ChatMode.amigos,
           avatarBg: const Color(0xFFE0EDFD),
           iconColor: const Color(0xFF2563EB),
           icon: LucideIcons.users,
@@ -1510,8 +1465,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
         const SizedBox(height: 10),
 
-        // Static Showcase Card 3: "Turma da Faculdade 🎓"
+        // Static Showcase Card 3: "Turma da Faculdade 🎓" (Grupo)
         _buildRecentWrappedCard(
+          mode: ChatMode.grupo,
           avatarBg: const Color(0xFFEDE9FE),
           iconColor: const Color(0xFF7C3AED),
           icon: LucideIcons.messagesSquare,
@@ -1525,6 +1481,7 @@ class _HomeScreenState extends State<HomeScreen> {
           (saved) => Padding(
             padding: const EdgeInsets.only(top: 10.0),
             child: _buildRecentWrappedCard(
+              mode: saved.mode,
               avatarBg: saved.mode == ChatMode.casal
                   ? const Color(0xFFFDE8EA)
                   : (saved.mode == ChatMode.grupo
@@ -1569,6 +1526,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildRecentWrappedCard({
+    required ChatMode mode,
     required Color avatarBg,
     required Color iconColor,
     required IconData icon,
@@ -1576,130 +1534,225 @@ class _HomeScreenState extends State<HomeScreen> {
     required String subtitle,
     required VoidCallback onTap,
   }) {
+    final String modeBadgeLabel;
+    final Color modeAccentColor;
+    final List<Color> cardGradient;
+    final Color cardBorderColor;
+    final Color badgeBg;
+    final Color badgeTextColor;
+    final Color buttonBg;
+    final Color buttonBorder;
+    final Color buttonText;
+    final CustomPainter doodlePainter;
+
+    switch (mode) {
+      case ChatMode.casal:
+        modeBadgeLabel = 'MODO CASAL';
+        modeAccentColor = const Color(0xFFE11D48);
+        cardGradient = const [Color(0xFFFFF9FA), Color(0xFFFFF1F3)];
+        cardBorderColor = const Color(0xFFFECDD3);
+        badgeBg = const Color(0xFFFFE4E6);
+        badgeTextColor = const Color(0xFFE11D48);
+        buttonBg = const Color(0xFFFFF1F2);
+        buttonBorder = const Color(0xFFFECDD3);
+        buttonText = const Color(0xFFE11D48);
+        doodlePainter = _HeartDoodlePainter();
+        break;
+      case ChatMode.amigos:
+        modeBadgeLabel = 'MODO AMIGOS';
+        modeAccentColor = const Color(0xFF2563EB);
+        cardGradient = const [Color(0xFFF9FBFE), Color(0xFFF0F7FF)];
+        cardBorderColor = const Color(0xFFBAE6FD);
+        badgeBg = const Color(0xFFE0F2FE);
+        badgeTextColor = const Color(0xFF2563EB);
+        buttonBg = const Color(0xFFF0F9FF);
+        buttonBorder = const Color(0xFFBAE6FD);
+        buttonText = const Color(0xFF2563EB);
+        doodlePainter = _AmigosDoodlePainter();
+        break;
+      case ChatMode.grupo:
+        modeBadgeLabel = 'MODO GRUPO';
+        modeAccentColor = const Color(0xFF7C3AED);
+        cardGradient = const [Color(0xFFFAF8FF), Color(0xFFF5F2FF)];
+        cardBorderColor = const Color(0xFFDDD6FE);
+        badgeBg = const Color(0xFFEDE9FE);
+        badgeTextColor = const Color(0xFF7C3AED);
+        buttonBg = const Color(0xFFF5F3FF);
+        buttonBorder = const Color(0xFFDDD6FE);
+        buttonText = const Color(0xFF7C3AED);
+        doodlePainter = _GrupoDoodlePainter();
+        break;
+    }
+
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: const Color(0xFFF1EFEA), width: 1.0),
-        boxShadow: [
+      decoration: ShapeDecoration(
+        gradient: LinearGradient(
+          colors: cardGradient,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        shape: SquircleBorder.radius(
+          20,
+          side: BorderSide(color: cardBorderColor, width: 1.0),
+        ),
+        shadows: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.025),
-            blurRadius: 12,
-            offset: const Offset(0, 3),
+            color: modeAccentColor.withValues(alpha: 0.05),
+            blurRadius: 14,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
-      child: Row(
+      clipBehavior: Clip.antiAlias,
+      child: Stack(
         children: [
-          // Squircle Avatar (50x50)
-          Container(
-            width: 50,
-            height: 50,
-            decoration: ShapeDecoration(
-              color: avatarBg,
-              shape: SquircleBorder.radius(16),
-            ),
-            child: Center(
-              child: Icon(icon, color: iconColor, size: 24),
+          // Faint organic doodle layer matching mode identity
+          Positioned.fill(
+            child: Opacity(
+              opacity: 0.55,
+              child: CustomPaint(painter: doodlePainter),
             ),
           ),
-          const SizedBox(width: 14),
-
-          // Title & Subtitle Column
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+            child: Row(
               children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontFamily: 'serif',
-                    fontSize: 16.5,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF0F172A),
-                    letterSpacing: -0.2,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Color(0xFF64748B),
-                    fontWeight: FontWeight.w400,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 8),
-
-          // Pill Action Button: "Ver análise →"
-          Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: _isLoading ? null : onTap,
-              borderRadius: BorderRadius.circular(999),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                decoration: const ShapeDecoration(
-                  color: Color(0xFFF8FAFC),
-                  shape: StadiumBorder(
-                    side: BorderSide(color: Color(0xFFE2E8F0), width: 1.0),
-                  ),
-                  shadows: [
-                    BoxShadow(
-                      color: Color(0x04000000),
-                      blurRadius: 4,
-                      offset: Offset(0, 1),
+                // Squircle Avatar (50x50) with mode-colored squircle border
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: ShapeDecoration(
+                    color: avatarBg,
+                    shape: SquircleBorder.radius(
+                      16,
+                      side: BorderSide(color: cardBorderColor.withValues(alpha: 0.8), width: 1.0),
                     ),
-                  ],
+                  ),
+                  child: Center(
+                    child: Icon(icon, color: iconColor, size: 24),
+                  ),
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Text(
-                      'Ver análise',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF0F172A),
+                const SizedBox(width: 14),
+
+                // Title & Subtitle Column with Mode Badge
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                            decoration: ShapeDecoration(
+                              color: badgeBg,
+                              shape: SquircleBorder.radius(6),
+                            ),
+                            child: Text(
+                              modeBadgeLabel,
+                              style: TextStyle(
+                                fontSize: 9.5,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: 0.7,
+                                color: badgeTextColor,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontFamily: 'serif',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF0F172A),
+                          letterSpacing: -0.2,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Color(0xFF64748B),
+                          fontWeight: FontWeight.w400,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+
+                // Pill Action Button: "Ver análise →" styled with mode colors
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: _isLoading ? null : onTap,
+                    borderRadius: BorderRadius.circular(999),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+                      decoration: ShapeDecoration(
+                        color: buttonBg,
+                        shape: SquircleBorder.radius(
+                          10,
+                          side: BorderSide(color: buttonBorder, width: 1.0),
+                        ),
+                        shadows: [
+                          BoxShadow(
+                            color: modeAccentColor.withValues(alpha: 0.08),
+                            blurRadius: 6,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Ver análise',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: buttonText,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Icon(
+                            LucideIcons.arrowRight,
+                            size: 12,
+                            color: buttonText,
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(width: 4),
-                    Icon(
-                      LucideIcons.arrowRight,
-                      size: 12,
-                      color: Color(0xFF0F172A),
+                  ),
+                ),
+
+                const SizedBox(width: 6),
+
+                // Vertical 3-Dots Menu
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: _showAllModelsBottomSheet,
+                    borderRadius: BorderRadius.circular(20),
+                    child: const Padding(
+                      padding: EdgeInsets.all(4.0),
+                      child: Icon(
+                        LucideIcons.moreVertical,
+                        size: 20,
+                        color: Color(0xFF64748B),
+                      ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          ),
-
-          const SizedBox(width: 6),
-
-          // Vertical 3-Dots Menu
-          Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: _showAllModelsBottomSheet,
-              borderRadius: BorderRadius.circular(20),
-              child: const Padding(
-                padding: EdgeInsets.all(4.0),
-                child: Icon(
-                  LucideIcons.moreVertical,
-                  size: 20,
-                  color: Color(0xFF64748B),
-                ),
-              ),
+              ],
             ),
           ),
         ],

@@ -97,9 +97,6 @@ void main() {
       expect(find.text('Modo Amigos'), findsOneWidget);
       expect(find.text('Modo Grupo'), findsNothing);
 
-      // Micro badges
-      expect(find.text('Ritmo a dois & Afinidade'), findsOneWidget);
-      expect(find.text('Duelo de estilos & Resenha a dois'), findsOneWidget);
 
       // Recommendation tag should be present on Casal only
       expect(find.text('Recomendado'), findsOneWidget);

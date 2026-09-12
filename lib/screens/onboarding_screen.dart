@@ -524,7 +524,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   icon: LucideIcons.share2,
                   iconColor: const Color(0xFFF59E0B),
                   bgColor: const Color(0xFFFEF3C7),
-                  title: 'Stories 9:16 Prontos',
+                  title: 'Stories Prontos',
                   subtitle: 'Retrospectiva visual cinematográfica para Instagram e WhatsApp.',
                 ),
               ],
@@ -653,8 +653,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             eyebrow: 'AFINIDADE & RITMO A DOIS',
             participantHint: '2 participantes',
             icon: LucideIcons.heart,
-            microBadgeIcon: LucideIcons.heartHandshake,
-            microBadgeLabel: 'Ritmo a dois & Afinidade',
             description:
                 'Sintonia do casal, linguagens do afeto, horários a dois, carinhos e equilíbrio de mensagens.',
             featureTags: const ['Love Language', 'Quem Puxa Papo', 'Horário do Amor', 'Sintonia 360°'],
@@ -676,8 +674,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             eyebrow: 'PARCERIA, RESENHA & ZOEIRA',
             participantHint: '2 amigos (dupla)',
             icon: LucideIcons.users,
-            microBadgeIcon: LucideIcons.sparkles,
-            microBadgeLabel: 'Duelo de estilos & Resenha a dois',
             description:
                 'A amizade a dois: duelo de estilos, quem responde mais rápido, áudios intermináveis de podcast, vácuos históricos e cumplicidade.',
             featureTags: const ['Duelo de Estilos', 'Podcast de Áudios', 'Ranking do Vácuo', 'Cultura de Emojis'],
@@ -699,8 +695,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             eyebrow: 'LEADERBOARD GERAL & VIBES',
             participantHint: '3 ou mais participantes',
             icon: LucideIcons.messagesSquare,
-            microBadgeIcon: LucideIcons.trophy,
-            microBadgeLabel: 'Leaderboard geral & Radar de vibes',
             description:
                 'Leaderboard geral de mensagens, pódio de engajamento, radar de vibes, matriz coletiva e corujas da madrugada.',
             featureTags: const ['Pódio Geral', 'Radar de Vibes', 'Corujas da Madrugada', 'Matriz de Interação'],
@@ -712,69 +706,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             avatarBgLight: const Color(0xFFEDE9FE),
             avatarBgDark: const Color(0xFF251445),
             doodlePainter: GrupoDoodlePainter(),
-          ),
-
-          const SizedBox(height: 14),
-
-          // Interactive Stories 9:16 Banner Card
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: ShapeDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF0F172A), Color(0xFF1E293B)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              shape: SquircleBorder.card(),
-              shadows: [
-                BoxShadow(
-                  color: const Color(0xFF0F172A).withValues(alpha: 0.18),
-                  blurRadius: 16,
-                  offset: const Offset(0, 6),
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 44,
-                  height: 44,
-                  decoration: ShapeDecoration(
-                    color: Colors.white.withValues(alpha: 0.12),
-                    shape: SquircleBorder.radius(12),
-                  ),
-                  child: const Center(
-                    child: Icon(LucideIcons.smartphone, color: Colors.white, size: 22),
-                  ),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        'Stories Interativos 9:16',
-                        style: TextStyle(
-                          fontSize: 14.5,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(height: 3),
-                      Text(
-                        'Inspirado no Spotify Wrapped: toque para avançar, segure para pausar e exporte cards prontos para compartilhar.',
-                        style: TextStyle(
-                          fontSize: 12.5,
-                          fontWeight: FontWeight.w400,
-                          height: 1.4,
-                          color: Color(0xFFC7D2FE),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
           ),
         ],
       ),

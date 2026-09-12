@@ -630,8 +630,6 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
           eyebrow: 'AFINIDADE & RITMO A DOIS',
           icon: LucideIcons.heart,
           participantHint: '2 participantes',
-          microBadgeIcon: LucideIcons.heartHandshake,
-          microBadgeLabel: 'Ritmo a dois & Afinidade',
           accentColor: const Color(0xFFE11D48),
           accentSecondary: const Color(0xFFF43F5E),
           bgLightGradient: const [Color(0xFFFFF1F2), Color(0xFFFFE4E6)],
@@ -656,8 +654,6 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
           eyebrow: 'PARCERIA, RESENHA & ZOEIRA',
           icon: LucideIcons.users,
           participantHint: '2 amigos (dupla)',
-          microBadgeIcon: LucideIcons.sparkles,
-          microBadgeLabel: 'Duelo de estilos & Resenha a dois',
           accentColor: const Color(0xFF2563EB),
           accentSecondary: const Color(0xFF3B82F6),
           bgLightGradient: const [Color(0xFFF0F9FF), Color(0xFFE0F2FE)],
@@ -683,8 +679,6 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
           eyebrow: 'LEADERBOARD GERAL & VIBES',
           icon: LucideIcons.messagesSquare,
           participantHint: '${_participants.length} participantes',
-          microBadgeIcon: LucideIcons.trophy,
-          microBadgeLabel: 'Leaderboard geral & Radar de vibes',
           accentColor: const Color(0xFF1D4ED8),
           accentSecondary: const Color(0xFF2563EB),
           bgLightGradient: const [Color(0xFFEFF6FF), Color(0xFFDBEAFE)],
@@ -1095,46 +1089,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                                     ),
                                   ],
 
-                                  const SizedBox(height: 10),
 
-                                  // Micro-Badge of specific lens capability
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
-                                    decoration: ShapeDecoration(
-                                      color: isDark
-                                      ? Colors.white.withValues(alpha: 0.07)
-                                      : Colors.white.withValues(alpha: 0.70),
-                                      shape: SquircleBorder.radius(
-                                        8,
-                                        side: BorderSide(
-                                          color: opt.accentColor.withValues(alpha: 0.25),
-                                          width: 0.8,
-                                        ),
-                                      ),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(
-                                          opt.microBadgeIcon,
-                                          size: 11.5,
-                                          color: opt.accentColor,
-                                        ),
-                                        const SizedBox(width: 5),
-                                        Text(
-                                          opt.microBadgeLabel,
-                                          style: TextStyle(
-                                            fontSize: 11,
-                                            fontWeight: FontWeight.w600,
-                                            letterSpacing: 0.1,
-                                            color: isDark
-                                                ? SwissColors.darkTextPrimary
-                                                : const Color(0xFF1E293B),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
 
                                   const SizedBox(height: 10),
 

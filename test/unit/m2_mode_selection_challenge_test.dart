@@ -578,9 +578,9 @@ void main() {
       // Radio indicator on Casal card is glowing and checked
       expect(find.byIcon(LucideIcons.check), findsOneWidget);
 
-      // Micro badges and typography present
-      expect(find.text('Ritmo a dois & Afinidade'), findsOneWidget);
-      expect(find.text('Duelo de estilos & Resenha a dois'), findsOneWidget);
+      // Mode titles and typography present
+      expect(find.text('Modo Casal'), findsOneWidget);
+      expect(find.text('Modo Amigos'), findsOneWidget);
 
       expect(tester.takeException(), isNull);
     });

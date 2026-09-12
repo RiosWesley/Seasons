@@ -74,7 +74,7 @@ void main() {
       expect(find.text('Suas conversas guardam histórias inesquecíveis.'), findsOneWidget);
       expect(find.text('Privacidade Inegociável'), findsOneWidget);
       expect(find.text('Análise Instantânea'), findsOneWidget);
-      expect(find.text('Stories 9:16 Prontos'), findsOneWidget);
+      expect(find.text('Stories Prontos'), findsOneWidget);
 
       // Bottom Navigation
       expect(find.text('Continuar'), findsOneWidget);
@@ -98,7 +98,6 @@ void main() {
       expect(find.text('Modo Casal'), findsOneWidget);
       expect(find.text('Modo Amigos'), findsOneWidget);
       expect(find.text('Modo Grupo'), findsOneWidget);
-      expect(find.text('Stories Interativos 9:16'), findsOneWidget);
 
       // Advance to Page 3
       await tester.tap(find.text('Continuar'));

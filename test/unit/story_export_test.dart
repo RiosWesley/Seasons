@@ -180,8 +180,8 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      // Find the hero button "Iniciar Wrapped (9:16 Stories)"
-      final storyButtonFinder = find.text('Iniciar Wrapped (9:16 Stories)');
+      // Find the hero button "Iniciar Wrapped (Stories)"
+      final storyButtonFinder = find.text('Iniciar Wrapped (Stories)');
       expect(storyButtonFinder, findsOneWidget);
 
       await tester.tap(storyButtonFinder);

@@ -444,18 +444,15 @@ void main() {
       expect(find.text('Modelos de Análise'), findsOneWidget);
       expect(find.text('Algoritmos calibrados para cada dinâmica de relacionamento.'), findsOneWidget);
 
-      // Verify all 3 Bento cards are rendered with their eyebrows and badges
+      // Verify all 3 Bento cards are rendered with their eyebrows and titles
       expect(find.text('AFINIDADE & RITMO A DOIS'), findsOneWidget);
       expect(find.text('Modo Casal'), findsOneWidget);
-      expect(find.text('Ritmo a dois & Afinidade'), findsOneWidget);
 
       expect(find.text('DUPLA & RESENHA A DOIS'), findsOneWidget);
       expect(find.text('Modo Amigos'), findsOneWidget);
-      expect(find.text('Duelo de estilos & Resenha a dois'), findsOneWidget);
 
       expect(find.text('LEADERBOARD GERAL & VIBES'), findsOneWidget);
       expect(find.text('Modo Grupo'), findsOneWidget);
-      expect(find.text('Leaderboard geral & Radar de vibes'), findsOneWidget);
 
       // Verify 3 demo action buttons are present
       expect(find.text('Experimentar com conversa de exemplo'), findsNWidgets(3));
