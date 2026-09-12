@@ -194,7 +194,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(tester.takeException(), isNull);
-      expect(find.text('Chat Wrapped'), findsOneWidget);
+      expect(find.text('seasons'), findsOneWidget);
     });
   });
 

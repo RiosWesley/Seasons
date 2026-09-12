@@ -1429,8 +1429,8 @@ Continuação
       });
 
       test('F34.5: Application label configured correctly', () {
-        const label = 'Chat Wrapped';
-        expect(label, equals('Chat Wrapped'));
+        const label = 'Seasons';
+        expect(label, equals('Seasons'));
       });
     });
 

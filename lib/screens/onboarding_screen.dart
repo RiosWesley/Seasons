@@ -5,11 +5,10 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../core/services/onboarding_preferences.dart';
 import '../theme/squircle_border.dart';
 import '../theme/swiss_colors.dart';
-import '../theme/swiss_typography.dart';
 import '../widgets/swiss_button.dart';
 import 'home_screen.dart';
 
-/// Interactive, fluid 4-page editorial onboarding experience for Chat Wrapped Flutter.
+/// Interactive, fluid 4-page editorial onboarding experience for Seasons.
 ///
 /// Features:
 /// - Warm Ivory palette (#FBF9F5), serif editorial typography, continuous squircles.
@@ -194,68 +193,46 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Left: Brand Icon + 'Chat Wrapped' title & subtitle
+          // Left: App Icon + "seasons" — matching HomeScreen
           Expanded(
             child: Row(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  width: 38,
-                  height: 38,
+                  width: 30,
+                  height: 30,
                   decoration: ShapeDecoration(
-                    gradient: const LinearGradient(
-                      colors: [SwissColors.irisPrimary, SwissColors.violetSecondary],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    shape: SquircleBorder.radius(12),
+                    shape: SquircleBorder.radius(8),
                     shadows: [
                       BoxShadow(
-                        color: SwissColors.irisPrimary.withValues(alpha: 0.25),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
+                        color: Colors.black.withValues(alpha: 0.08),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
                       ),
                     ],
                   ),
-                  child: const Center(
-                    child: Icon(
-                      LucideIcons.sparkles,
-                      color: Colors.white,
-                      size: 20,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      'assets/images/icone.png',
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text(
-                        'Chat Wrapped',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontFamily: 'serif',
-                          fontWeight: FontWeight.w700,
-                          fontSize: 18,
-                          letterSpacing: -0.3,
-                          color: Color(0xFF1E1B4B),
-                        ),
-                      ),
-                      Text(
-                        'ARCHIVE EDITION',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: SwissTypography.labelSmall.copyWith(
-                          fontSize: 9.5,
-                          letterSpacing: 1.4,
-                          fontWeight: FontWeight.w700,
-                          color: SwissColors.irisPrimary,
-                        ),
-                      ),
-                    ],
+                const SizedBox(width: 8),
+                Flexible(
+                  child: Text(
+                    'seasons',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontFamily: 'serif',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20,
+                      letterSpacing: -0.3,
+                      color: Color(0xFF1E1B4B),
+                    ),
                   ),
                 ),
               ],
@@ -336,66 +313,26 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Category Pill & 100% OFFLINE Badge
-          Wrap(
-            alignment: WrapAlignment.spaceBetween,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                decoration: ShapeDecoration(
-                  color: const Color(0xFFEEF2FF),
-                  shape: SquircleBorder.radius(
-                    8,
-                    side: const BorderSide(color: Color(0xFFE0E7FF), width: 1.0),
-                  ),
-                ),
-                child: const Text(
-                  'ARQUIVO PESSOAL DE CONVERSAS',
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 1.0,
-                    color: Color(0xFF4F46E5),
-                  ),
-                ),
+          // Eyebrow label
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            decoration: ShapeDecoration(
+              color: const Color(0xFFEEF2FF),
+              shape: SquircleBorder.radius(
+                8,
+                side: const BorderSide(color: Color(0xFFE0E7FF), width: 1.0),
               ),
-              // Security Pill (matches smoke test: '100% OFFLINE')
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                decoration: const ShapeDecoration(
-                  color: Color(0xFFEEF2FF),
-                  shape: StadiumBorder(
-                    side: BorderSide(color: Color(0xFFE0E7FF), width: 1.0),
-                  ),
-                ),
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      LucideIcons.lock,
-                      size: 13,
-                      color: Color(0xFF4F46E5),
-                    ),
-                    SizedBox(width: 4),
-                    Text(
-                      '100% OFFLINE',
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 0.8,
-                        color: Color(0xFF4338CA),
-                      ),
-                    ),
-                  ],
-                ),
+            ),
+            child: const Text(
+              'ARQUIVO PESSOAL DE CONVERSAS',
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 1.0,
+                color: Color(0xFF4F46E5),
               ),
-            ],
+            ),
           ),
-
-          const SizedBox(height: 18),
 
           // Editorial Headline
           const Text(
@@ -1023,9 +960,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           _buildStepCard(
             stepNumber: 4,
             icon: LucideIcons.share2,
-            title: 'Abra ou salve no Chat Wrapped',
+            title: 'Abra ou salve no Seasons',
             description:
-                'Selecione o Chat Wrapped diretamente na folha de compartilhamento do Android, ou salve o arquivo gerado e selecione-o no app.',
+                'Selecione o Seasons diretamente na folha de compartilhamento do Android, ou salve o arquivo gerado e selecione-o no app.',
             imageAsset: 'assets/images/passo-4.png',
           ),
         ],
@@ -1241,7 +1178,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
           // Subtitle
           const Text(
-            'Privacidade não é uma promessa — é a própria arquitetura do Chat Wrapped.',
+            'Privacidade não é uma promessa — é a própria arquitetura do Seasons.',
             style: TextStyle(
               fontSize: 14.5,
               fontWeight: FontWeight.w400,

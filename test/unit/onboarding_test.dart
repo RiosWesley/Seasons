@@ -60,18 +60,16 @@ void main() {
   });
 
   group('OnboardingScreen Rendering & Content Tests', () {
-    testWidgets('Page 1 renders brand, offline badge, and editorial value props', (tester) async {
+    testWidgets('Page 1 renders brand, eyebrow label, and editorial value props', (tester) async {
       setMobileViewport(tester);
       await tester.pumpWidget(wrapWithApp(const OnboardingScreen()));
       await tester.pumpAndSettle();
 
       // Brand Top Bar
-      expect(find.text('Chat Wrapped'), findsOneWidget);
-      expect(find.text('ARCHIVE EDITION'), findsOneWidget);
+      expect(find.text('seasons'), findsOneWidget);
       expect(find.text('Pular'), findsOneWidget);
 
       // Page 1 Elements
-      expect(find.text('100% OFFLINE'), findsOneWidget);
       expect(find.text('ARQUIVO PESSOAL DE CONVERSAS'), findsOneWidget);
       expect(find.text('Suas conversas guardam histórias inesquecíveis.'), findsOneWidget);
       expect(find.text('Privacidade Inegociável'), findsOneWidget);
@@ -113,7 +111,7 @@ void main() {
       expect(find.text('Menu Mais > Exportar conversa'), findsOneWidget);
       expect(find.text('Selecione SEMPRE "Sem mídia"'), findsOneWidget);
       expect(find.text('OBRIGATÓRIO: Sem mídia'), findsOneWidget);
-      expect(find.text('Abra ou salve no Chat Wrapped'), findsOneWidget);
+      expect(find.text('Abra ou salve no Seasons'), findsOneWidget);
 
       // Advance to Page 4
       await tester.tap(find.text('Continuar'));
