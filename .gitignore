@@ -49,6 +49,8 @@ app.*.map.json
 
 # Agent working dirs
 .agents/
-screenshot_*.png
-*.png
+# Root screenshots
+/screenshot_*.png
+/*.png
+!assets/**
 
