@@ -160,7 +160,11 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _handleDemoRetrospective([String? customChatRaw, String? demoName]) async {
+  Future<void> _handleDemoRetrospective([
+    String? customChatRaw,
+    String? demoName,
+    ChatMode? overrideMode,
+  ]) async {
     HapticFeedback.mediumImpact();
     final rawText = customChatRaw ?? _demoChatCasal;
 
@@ -187,7 +191,12 @@ class _HomeScreenState extends State<HomeScreen> {
         _statusMessage = 'Calculando métricas e afinidade offline...';
       });
 
-      await _processExport(export, isDemo: true, customTitle: demoName);
+      await _processExport(
+        export,
+        isDemo: true,
+        customTitle: demoName,
+        overrideMode: overrideMode,
+      );
     } catch (e) {
       setState(() {
         _isLoading = false;
@@ -201,6 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
     RawChatExport export, {
     bool isDemo = false,
     String? customTitle,
+    ChatMode? overrideMode,
   }) async {
     setState(() {
       _currentStage = PipelineStage.analyzing;
@@ -208,7 +218,10 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     await Future<void>.delayed(const Duration(milliseconds: 200));
-    final analysis = ChatAnalyzer.analyzeRawExport(export);
+    final analysis = ChatAnalyzer.analyzeRawExport(
+      export,
+      overrideMode: overrideMode,
+    );
 
     setState(() {
       _currentStage = PipelineStage.complete;
@@ -350,19 +363,19 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 12),
               _buildModelDetailTile(
                 icon: LucideIcons.users,
-                title: 'Amigos (3 a 5 participantes)',
-                subtitle: 'Índice de vácuo, tempos médios de resposta, quem envia mais áudios e memes do squad.',
+                title: 'Amigos (2 participantes - Dupla)',
+                subtitle: 'Duelo de estilos, quem responde mais rápido, áudios intermináveis e dinâmicas a dois.',
                 color: const Color(0xFF0284C7),
                 bgColor: const Color(0xFFF0F9FF),
                 onTap: () {
                   Navigator.pop(context);
-                  _handleDemoRetrospective(_demoChatAmigos, 'Resenha do Squad (Amigos)');
+                  _handleDemoRetrospective(_demoChatAmigos, 'Resenha da Dupla (Amigos)', ChatMode.amigos);
                 },
               ),
               const SizedBox(height: 12),
               _buildModelDetailTile(
-                icon: LucideIcons.users,
-                title: 'Grupo (6+ participantes)',
+                icon: LucideIcons.messagesSquare,
+                title: 'Grupo (3 ou mais participantes)',
                 subtitle: 'Leaderboard de mensagens, radar de vibe, horários caóticos e análise de rede.',
                 color: const Color(0xFF8B5CF6),
                 bgColor: const Color(0xFFF5F3FF),
@@ -706,13 +719,13 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 16),
           _buildModelBentoCard(
             title: 'Modo Amigos',
-            eyebrow: 'SQUAD & ARQUÉTIPOS',
-            participantHint: '3 a 5 participantes',
+            eyebrow: 'DUPLA & RESENHA A DOIS',
+            participantHint: '2 amigos (dupla)',
             icon: LucideIcons.users,
             microBadgeIcon: LucideIcons.sparkles,
-            microBadgeLabel: 'Arquétipos do squad & Dinâmica',
+            microBadgeLabel: 'Duelo de estilos & Resenha a dois',
             description:
-                'Arquétipos de comunicação (Tagarela, Fantasma, Áudio-maníaco), dinâmicas do squad, ghosting e quem inicia conversas.',
+                'A amizade a dois: quem responde mais rápido, duelo de estilos, áudios intermináveis de podcast, vácuos históricos e cumplicidade.',
             accentColor: const Color(0xFF2563EB),
             bgLightGradient: const [Color(0xFFF0F9FF), Color(0xFFE0F2FE)],
             bgDarkGradient: const [Color(0xFF0C192E), Color(0xFF112240)],
@@ -721,13 +734,13 @@ class _HomeScreenState extends State<HomeScreen> {
             avatarBgLight: const Color(0xFFE0EDFD),
             avatarBgDark: const Color(0xFF13274A),
             doodlePainter: _AmigosDoodlePainter(),
-            onTap: () => _handleDemoRetrospective(_demoChatAmigos, 'Resenha do Squad (Amigos)'),
+            onTap: () => _handleDemoRetrospective(_demoChatAmigos, 'Resenha da Dupla (Amigos)', ChatMode.amigos),
           ),
           const SizedBox(height: 16),
           _buildModelBentoCard(
             title: 'Modo Grupo',
             eyebrow: 'LEADERBOARD GERAL & VIBES',
-            participantHint: '6 ou mais participantes',
+            participantHint: '3 ou mais participantes',
             icon: LucideIcons.messagesSquare,
             microBadgeIcon: LucideIcons.trophy,
             microBadgeLabel: 'Leaderboard geral & Radar de vibes',
@@ -1489,14 +1502,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
         const SizedBox(height: 10),
 
-        // Static Showcase Card 2: "Resenha do Squad"
+        // Static Showcase Card 2: "Resenha da Dupla"
         _buildRecentWrappedCard(
           avatarBg: const Color(0xFFE0EDFD),
           iconColor: const Color(0xFF2563EB),
           icon: LucideIcons.users,
-          title: 'Resenha do Squad',
+          title: 'Resenha da Dupla',
           subtitle: '8.732 mensagens  •  3 de mar. de 2024',
-          onTap: () => _handleDemoRetrospective(_demoChatAmigos, 'Resenha do Squad'),
+          onTap: () => _handleDemoRetrospective(_demoChatAmigos, 'Resenha da Dupla', ChatMode.amigos),
         ),
 
         const SizedBox(height: 10),
@@ -1773,9 +1786,9 @@ class _HomeScreenState extends State<HomeScreen> {
             // Card 2: Amigos
             Expanded(
               child: _buildBentoCard(
-                eyebrow: 'DINÂMICA & SQUAD',
+                eyebrow: 'DUPLA & AMIZADE',
                 title: 'Modo Amigos',
-                description: 'Descubra os padrões,\nos memes, os áudios\ne quem manda mais.',
+                description: 'Descubra os padrões,\nos memes, os áudios\ne a sintonia a dois.',
                 bgAsset: 'assets/images/amigos_bento_bg.jpg',
                 doodlePainter: _AmigosDoodlePainter(),
                 borderColor: const Color(0xFFBAE6FD),
@@ -1783,7 +1796,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 eyebrowColor: const Color(0xFF2563EB),
                 icon: LucideIcons.users,
                 avatarBg: const Color(0xFFE0EDFD),
-                onTap: () => _handleDemoRetrospective(_demoChatAmigos, 'Resenha do Squad (Amigos)'),
+                onTap: () => _handleDemoRetrospective(_demoChatAmigos, 'Resenha da Dupla (Amigos)', ChatMode.amigos),
               ),
             ),
           ],
