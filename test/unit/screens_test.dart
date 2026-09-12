@@ -53,7 +53,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('seasons'), findsOneWidget);
-      expect(find.text('Selecionar arquivo'), findsOneWidget);
+      expect(find.text('Como exportar do WhatsApp? Ver tutorial →'), findsOneWidget);
       expect(find.text('Experimentar com uma conversa de exemplo'), findsOneWidget);
       expect(find.text('ESCOLHA UMA LENTE DE ANÁLISE'), findsOneWidget);
     });

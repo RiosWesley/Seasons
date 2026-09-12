@@ -192,7 +192,7 @@ void main() {
 
       // Should have transitioned to HomeScreen
       expect(find.byType(HomeScreen), findsOneWidget);
-      expect(find.text('Selecionar arquivo'), findsOneWidget);
+      expect(find.text('Como exportar do WhatsApp? Ver tutorial →'), findsOneWidget);
     });
 
     testWidgets('Tapping Começar a Explorar on Page 4 persists hasSeenOnboarding and routes to HomeScreen', (tester) async {
@@ -214,7 +214,7 @@ void main() {
       expect(hasSeen, isTrue);
 
       expect(find.byType(HomeScreen), findsOneWidget);
-      expect(find.text('Selecionar arquivo'), findsOneWidget);
+      expect(find.text('Como exportar do WhatsApp? Ver tutorial →'), findsOneWidget);
     });
   });
 

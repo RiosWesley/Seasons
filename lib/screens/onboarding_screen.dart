@@ -987,9 +987,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             title: 'Abra a conversa desejada',
             description:
                 'Vá até o chat individual ou grupo do WhatsApp que você deseja analisar.',
+            imageAsset: 'assets/images/passo-1.png',
           ),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 14),
 
           // Step 2
           _buildStepCard(
@@ -998,9 +999,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             title: 'Menu Mais > Exportar conversa',
             description:
                 'No canto superior direito, toque nos três pontinhos (⋮) > Mais > Exportar conversa. (No iPhone: toque no nome do contato e role até o fim).',
+            imageAsset: 'assets/images/passo-2.png',
           ),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 14),
 
           // Step 3 (Mandatory 'Sem mídia' badge)
           _buildStepCard(
@@ -1012,9 +1014,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 'Quando o WhatsApp perguntar, selecione obrigatoriamente "Sem mídia". Isso gera um arquivo leve (.txt ou .zip) e garante processamento instantâneo de 100% das mensagens.',
             calloutNote:
                 'Arquivos com mídia (fotos/vídeos) tornam o arquivo pesado e não alteram o resultado das análises estatísticas.',
+            imageAsset: 'assets/images/passo-3.png',
           ),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 14),
 
           // Step 4
           _buildStepCard(
@@ -1022,7 +1025,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             icon: LucideIcons.share2,
             title: 'Abra ou salve no Chat Wrapped',
             description:
-                'Selecione o Chat Wrapped diretamente na folha de compartilhamento do Android, ou salve o arquivo gerado e selecione-o na tela inicial do app.',
+                'Selecione o Chat Wrapped diretamente na folha de compartilhamento do Android, ou salve o arquivo gerado e selecione-o no app.',
+            imageAsset: 'assets/images/passo-4.png',
           ),
         ],
       ),
@@ -1036,6 +1040,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     required String description,
     bool isMandatory = false,
     String? calloutNote,
+    String? imageAsset,
   }) {
     return Container(
       padding: const EdgeInsets.all(15),
@@ -1155,6 +1160,26 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           ),
                         ),
                       ],
+                    ),
+                  ),
+                ],
+                if (imageAsset != null) ...[
+                  const SizedBox(height: 12),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: isMandatory ? const Color(0xFFFDE68A) : const Color(0xFFE2E8F0),
+                          width: 1.0,
+                        ),
+                      ),
+                      child: Image.asset(
+                        imageAsset,
+                        fit: BoxFit.fitWidth,
+                        width: double.infinity,
+                      ),
                     ),
                   ),
                 ],
