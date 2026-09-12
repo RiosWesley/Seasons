@@ -4,7 +4,6 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:chat_wrapped/core/analytics/chat_analyzer.dart';
 import 'package:chat_wrapped/core/models/chat_message.dart';
 import 'package:chat_wrapped/core/models/general_stats.dart';
-import 'package:chat_wrapped/core/models/casal_stats.dart';
 import 'package:chat_wrapped/core/models/amigos_stats.dart';
 import 'package:chat_wrapped/core/models/grupo_stats.dart';
 import 'package:chat_wrapped/core/models/raw_chat_export.dart';
@@ -153,12 +152,12 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('1.4 3 participants boundary (Amigos lower bound): Amigos recommended with 3 chips', (tester) async {
+    testWidgets('1.4 3 participants boundary: Grupo recommended with 3 chips', (tester) async {
       setViewport(tester);
       final export3 = createMockExport(authors: ['Alpha', 'Beta', 'Gamma']);
       final analysis3 = ChatAnalyzer.analyzeRawExport(export3);
 
-      expect(ChatAnalyzer.detectMode(3), equals(ChatMode.amigos));
+      expect(ChatAnalyzer.detectMode(3), equals(ChatMode.grupo));
 
       await tester.pumpWidget(
         wrapWithApp(
@@ -175,17 +174,20 @@ void main() {
       expect(find.text('Beta'), findsOneWidget);
       expect(find.text('Gamma'), findsOneWidget);
 
-      // Exactly 1 recommendation pill on Amigos
+      // Exactly 1 recommendation pill on Grupo
       expect(find.text('Recomendado'), findsOneWidget);
+      expect(find.text('Modo Grupo'), findsOneWidget);
+      expect(find.text('Modo Casal'), findsNothing);
+      expect(find.text('Modo Amigos'), findsNothing);
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('1.5 5 participants boundary (Amigos upper bound): Amigos recommended with 5 chips', (tester) async {
+    testWidgets('1.5 5 participants boundary: Grupo recommended with 5 chips', (tester) async {
       setViewport(tester);
       final export5 = createMockExport(authors: ['P1', 'P2', 'P3', 'P4', 'P5']);
       final analysis5 = ChatAnalyzer.analyzeRawExport(export5);
 
-      expect(ChatAnalyzer.detectMode(5), equals(ChatMode.amigos));
+      expect(ChatAnalyzer.detectMode(5), equals(ChatMode.grupo));
 
       await tester.pumpWidget(
         wrapWithApp(
@@ -199,6 +201,8 @@ void main() {
 
       expect(find.text('Participantes Detectados (5)'), findsOneWidget);
       expect(find.text('Recomendado'), findsOneWidget);
+      expect(find.text('Modo Grupo'), findsOneWidget);
+      expect(find.text('Modo Casal'), findsNothing);
       expect(tester.takeException(), isNull);
     });
 
@@ -304,7 +308,7 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('2.2 Override Casal (2-person) to Grupo mode: cleanly re-analyzes and opens Dashboard', (tester) async {
+    testWidgets('2.2 Duo participants (2-person) only presents Casal and Amigos modes (no Grupo)', (tester) async {
       setViewport(tester);
       final export = createMockExport(authors: ['Ana', 'Carlos']);
       final analysis = ChatAnalyzer.analyzeRawExport(export);
@@ -319,9 +323,33 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      // Tap Modo Grupo card to override
-      await tester.tap(find.text('Modo Grupo'));
+      // Grupo should not exist for duo
+      expect(find.text('Modo Grupo'), findsNothing);
+      expect(find.text('Modo Casal'), findsOneWidget);
+      expect(find.text('Modo Amigos'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('2.3 3-person chat in ModeSelectionScreen presents Grupo mode directly', (tester) async {
+      setViewport(tester);
+      final export = createMockExport(authors: ['Lucas', 'Mateus', 'Gabriel']);
+      final analysis = ChatAnalyzer.analyzeRawExport(export);
+
+      expect(analysis.mode, equals(ChatMode.grupo));
+
+      await tester.pumpWidget(
+        wrapWithApp(
+          ModeSelectionScreen(
+            rawExport: export,
+            initialAnalysis: analysis,
+          ),
+        ),
+      );
       await tester.pumpAndSettle();
+
+      expect(find.text('Modo Grupo'), findsOneWidget);
+      expect(find.text('Modo Casal'), findsNothing);
+      expect(find.text('Modo Amigos'), findsNothing);
 
       final continueBtn = find.text('Continuar para o Dashboard');
       await tester.ensureVisible(continueBtn);
@@ -338,43 +366,7 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('2.3 Override Amigos (3-person) to Casal mode: cleanly re-analyzes and opens Dashboard', (tester) async {
-      setViewport(tester);
-      final export = createMockExport(authors: ['Lucas', 'Mateus', 'Gabriel']);
-      final analysis = ChatAnalyzer.analyzeRawExport(export);
-
-      expect(analysis.mode, equals(ChatMode.amigos));
-
-      await tester.pumpWidget(
-        wrapWithApp(
-          ModeSelectionScreen(
-            rawExport: export,
-            initialAnalysis: analysis,
-          ),
-        ),
-      );
-      await tester.pumpAndSettle();
-
-      // Tap Modo Casal card to override
-      await tester.tap(find.text('Modo Casal'));
-      await tester.pumpAndSettle();
-
-      final continueBtn = find.text('Continuar para o Dashboard');
-      await tester.ensureVisible(continueBtn);
-      await tester.tap(continueBtn);
-      await tester.pumpAndSettle();
-
-      final dashboardFinder = find.byType(DashboardScreen);
-      expect(dashboardFinder, findsOneWidget);
-
-      final dashboardWidget = tester.widget<DashboardScreen>(dashboardFinder);
-      expect(dashboardWidget.analysis.mode, equals(ChatMode.casal));
-      expect(dashboardWidget.analysis, isA<CasalAnalysisResult>());
-      expect(find.text('Modo Casal'), findsOneWidget);
-      expect(tester.takeException(), isNull);
-    });
-
-    testWidgets('2.4 Override Grupo (7-person) to Amigos mode: cleanly re-analyzes and opens Dashboard', (tester) async {
+    testWidgets('2.4 7-person chat in ModeSelectionScreen presents Grupo mode and opens Dashboard', (tester) async {
       setViewport(tester);
       final export = createMockExport(authors: ['A', 'B', 'C', 'D', 'E', 'F', 'G']);
       final analysis = ChatAnalyzer.analyzeRawExport(export);
@@ -391,9 +383,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      // Tap Modo Amigos card to override
-      await tester.tap(find.text('Modo Amigos'));
-      await tester.pumpAndSettle();
+      expect(find.text('Modo Grupo'), findsOneWidget);
 
       final continueBtn = find.text('Continuar para o Dashboard');
       await tester.ensureVisible(continueBtn);
@@ -404,9 +394,9 @@ void main() {
       expect(dashboardFinder, findsOneWidget);
 
       final dashboardWidget = tester.widget<DashboardScreen>(dashboardFinder);
-      expect(dashboardWidget.analysis.mode, equals(ChatMode.amigos));
-      expect(dashboardWidget.analysis, isA<AmigosAnalysisResult>());
-      expect(find.text('Modo Amigos'), findsOneWidget);
+      expect(dashboardWidget.analysis.mode, equals(ChatMode.grupo));
+      expect(dashboardWidget.analysis, isA<GrupoAnalysisResult>());
+      expect(find.text('Modo Grupo'), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
 
@@ -425,10 +415,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      // Cycle through selections: Casal -> Grupo -> Amigos -> Casal
-      await tester.tap(find.text('Modo Grupo'));
-      await tester.pumpAndSettle();
-
+      // Cycle through selections: Casal -> Amigos -> Casal
       await tester.tap(find.text('Modo Amigos'));
       await tester.pumpAndSettle();
 
@@ -593,8 +580,7 @@ void main() {
 
       // Micro badges and typography present
       expect(find.text('Ritmo a dois & Afinidade'), findsOneWidget);
-      expect(find.text('Arquétipos do squad & Dinâmica'), findsOneWidget);
-      expect(find.text('Leaderboard geral & Radar de vibes'), findsOneWidget);
+      expect(find.text('Duelo de estilos & Resenha a dois'), findsOneWidget);
 
       expect(tester.takeException(), isNull);
     });
@@ -655,7 +641,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      // Exactly 1 check icon rendered across the 3 cards (for Casal)
+      // Exactly 1 check icon rendered across the cards (for Casal)
       expect(find.byIcon(LucideIcons.check), findsOneWidget);
 
       // Tap Amigos
@@ -663,8 +649,8 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byIcon(LucideIcons.check), findsOneWidget);
 
-      // Tap Grupo
-      await tester.tap(find.text('Modo Grupo'));
+      // Tap Casal back
+      await tester.tap(find.text('Modo Casal'));
       await tester.pumpAndSettle();
       expect(find.byIcon(LucideIcons.check), findsOneWidget);
 

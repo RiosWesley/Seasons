@@ -22,13 +22,17 @@ class AmigosA18SquadPosterSlide extends StatelessWidget {
     final total = adapter.totalMessages;
     final score = adapter.compatibilityScore;
 
+    final isDuo = adapter.isDuo;
+
     return StoryCardBase(
       background: AmigosBackgroundVariants.a18SquadPoster(),
       backgroundColor: AmigosTheme.paperBase,
-      category: 'A Resenha Oficial',
+      category: isDuo ? 'A Dupla do Ano' : 'A Resenha Oficial',
       categoryIcon: Icons.celebration_rounded,
-      title: 'Pôster Oficial\ndo Squad',
-      subtitle: 'A resenha documentada e homologada para a história.',
+      title: isDuo ? 'Pôster Oficial\nda Dupla' : 'Pôster Oficial\ndo Squad',
+      subtitle: isDuo
+          ? 'A amizade documentada e homologada para a história.'
+          : 'A resenha documentada e homologada para a história.',
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -49,9 +53,9 @@ class AmigosA18SquadPosterSlide extends StatelessWidget {
                     color: AmigosTheme.stickerPop,
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  child: const Text(
-                    'SQUAD 2025 • TURNÊ OFICIAL',
-                    style: TextStyle(
+                  child: Text(
+                    isDuo ? 'A DUPLA DO ANO • TURNÊ OFICIAL' : 'SQUAD 2025 • TURNÊ OFICIAL',
+                    style: const TextStyle(
                       fontFamily: 'monospace',
                       fontSize: 10,
                       fontWeight: FontWeight.w900,
@@ -63,30 +67,77 @@ class AmigosA18SquadPosterSlide extends StatelessWidget {
                 const SizedBox(height: 12),
 
                 // Rubber stamp
-                const EditorialStamp.rubberStamp(
+                EditorialStamp.rubberStamp(
                   size: 78,
-                  label: 'SQUAD ARCHIVE',
+                  label: isDuo ? 'PARCERIA OFICIAL' : 'SQUAD ARCHIVE',
                 ),
 
                 const SizedBox(height: 12),
 
-                // Lineup roster
-                Wrap(
-                  alignment: WrapAlignment.center,
-                  spacing: 6,
-                  runSpacing: 4,
-                  children: members.map((m) {
-                    return Text(
-                      m.toUpperCase(),
-                      style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w900,
-                        color: AmigosTheme.inkPrimary,
-                        letterSpacing: 0.5,
+                // Lineup roster (hero duo headline or wrap for multi)
+                if (isDuo)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          adapter.friendA.toUpperCase(),
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w900,
+                            color: AmigosTheme.inkPrimary,
+                            letterSpacing: 0.5,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.right,
+                        ),
                       ),
-                    );
-                  }).toList(),
-                ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: AmigosTheme.stickerPop,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: const Text(
+                            '⚡',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        child: Text(
+                          adapter.friendB.toUpperCase(),
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w900,
+                            color: AmigosTheme.inkPrimary,
+                            letterSpacing: 0.5,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ],
+                  )
+                else
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 6,
+                    runSpacing: 4,
+                    children: members.map((m) {
+                      return Text(
+                        m.toUpperCase(),
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w900,
+                          color: AmigosTheme.inkPrimary,
+                          letterSpacing: 0.5,
+                        ),
+                      );
+                    }).toList(),
+                  ),
 
                 const SizedBox(height: 12),
                 Container(
@@ -97,7 +148,9 @@ class AmigosA18SquadPosterSlide extends StatelessWidget {
                     border: Border.all(color: AmigosTheme.hairlineBorder),
                   ),
                   child: Text(
-                    '$total MENSAGENS • ${members.length} INTEGRANTES • $score% SINTONIA',
+                    isDuo
+                        ? '$total MENSAGENS • DUPLA OFICIAL • $score% SINTONIA'
+                        : '$total MENSAGENS • ${members.length} INTEGRANTES • $score% SINTONIA',
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontFamily: 'monospace',
@@ -112,8 +165,8 @@ class AmigosA18SquadPosterSlide extends StatelessWidget {
                 const SizedBox(height: 12),
 
                 // Barcode
-                const ZineBarcode(
-                  code: 'FESTIVAL-SQUAD-2025',
+                ZineBarcode(
+                  code: isDuo ? 'DUPLA-OFICIAL-2025' : 'FESTIVAL-SQUAD-2025',
                   height: 24,
                   color: AmigosTheme.inkPrimary,
                 ),
@@ -139,9 +192,9 @@ class AmigosA18SquadPosterSlide extends StatelessWidget {
               ),
               onPressed: onShare,
               icon: const Icon(Icons.share_rounded, size: 20, color: Colors.white),
-              label: const Text(
-                'COMPARTILHAR PÔSTER DO SQUAD',
-                style: TextStyle(
+              label: Text(
+                isDuo ? 'COMPARTILHAR PÔSTER DA DUPLA' : 'COMPARTILHAR PÔSTER DO SQUAD',
+                style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 1.0,

@@ -16,13 +16,15 @@ class AmigosA14AudiosSlide extends StatelessWidget {
     final count = adapter.totalAudios;
     final mins = adapter.estimatedAudioMinutes;
 
+    final isDuo = adapter.isDuo;
+
     return StoryCardBase(
       background: AmigosBackgroundVariants.a14Audios(),
       isDarkTheme: true,
       backgroundColor: const Color(0xFF0D1527),
       category: 'Podcast do WhatsApp',
       categoryIcon: Icons.mic_rounded,
-      title: 'O Podcaster do\nSquad',
+      title: isDuo ? 'O Podcaster da\nDupla' : 'O Podcaster do\nSquad',
       subtitle: 'Quem grava episódios inteiros de áudio na conversa.',
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -40,13 +42,13 @@ class AmigosA14AudiosSlide extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Row(
+                    Row(
                       children: [
-                        Icon(Icons.graphic_eq_rounded, size: 18, color: AmigosTheme.accentPrimary),
-                        SizedBox(width: 6),
+                        const Icon(Icons.graphic_eq_rounded, size: 18, color: AmigosTheme.accentPrimary),
+                        const SizedBox(width: 6),
                         Text(
-                          'SQUADCAST • EP. 01',
-                          style: TextStyle(
+                          isDuo ? 'PODCAST DA DUPLA • EP. 01' : 'SQUADCAST • EP. 01',
+                          style: const TextStyle(
                             fontFamily: 'monospace',
                             fontSize: 10,
                             fontWeight: FontWeight.w900,

@@ -106,7 +106,7 @@ void main() {
       expect(find.text('Relatório Completo'), findsOneWidget);
     });
 
-    testWidgets('Recommends Amigos for 3 participants and Grupo for 6 participants', (tester) async {
+    testWidgets('3 participants routes to Grupo mode', (tester) async {
       setMobileViewport(tester);
       final amigosExport = const ChatParser().parse(sampleAmigosChat);
       final amigosAnalysis = ChatAnalyzer.analyzeRawExport(amigosExport);
@@ -122,7 +122,8 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Participantes Detectados (3)'), findsOneWidget);
-      expect(find.text('Modo Amigos'), findsOneWidget);
+      expect(find.text('Modo Grupo'), findsOneWidget);
+      expect(find.text('Modo Amigos'), findsNothing);
     });
   });
 

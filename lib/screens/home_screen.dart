@@ -12,6 +12,7 @@ import '../theme/swiss_typography.dart';
 import '../widgets/floating_bottom_bar.dart';
 import '../widgets/stage_progress_indicator.dart';
 import '../widgets/swiss_button.dart';
+import 'dashboard_screen.dart';
 import 'mode_selection_screen.dart';
 import 'onboarding_screen.dart';
 
@@ -88,16 +89,16 @@ class _HomeScreenState extends State<HomeScreen> {
 ''';
 
   static const String _demoChatAmigos = '''
-10/02/2025 18:00 - Pedro: Galera, bora marcar aquele churrasco sábado?
-10/02/2025 18:01 - Julia: Eu topo demais!! Quem leva a carne?
-10/02/2025 18:02 - Lucas: <Mídia oculta>
-10/02/2025 18:02 - Lucas: Comprei a picanha ontem já hahaha
-10/02/2025 18:05 - Pedro: Boa garoto! Levo as bebidas.
-10/02/2025 18:10 - Mariana: Gente, chego por volta das 15h pode ser?
-10/02/2025 18:11 - Julia: Fechado! Todo mundo confirma presença.
-11/02/2025 23:30 - Pedro: Alguém acordado ainda?
-11/02/2025 23:35 - Lucas: Só os guerreiros da madrugada kkkk
-11/02/2025 23:36 - Julia: dormindo quase kkk
+10/02/2025 18:00 - Pedro: Fala mano, viu o jogo ontem? Pqp que loucura 😂
+10/02/2025 18:01 - Lucas: Vi mano!! Nem me fala kkkkk quase tive um infarto
+10/02/2025 18:02 - Pedro: <Mídia oculta>
+10/02/2025 18:02 - Pedro: Olha esse lance mano, não foi falta nunca
+10/02/2025 18:05 - Lucas: Roubado demais cara hahaha mas bora pro treino hoje?
+10/02/2025 18:10 - Pedro: Bora, passo aí 19h pra te buscar ⚡
+10/02/2025 18:11 - Lucas: Fechou meu parceiro!
+11/02/2025 23:30 - Pedro: Ô podcaster, ouve meu áudio aí
+11/02/2025 23:35 - Lucas: Kkkkk calma que 3 minutos de áudio é foda, to ouvindo
+11/02/2025 23:36 - Pedro: Vale a pena, a fofoca é forte kkkk
 ''';
 
   static const String _demoChatGrupo = '''
@@ -238,14 +239,28 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     if (mounted) {
-      Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          builder: (context) => ModeSelectionScreen(
-            rawExport: export,
-            initialAnalysis: analysis,
+      if (export.participants.length >= 3) {
+        final grupoAnalysis = analysis.mode == ChatMode.grupo
+            ? analysis
+            : ChatAnalyzer.analyzeRawExport(export, overrideMode: ChatMode.grupo);
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (context) => DashboardScreen(
+              analysis: grupoAnalysis,
+              rawExport: export,
+            ),
           ),
-        ),
-      );
+        );
+      } else {
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (context) => ModeSelectionScreen(
+              rawExport: export,
+              initialAnalysis: analysis,
+            ),
+          ),
+        );
+      }
     }
   }
 
@@ -1519,13 +1534,23 @@ class _HomeScreenState extends State<HomeScreen> {
               title: saved.title,
               subtitle: '${saved.messageCount} mensagens  •  ${saved.dateText}',
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (context) => ModeSelectionScreen(
-                      initialAnalysis: saved.analysisResult,
+                if (saved.participantCount >= 3 || saved.mode == ChatMode.grupo) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (context) => DashboardScreen(
+                        analysis: saved.analysisResult,
+                      ),
                     ),
-                  ),
-                );
+                  );
+                } else {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (context) => ModeSelectionScreen(
+                        initialAnalysis: saved.analysisResult,
+                      ),
+                    ),
+                  );
+                }
               },
             ),
           ),

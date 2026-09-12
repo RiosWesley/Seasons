@@ -12,34 +12,18 @@ class AmigosA10PersonalitiesSlide extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final titles = [
-      (
-        'Mais Rápido no Gatilho',
-        adapter.fastestReplier,
-        '⚡',
-        'Respostas em tempo recorde',
-      ),
-      (
-        'O Podcaster de Áudios',
-        adapter.podcasterAuthor,
-        '🎙️',
-        'Áudios com duração de podcast',
-      ),
-      (
-        'Líder de Pautas',
-        adapter.memeSupplier,
-        '🔥',
-        'Iniciador oficial das conversas',
-      ),
-    ];
+    final isDuo = adapter.isDuo;
+    final titles = adapter.distributedTitles;
 
     return StoryCardBase(
       background: AmigosBackgroundVariants.a10Personalities(),
       backgroundColor: AmigosTheme.paperBase,
-      category: 'Personalidades',
+      category: isDuo ? 'Títulos da Dupla' : 'Personalidades',
       categoryIcon: Icons.psychology_rounded,
       title: 'Títulos\nHonorários',
-      subtitle: 'Condecorações oficiais outorgadas pelo squad.',
+      subtitle: isDuo
+          ? 'Condecorações oficiais da dupla.'
+          : 'Condecorações oficiais outorgadas pelo squad.',
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -120,8 +104,8 @@ class AmigosA10PersonalitiesSlide extends StatelessWidget {
 
           const SizedBox(height: 12),
 
-          const HazardTapeBanner(
-            text: '🏅 CONDECORAÇÕES OFICIAIS DO ANO',
+          HazardTapeBanner(
+            text: isDuo ? '🏅 CONDECORAÇÕES OFICIAIS DA DUPLA' : '🏅 CONDECORAÇÕES OFICIAIS DO ANO',
             angle: -0.02,
           ).animate().fadeIn(delay: 400.ms),
         ],

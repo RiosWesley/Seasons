@@ -41,12 +41,12 @@ class ChatAnalyzer {
     unicode: true,
   );
 
-  /// Automatically categorizes chat into Casal (<=2), Amigos (3-5), or Grupo (6+).
+  /// Automatically categorizes chat:
+  /// - <= 2 participants: defaults to Casal (duo lens, user can choose Casal or Amigos)
+  /// - >= 3 participants: directly Grupo mode
   static ChatMode detectMode(int participantCount) {
     if (participantCount <= 2) {
       return ChatMode.casal;
-    } else if (participantCount <= 5) {
-      return ChatMode.amigos;
     } else {
       return ChatMode.grupo;
     }

@@ -20,12 +20,14 @@ class AmigosA11SquadStatsSlide extends StatelessWidget {
         : 1;
     final dailyAvg = (adapter.totalMessages / days).round();
 
+    final isDuo = adapter.isDuo;
+
     return StoryCardBase(
       background: AmigosBackgroundVariants.a11SquadStats(),
       backgroundColor: AmigosTheme.paperBase,
-      category: 'Destaques do Squad',
+      category: isDuo ? 'Métricas da Parceria' : 'Destaques do Squad',
       categoryIcon: Icons.speed_rounded,
-      title: 'Telemetria do\nSquad',
+      title: isDuo ? 'Telemetria da\nDupla' : 'Telemetria do\nSquad',
       subtitle: 'Velocímetro de resposta e métricas de engajamento.',
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -155,8 +157,8 @@ class AmigosA11SquadStatsSlide extends StatelessWidget {
 
           const SizedBox(height: 16),
 
-          const ZineBarcode(
-            code: 'TELEMETRY-SQUAD-2025',
+          ZineBarcode(
+            code: isDuo ? 'TELEMETRY-DUPLA-2025' : 'TELEMETRY-SQUAD-2025',
             height: 24,
             color: AmigosTheme.inkSecondary,
           ).animate().fadeIn(delay: 200.ms),

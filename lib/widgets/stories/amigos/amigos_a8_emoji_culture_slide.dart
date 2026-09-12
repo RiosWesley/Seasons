@@ -13,11 +13,12 @@ class AmigosA8EmojiCultureSlide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final emojis = adapter.topEmojis.take(5).toList();
+    final isDuo = adapter.isDuo;
 
     return StoryCardBase(
       background: AmigosBackgroundVariants.a8EmojiCulture(),
       backgroundColor: AmigosTheme.paperBase,
-      category: 'Cultura do Squad',
+      category: isDuo ? 'Cultura da Dupla' : 'Cultura do Squad',
       categoryIcon: Icons.mood_rounded,
       title: 'Emoji Culture',
       subtitle: 'Álbum de figurinhas recortadas da resenha.',
@@ -105,8 +106,8 @@ class AmigosA8EmojiCultureSlide extends StatelessWidget {
 
           const SizedBox(height: 24),
 
-          const HazardTapeBanner(
-            text: 'HOMOLOGADO NO ÁLBUM DO SQUAD',
+          HazardTapeBanner(
+            text: isDuo ? 'HOMOLOGADO NO ÁLBUM DA DUPLA' : 'HOMOLOGADO NO ÁLBUM DO SQUAD',
             angle: 0.02,
           ).animate().fadeIn(delay: 400.ms),
         ],

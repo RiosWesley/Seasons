@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
+import '../../screens/dashboard_screen.dart';
 import '../../screens/mode_selection_screen.dart';
 import '../../theme/swiss_colors.dart';
 import '../analytics/chat_analyzer.dart';
@@ -181,10 +182,48 @@ class ShareIntentService {
     // 3. Optional callback notification
     onChatParsed?.call(rawExport, analysis);
 
-    // 4. Auto-route to ModeSelectionScreen
+    // 4. Auto-route: If >= 3 participants, directly to DashboardScreen as Grupo!
+    if (rawExport.participants.length >= 3) {
+      final grupoAnalysis = analysis.mode == ChatMode.grupo
+          ? analysis
+          : ChatAnalyzer.analyzeRawExport(rawExport, overrideMode: ChatMode.grupo);
+      _navigateToDashboard(rawExport, grupoAnalysis);
+      return grupoAnalysis;
+    }
+
     _navigateToModeSelection(rawExport, analysis);
 
     return analysis;
+  }
+
+  /// Pushes [DashboardScreen] directly for groups (>= 3 participants).
+  void _navigateToDashboard(
+    RawChatExport rawExport,
+    ChatAnalysisResult analysis,
+  ) {
+    final nav = navigatorKey?.currentState;
+    if (nav == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        navigatorKey?.currentState?.push(
+          MaterialPageRoute<void>(
+            builder: (_) => DashboardScreen(
+              rawExport: rawExport,
+              analysis: analysis,
+            ),
+          ),
+        );
+      });
+      return;
+    }
+
+    nav.push(
+      MaterialPageRoute<void>(
+        builder: (_) => DashboardScreen(
+          rawExport: rawExport,
+          analysis: analysis,
+        ),
+      ),
+    );
   }
 
   /// Pushes [ModeSelectionScreen] onto the active navigator.

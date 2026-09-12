@@ -11,12 +11,12 @@ import 'package:chat_wrapped/core/parser/chat_parser.dart';
 
 void main() {
   group('ChatAnalyzer Unit & Benchmark Tests', () {
-    test('Mode auto-detection categorizes 1-2 as casal, 3-5 as amigos, 6+ as grupo', () {
+    test('Mode auto-detection categorizes <=2 as casal and >=3 as grupo', () {
       expect(ChatAnalyzer.detectMode(1), equals(ChatMode.casal));
       expect(ChatAnalyzer.detectMode(2), equals(ChatMode.casal));
-      expect(ChatAnalyzer.detectMode(3), equals(ChatMode.amigos));
-      expect(ChatAnalyzer.detectMode(4), equals(ChatMode.amigos));
-      expect(ChatAnalyzer.detectMode(5), equals(ChatMode.amigos));
+      expect(ChatAnalyzer.detectMode(3), equals(ChatMode.grupo));
+      expect(ChatAnalyzer.detectMode(4), equals(ChatMode.grupo));
+      expect(ChatAnalyzer.detectMode(5), equals(ChatMode.grupo));
       expect(ChatAnalyzer.detectMode(6), equals(ChatMode.grupo));
       expect(ChatAnalyzer.detectMode(20), equals(ChatMode.grupo));
     });

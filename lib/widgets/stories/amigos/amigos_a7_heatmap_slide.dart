@@ -23,14 +23,18 @@ class AmigosA7HeatmapSlide extends StatelessWidget {
       if (h.count > maxHourActivity) maxHourActivity = h.count;
     }
 
+    final isDuo = adapter.isDuo;
+
     return StoryCardBase(
       background: AmigosBackgroundVariants.a7Heatmap(),
       isDarkTheme: true,
       backgroundColor: const Color(0xFF0B0F19),
       category: 'Picos de Atividade',
       categoryIcon: Icons.access_time_rounded,
-      title: 'O Horário do\nSquad',
-      subtitle: 'Quando a resenha pega fogo e o chat explode.',
+      title: isDuo ? 'O Horário da\nDupla' : 'O Horário do\nSquad',
+      subtitle: isDuo
+          ? 'Quando a resenha entre vocês pega fogo.'
+          : 'Quando a resenha pega fogo e o chat explode.',
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

@@ -39,21 +39,27 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
     _participants = widget.rawExport?.participants.toList() ??
         widget.initialAnalysis.generalStats.participants;
 
-    _recommendedMode = widget.rawExport != null
-        ? ChatAnalyzer.detectMode(widget.rawExport!.participants.length)
-        : ChatAnalyzer.detectMode(widget.initialAnalysis.generalStats.participants.length);
-
-    _selectedMode = _recommendedMode;
+    if (_participants.length <= 2) {
+      _recommendedMode = ChatMode.casal;
+      _selectedMode = widget.initialAnalysis.mode == ChatMode.amigos
+          ? ChatMode.amigos
+          : ChatMode.casal;
+    } else {
+      _recommendedMode = ChatMode.grupo;
+      _selectedMode = ChatMode.grupo;
+    }
   }
 
   void _proceedToDashboard() {
     HapticFeedback.mediumImpact();
     ChatAnalysisResult analysisToUse = widget.initialAnalysis;
 
-    if (widget.rawExport != null && _selectedMode != widget.initialAnalysis.mode) {
+    final targetMode = _participants.length >= 3 ? ChatMode.grupo : _selectedMode;
+
+    if (widget.rawExport != null && targetMode != widget.initialAnalysis.mode) {
       analysisToUse = ChatAnalyzer.analyzeRawExport(
         widget.rawExport!,
-        overrideMode: _selectedMode,
+        overrideMode: targetMode,
       );
     }
 
@@ -70,68 +76,72 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDuo = _participants.length <= 2;
 
     final modeOptions = [
-      (
-        mode: ChatMode.casal,
-        title: 'Modo Casal',
-        eyebrow: 'AFINIDADE & RITMO A DOIS',
-        icon: LucideIcons.heart,
-        participantHint: '2 participantes',
-        microBadgeIcon: LucideIcons.heartHandshake,
-        microBadgeLabel: 'Ritmo a dois & Afinidade',
-        accentColor: const Color(0xFFE11D48),
-        accentSecondary: const Color(0xFFF43F5E),
-        bgLightGradient: const [Color(0xFFFFF1F2), Color(0xFFFFE4E6)],
-        bgDarkGradient: const [Color(0xFF1E1015), Color(0xFF2D121B)],
-        borderLight: const Color(0xFFFECDD3),
-        borderDark: const Color(0xFF4C1D2A),
-        avatarBgLight: const Color(0xFFFDE8EA),
-        avatarBgDark: const Color(0xFF3B121E),
-        doodlePainter: _HeartDoodlePainter(),
-        description:
-            'Índice de sintonia amorosa, love language (corações, afeto, memes), horários a dois e métricas de resposta.',
-      ),
-      (
-        mode: ChatMode.amigos,
-        title: 'Modo Amigos',
-        eyebrow: 'SQUAD & ARQUÉTIPOS',
-        icon: LucideIcons.users,
-        participantHint: '3 a 5 participantes',
-        microBadgeIcon: LucideIcons.sparkles,
-        microBadgeLabel: 'Arquétipos do squad & Dinâmica',
-        accentColor: const Color(0xFF2563EB),
-        accentSecondary: const Color(0xFF3B82F6),
-        bgLightGradient: const [Color(0xFFF0F9FF), Color(0xFFE0F2FE)],
-        bgDarkGradient: const [Color(0xFF0C192E), Color(0xFF112240)],
-        borderLight: const Color(0xFFBAE6FD),
-        borderDark: const Color(0xFF1E3A8A),
-        avatarBgLight: const Color(0xFFE0EDFD),
-        avatarBgDark: const Color(0xFF13274A),
-        doodlePainter: _AmigosDoodlePainter(),
-        description:
-            'Arquétipos de comunicação (Tagarela, Fantasma, Áudio-maníaco), dinâmicas do squad, ghosting e quem inicia conversas.',
-      ),
-      (
-        mode: ChatMode.grupo,
-        title: 'Modo Grupo',
-        eyebrow: 'LEADERBOARD GERAL & VIBES',
-        icon: LucideIcons.messagesSquare,
-        participantHint: '6 ou mais participantes',
-        microBadgeIcon: LucideIcons.trophy,
-        microBadgeLabel: 'Leaderboard geral & Radar de vibes',
-        accentColor: const Color(0xFF7C3AED),
-        accentSecondary: const Color(0xFF8B5CF6),
-        bgLightGradient: const [Color(0xFFF5F3FF), Color(0xFFEDE9FE)],
-        bgDarkGradient: const [Color(0xFF1A102E), Color(0xFF251642)],
-        borderLight: const Color(0xFFDDD6FE),
-        borderDark: const Color(0xFF4C1D95),
-        avatarBgLight: const Color(0xFFEDE9FE),
-        avatarBgDark: const Color(0xFF251445),
-        doodlePainter: _GrupoDoodlePainter(),
-        description:
-            'Leaderboard geral com pódios e porcentagens, matriz de interação, ranking de vibes e corujas da madrugada.',
-      ),
+      if (isDuo) ...[
+        (
+          mode: ChatMode.casal,
+          title: 'Modo Casal',
+          eyebrow: 'AFINIDADE & RITMO A DOIS',
+          icon: LucideIcons.heart,
+          participantHint: '2 participantes',
+          microBadgeIcon: LucideIcons.heartHandshake,
+          microBadgeLabel: 'Ritmo a dois & Afinidade',
+          accentColor: const Color(0xFFE11D48),
+          accentSecondary: const Color(0xFFF43F5E),
+          bgLightGradient: const [Color(0xFFFFF1F2), Color(0xFFFFE4E6)],
+          bgDarkGradient: const [Color(0xFF1E1015), Color(0xFF2D121B)],
+          borderLight: const Color(0xFFFECDD3),
+          borderDark: const Color(0xFF4C1D2A),
+          avatarBgLight: const Color(0xFFFDE8EA),
+          avatarBgDark: const Color(0xFF3B121E),
+          doodlePainter: _HeartDoodlePainter(),
+          description:
+              'Índice de sintonia amorosa, love language (corações, afeto, memes), horários a dois e métricas de resposta.',
+        ),
+        (
+          mode: ChatMode.amigos,
+          title: 'Modo Amigos',
+          eyebrow: 'PARCERIA, RESENHA & ZOEIRA',
+          icon: LucideIcons.users,
+          participantHint: '2 amigos (dupla)',
+          microBadgeIcon: LucideIcons.sparkles,
+          microBadgeLabel: 'Duelo de estilos & Resenha a dois',
+          accentColor: const Color(0xFF2563EB),
+          accentSecondary: const Color(0xFF3B82F6),
+          bgLightGradient: const [Color(0xFFF0F9FF), Color(0xFFE0F2FE)],
+          bgDarkGradient: const [Color(0xFF0C192E), Color(0xFF112240)],
+          borderLight: const Color(0xFFBAE6FD),
+          borderDark: const Color(0xFF1E3A8A),
+          avatarBgLight: const Color(0xFFE0EDFD),
+          avatarBgDark: const Color(0xFF13274A),
+          doodlePainter: _AmigosDoodlePainter(),
+          description:
+              'A amizade a dois: quem responde mais rápido, duelo de estilos, áudios intermináveis de podcast, vácuos históricos e cumplicidade.',
+        ),
+      ] else ...[
+        (
+          mode: ChatMode.grupo,
+          title: 'Modo Grupo',
+          eyebrow: 'LEADERBOARD GERAL & VIBES',
+          icon: LucideIcons.messagesSquare,
+          participantHint: '${_participants.length} participantes',
+          microBadgeIcon: LucideIcons.trophy,
+          microBadgeLabel: 'Leaderboard geral & Radar de vibes',
+          accentColor: const Color(0xFF7C3AED),
+          accentSecondary: const Color(0xFF8B5CF6),
+          bgLightGradient: const [Color(0xFFF5F3FF), Color(0xFFEDE9FE)],
+          bgDarkGradient: const [Color(0xFF1A102E), Color(0xFF251642)],
+          borderLight: const Color(0xFFDDD6FE),
+          borderDark: const Color(0xFF4C1D95),
+          avatarBgLight: const Color(0xFFEDE9FE),
+          avatarBgDark: const Color(0xFF251445),
+          doodlePainter: _GrupoDoodlePainter(),
+          description:
+              'Leaderboard geral com pódios e porcentagens, matriz de interação, ranking de vibes e corujas da madrugada.',
+        ),
+      ],
     ];
 
     return Scaffold(
@@ -142,8 +152,92 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
           style: SwissTypography.titleMedium.copyWith(
             fontFamily: 'serif',
             fontWeight: FontWeight.w700,
+            letterSpacing: -0.2,
           ),
         ),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 12.0),
+          child: Center(
+            child: GestureDetector(
+              onTap: () {
+                HapticFeedback.selectionClick();
+                Navigator.of(context).maybePop();
+              },
+              child: Container(
+                width: 38,
+                height: 38,
+                decoration: ShapeDecoration(
+                  color: isDark ? SwissColors.darkSurfaceCard : Colors.white,
+                  shape: SquircleBorder.radius(
+                    11,
+                    side: BorderSide(
+                      color: isDark ? SwissColors.darkBorder : SwissColors.lightBorder,
+                      width: 1.0,
+                    ),
+                  ),
+                  shadows: [
+                    BoxShadow(
+                      color: isDark ? Colors.black26 : const Color(0x060F172A),
+                      blurRadius: 6,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: Icon(
+                    LucideIcons.arrowLeft,
+                    size: 18,
+                    color: isDark ? SwissColors.darkTextPrimary : SwissColors.lightTextPrimary,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: Center(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: ShapeDecoration(
+                  color: isDark ? SwissColors.darkSurfaceSubdued : SwissColors.lightSurfaceSubdued,
+                  shape: SquircleBorder.radius(
+                    8,
+                    side: BorderSide(
+                      color: isDark ? SwissColors.darkBorder : SwissColors.lightBorder,
+                      width: 1.0,
+                    ),
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 6,
+                      height: 6,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: isDuo ? SwissColors.brandCobalt : const Color(0xFF7C3AED),
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      isDuo ? 'DUPLA (1-A-1)' : 'GRUPO',
+                      style: TextStyle(
+                        fontFamily: 'monospace',
+                        fontSize: 10,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.8,
+                        color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: false,
@@ -167,7 +261,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                 shadows: [
                   BoxShadow(
                     color: isDark ? Colors.black38 : const Color(0x060F172A),
-                    blurRadius: 12,
+                    blurRadius: 14,
                     offset: const Offset(0, 4),
                   ),
                 ],
@@ -176,35 +270,79 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        width: 32,
-                        height: 32,
-                        decoration: ShapeDecoration(
-                          color: isDark
-                              ? SwissColors.accentSubduedDark
-                              : SwissColors.accentSubduedLight,
-                          shape: SquircleBorder.radius(10),
-                        ),
-                        child: const Center(
-                          child: Icon(
-                            LucideIcons.users,
-                            size: 16,
-                            color: SwissColors.irisPrimary,
+                      Row(
+                        children: [
+                          Container(
+                            width: 36,
+                            height: 36,
+                            decoration: ShapeDecoration(
+                              color: isDark
+                                  ? const Color(0xFF1E293B)
+                                  : const Color(0xFFEFF6FF),
+                              shape: SquircleBorder.radius(
+                                11,
+                                side: BorderSide(
+                                  color: isDark
+                                      ? const Color(0xFF334155)
+                                      : const Color(0xFFBFDBFE),
+                                  width: 0.8,
+                                ),
+                              ),
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                LucideIcons.users,
+                                size: 17,
+                                color: SwissColors.brandCobalt,
+                              ),
+                            ),
                           ),
-                        ),
+                          const SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Participantes Detectados (${_participants.length})',
+                                style: SwissTypography.titleMedium.copyWith(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              const SizedBox(height: 1),
+                              Text(
+                                '${widget.initialAnalysis.generalStats.totalMessages} mensagens analisadas',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w500,
+                                  color: isDark ? SwissColors.darkTextMuted : SwissColors.lightTextMuted,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 10),
-                      Text(
-                        'Participantes Detectados (${_participants.length})',
-                        style: SwissTypography.titleMedium.copyWith(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        decoration: ShapeDecoration(
+                          color: isDark ? SwissColors.darkSurfaceSubdued : SwissColors.lightSurfaceSubdued,
+                          shape: SquircleBorder.radius(6),
+                        ),
+                        child: Text(
+                          isDuo ? '1-A-1' : 'MULTI',
+                          style: TextStyle(
+                            fontFamily: 'monospace',
+                            fontSize: 9.5,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.5,
+                            color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 16),
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
@@ -229,7 +367,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                             const Icon(
                               LucideIcons.user,
                               size: 13,
-                              color: SwissColors.irisPrimary,
+                              color: SwissColors.brandCobalt,
                             ),
                             const SizedBox(width: 6),
                             Text(
@@ -590,6 +728,28 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
               type: SwissButtonType.primary,
               fullWidth: true,
               onPressed: _proceedToDashboard,
+            ),
+            const SizedBox(height: 14),
+
+            // Privacy / offline security reassurance
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  LucideIcons.shieldCheck,
+                  size: 13,
+                  color: isDark ? SwissColors.darkTextMuted : SwissColors.lightTextMuted,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  '100% offline. Seus dados nunca saem deste aparelho.',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                    color: isDark ? SwissColors.darkTextMuted : SwissColors.lightTextMuted,
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 16),
           ],

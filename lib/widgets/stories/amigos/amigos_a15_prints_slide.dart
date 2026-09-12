@@ -102,7 +102,9 @@ class AmigosA15PrintsSlide extends StatelessWidget {
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          'Detetive oficial do squad: $investigator',
+                          adapter.isDuo
+                              ? 'Detetive oficial da dupla: $investigator'
+                              : 'Detetive oficial do squad: $investigator',
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w700,

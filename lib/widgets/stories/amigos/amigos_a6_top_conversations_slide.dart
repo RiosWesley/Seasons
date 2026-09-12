@@ -14,13 +14,17 @@ class AmigosA6TopConversationsSlide extends StatelessWidget {
   Widget build(BuildContext context) {
     final words = adapter.topWords.take(4).toList();
 
+    final isDuo = adapter.isDuo;
+
     return StoryCardBase(
       background: AmigosBackgroundVariants.a6TopConversations(),
       backgroundColor: AmigosTheme.paperBase,
       category: 'Assuntos em Alta',
       categoryIcon: Icons.topic_rounded,
       title: 'Top Conversas\n& Jargões',
-      subtitle: 'Tópicos mais debatidos e gírias do squad.',
+      subtitle: isDuo
+          ? 'Tópicos mais debatidos e gírias da dupla.'
+          : 'Tópicos mais debatidos e gírias do squad.',
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -36,12 +40,12 @@ class AmigosA6TopConversationsSlide extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'MURAL DE CLASSIFICADOS DO SQUAD',
-                          style: TextStyle(
+                          isDuo ? 'MURAL DE CLASSIFICADOS DA DUPLA' : 'MURAL DE CLASSIFICADOS DO SQUAD',
+                          style: const TextStyle(
                             fontFamily: 'monospace',
                             fontSize: 10,
                             fontWeight: FontWeight.w800,

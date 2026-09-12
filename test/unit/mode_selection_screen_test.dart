@@ -91,22 +91,21 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      // Mode cards presence
+      // Mode cards presence for <= 2 participants: ONLY Casal and Amigos! Grupo does not appear!
       expect(find.text('Modo Casal'), findsOneWidget);
       expect(find.text('Modo Amigos'), findsOneWidget);
-      expect(find.text('Modo Grupo'), findsOneWidget);
+      expect(find.text('Modo Grupo'), findsNothing);
 
       // Micro badges
       expect(find.text('Ritmo a dois & Afinidade'), findsOneWidget);
-      expect(find.text('Arquétipos do squad & Dinâmica'), findsOneWidget);
-      expect(find.text('Leaderboard geral & Radar de vibes'), findsOneWidget);
+      expect(find.text('Duelo de estilos & Resenha a dois'), findsOneWidget);
 
       // Recommendation tag should be present on Casal only
       expect(find.text('Recomendado'), findsOneWidget);
       expect(find.text(' para esta conversa'), findsOneWidget);
     });
 
-    testWidgets('3. Amigos mode is recommended for 3-5 participants', (tester) async {
+    testWidgets('3. Grupo mode is selected for 3+ participants (4 participants)', (tester) async {
       setMobileViewport(tester);
       final export = const ChatParser().parse(sampleAmigosChat);
       final analysis = ChatAnalyzer.analyzeRawExport(export);
@@ -122,7 +121,9 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Participantes Detectados (4)'), findsOneWidget);
-      expect(find.text('Modo Amigos'), findsOneWidget);
+      expect(find.text('Modo Grupo'), findsOneWidget);
+      expect(find.text('Modo Casal'), findsNothing);
+      expect(find.text('Modo Amigos'), findsNothing);
       expect(find.text('Recomendado'), findsOneWidget);
       expect(find.text(' para esta conversa'), findsOneWidget);
     });
@@ -144,6 +145,8 @@ void main() {
 
       expect(find.text('Participantes Detectados (7)'), findsOneWidget);
       expect(find.text('Modo Grupo'), findsOneWidget);
+      expect(find.text('Modo Casal'), findsNothing);
+      expect(find.text('Modo Amigos'), findsNothing);
       expect(find.text('Recomendado'), findsOneWidget);
       expect(find.text(' para esta conversa'), findsOneWidget);
     });
@@ -165,10 +168,6 @@ void main() {
 
       // Initially Casal is recommended & selected
       expect(find.text('Recomendado'), findsOneWidget);
-
-      // Tap Grupo mode card to switch selection
-      await tester.tap(find.text('Modo Grupo'));
-      await tester.pumpAndSettle();
 
       // Tap Amigos mode card to switch selection
       await tester.tap(find.text('Modo Amigos'));
@@ -257,7 +256,7 @@ void main() {
       expect(find.text('Configurar Retrospectiva'), findsOneWidget);
       expect(find.text('Modo Casal'), findsOneWidget);
       expect(find.text('Modo Amigos'), findsOneWidget);
-      expect(find.text('Modo Grupo'), findsOneWidget);
+      expect(find.text('Modo Grupo'), findsNothing);
       expect(tester.takeException(), isNull);
     });
   });

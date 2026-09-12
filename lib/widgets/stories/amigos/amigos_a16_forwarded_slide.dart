@@ -21,7 +21,9 @@ class AmigosA16ForwardedSlide extends StatelessWidget {
       category: 'Circulação de Links',
       categoryIcon: Icons.forward_rounded,
       title: 'Central de\nTransmissão',
-      subtitle: 'Quem abastece o grupo com memes e links externos.',
+      subtitle: adapter.isDuo
+          ? 'Quem abastece a conversa com memes e links externos.'
+          : 'Quem abastece o grupo com memes e links externos.',
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

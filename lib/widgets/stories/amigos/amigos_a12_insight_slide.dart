@@ -13,6 +13,7 @@ class AmigosA12InsightSlide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final text = adapter.primaryInsight;
+    final isDuo = adapter.isDuo;
 
     return StoryCardBase(
       background: AmigosBackgroundVariants.a12Insight(),
@@ -20,8 +21,10 @@ class AmigosA12InsightSlide extends StatelessWidget {
       backgroundColor: const Color(0xFF0F172A),
       category: 'Diagnóstico da Amizade',
       categoryIcon: Icons.lightbulb_outline_rounded,
-      title: 'Manifesto do\nSquad',
-      subtitle: 'Retrato sociológico sobre a química do grupo.',
+      title: isDuo ? 'Manifesto da\nDupla' : 'Manifesto do\nSquad',
+      subtitle: isDuo
+          ? 'Retrato sobre a química e conexão entre vocês.'
+          : 'Retrato sociológico sobre a química do grupo.',
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -93,9 +96,9 @@ class AmigosA12InsightSlide extends StatelessWidget {
               border: Border.all(color: AmigosTheme.accentPrimary, width: 1.5),
               borderRadius: BorderRadius.circular(6),
             ),
-            child: const Text(
-              'ARQUIVADO NO ZINE DO SQUAD',
-              style: TextStyle(
+            child: Text(
+              isDuo ? 'ARQUIVADO NO ZINE DA DUPLA' : 'ARQUIVADO NO ZINE DO SQUAD',
+              style: const TextStyle(
                 fontFamily: 'monospace',
                 fontSize: 9,
                 fontWeight: FontWeight.w900,

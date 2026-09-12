@@ -16,6 +16,8 @@ class AmigosA13HiddenInteractionsSlide extends StatelessWidget {
     final victim = adapter.vacuumVictim;
     final count = adapter.ignoringStats.ignoredCount;
 
+    final isDuo = adapter.isDuo;
+
     return StoryCardBase(
       background: AmigosBackgroundVariants.a13HiddenInteractions(),
       isDarkTheme: true,
@@ -23,7 +25,9 @@ class AmigosA13HiddenInteractionsSlide extends StatelessWidget {
       category: 'Interações Ocultas',
       categoryIcon: Icons.timer_off_outlined,
       title: 'Cartaz de\nProcurado',
-      subtitle: 'A diplomacia do vácuo no grupo.',
+      subtitle: isDuo
+          ? 'A arte do vácuo: quem sumiu e deixou o amigo falando sozinho.'
+          : 'A diplomacia do vácuo no grupo.',
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -44,14 +48,14 @@ class AmigosA13HiddenInteractionsSlide extends StatelessWidget {
             ),
             child: Column(
               children: [
-                const Text(
-                  '★ PROCURADO PELO SQUAD ★',
-                  style: TextStyle(
+                Text(
+                  isDuo ? '★ QUEM DEIXOU QUEM NO VÁCUO ★' : '★ PROCURADO PELO SQUAD ★',
+                  style: const TextStyle(
                     fontFamily: 'monospace',
-                    fontSize: 12,
+                    fontSize: 11,
                     fontWeight: FontWeight.w900,
                     color: Color(0xFF78350F),
-                    letterSpacing: 2.0,
+                    letterSpacing: 1.5,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -82,7 +86,11 @@ class AmigosA13HiddenInteractionsSlide extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Acusado de aplicar $count vácuos demorados (>2h)',
+                  isDuo
+                      ? (count > 0
+                          ? 'Deixou $victim no vácuo $count vezes (>2h)'
+                          : 'Demorou mais tempo para responder $victim no chat')
+                      : 'Acusado de aplicar $count vácuos demorados (>2h)',
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 12,
@@ -92,17 +100,17 @@ class AmigosA13HiddenInteractionsSlide extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(color: const Color(0xFFD97706)),
                   ),
                   child: Text(
-                    'Vítima mais paciente: $victim',
+                    isDuo ? 'Vítima mais paciente: $victim 🕊️' : 'Vítima mais paciente: $victim',
                     style: const TextStyle(
                       fontSize: 11,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                       color: Color(0xFF78350F),
                     ),
                   ),
@@ -122,9 +130,9 @@ class AmigosA13HiddenInteractionsSlide extends StatelessWidget {
                 border: Border.all(color: AmigosTheme.dangerRed, width: 2),
                 borderRadius: BorderRadius.circular(4),
               ),
-              child: const Text(
-                'CULPADO / SEM RESPOSTA',
-                style: TextStyle(
+              child: Text(
+                isDuo ? 'CULPADO DE SUMIÇO // SEM RESPOSTA' : 'CULPADO / SEM RESPOSTA',
+                style: const TextStyle(
                   fontFamily: 'monospace',
                   fontSize: 11,
                   fontWeight: FontWeight.w900,

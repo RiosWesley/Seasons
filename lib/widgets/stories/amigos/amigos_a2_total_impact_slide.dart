@@ -19,12 +19,14 @@ class AmigosA2TotalImpactSlide extends StatelessWidget {
         : 1;
     final sortedMembers = adapter.sortedMemberVolumes;
 
+    final isDuo = adapter.isDuo;
+
     return StoryCardBase(
       background: AmigosBackgroundVariants.a2TotalImpact(),
       backgroundColor: AmigosTheme.paperBase,
-      category: 'Movimentação do Squad',
+      category: isDuo ? 'Movimentação da Dupla' : 'Movimentação do Squad',
       categoryIcon: Icons.chat_bubble_outline_rounded,
-      title: 'O Grupo Não\nParou Um Segundo',
+      title: isDuo ? 'A Dupla Não\nParou Um Segundo' : 'O Grupo Não\nParou Um Segundo',
       subtitle: 'Volume anual e impacto da resenha.',
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -34,7 +36,7 @@ class AmigosA2TotalImpactSlide extends StatelessWidget {
             targetValue: adapter.totalMessages,
             fontSize: 56,
             color: AmigosTheme.accentPrimary,
-            label: 'MENSAGENS DO SQUAD',
+            label: isDuo ? 'MENSAGENS DA DUPLA' : 'MENSAGENS DO SQUAD',
           ),
 
           const SizedBox(height: 20),

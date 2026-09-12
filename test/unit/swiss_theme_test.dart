@@ -24,7 +24,7 @@ void main() {
     test('Disciplined electric iris & radiant violet accent tokens match specifications', () {
       expect(SwissColors.irisPrimary.toARGB32(), equals(0xFF6366F1));
       expect(SwissColors.violetSecondary.toARGB32(), equals(0xFF8B5CF6));
-      expect(SwissColors.accent, equals(SwissColors.irisPrimary));
+      expect(SwissColors.accent, equals(SwissColors.brandCobalt));
     });
 
     test('Luminance and color channel relationships verify Swiss precision', () {

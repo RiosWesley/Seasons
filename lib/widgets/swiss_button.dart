@@ -60,19 +60,22 @@ class _SwissButtonState extends State<SwissButton> {
     switch (widget.type) {
       case SwissButtonType.primary:
         if (_isEnabled) {
-          backgroundGradient = const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              SwissColors.irisPrimary,
-              SwissColors.violetSecondary,
-            ],
-          );
+          backgroundColor = isDark
+              ? const Color(0xFF2563EB)
+              : const Color(0xFF0F172A);
           foregroundColor = Colors.white;
+          borderSide = BorderSide(
+            color: isDark
+                ? const Color(0x4060A5FA)
+                : const Color(0x20000000),
+            width: 1.0,
+          );
           shadows = [
             BoxShadow(
-              color: SwissColors.irisPrimary.withValues(alpha: 0.35),
-              blurRadius: 18,
+              color: isDark
+                  ? const Color(0xFF2563EB).withValues(alpha: 0.35)
+                  : const Color(0xFF0F172A).withValues(alpha: 0.18),
+              blurRadius: 14,
               offset: const Offset(0, 4),
               spreadRadius: -2,
             ),

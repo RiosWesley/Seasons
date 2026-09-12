@@ -15,13 +15,17 @@ class AmigosA4CompatibilitySlide extends StatelessWidget {
   Widget build(BuildContext context) {
     final score = adapter.compatibilityScore.toDouble().clamp(0.0, 100.0);
 
+    final isDuo = adapter.isDuo;
+
     return StoryCardBase(
       background: AmigosBackgroundVariants.a4Compatibility(),
       backgroundColor: AmigosTheme.paperBase,
-      category: 'Harmonia do Grupo',
-      categoryIcon: Icons.diversity_3_rounded,
-      title: 'Sintonia do\nSquad',
-      subtitle: 'Índice de sintonia cruzada e dinâmica interna.',
+      category: isDuo ? 'Sintonia da Dupla' : 'Harmonia do Grupo',
+      categoryIcon: isDuo ? Icons.handshake_outlined : Icons.diversity_3_rounded,
+      title: isDuo ? 'Sintonia da\nDupla' : 'Sintonia do\nSquad',
+      subtitle: isDuo
+          ? 'Nível de conexão e harmonia entre vocês.'
+          : 'Índice de sintonia cruzada e dinâmica interna.',
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -32,14 +36,14 @@ class AmigosA4CompatibilitySlide extends StatelessWidget {
             activeColor: AmigosTheme.accentPrimary,
             trackColor: const Color(0x202563EB),
             textColor: AmigosTheme.inkPrimary,
-            title: 'SINTONIA DO SQUAD',
+            title: isDuo ? 'NÍVEL DE CONEXÃO' : 'SINTONIA DO SQUAD',
           ).animate().scale(duration: 600.ms, curve: Curves.easeOutBack),
 
           const SizedBox(height: 14),
 
           // Hazard tape pop
-          const HazardTapeBanner(
-            text: '⚡ ALTO TEOR DE ZOEIRA & SINTONIA',
+          HazardTapeBanner(
+            text: isDuo ? '⚡ ALTA CONEXÃO & RESENHA PURA' : '⚡ ALTO TEOR DE ZOEIRA & SINTONIA',
             angle: -0.03,
           ).animate().fadeIn(delay: 200.ms),
 

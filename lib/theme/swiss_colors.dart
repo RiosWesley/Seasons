@@ -9,12 +9,17 @@ import 'package:flutter/material.dart';
 class SwissColors {
   SwissColors._();
 
+  // === SWISS EDITORIAL BRAND ACCENTS (Harmonized with App Icon) ===
+  static const Color brandCobalt = Color(0xFF2563EB); // Vivid Cobalt from App Icon
+  static const Color brandSapphire = Color(0xFF1D4ED8); // Deep Sapphire
+  static const Color brandObsidian = Color(0xFF0F172A); // Swiss Editorial Midnight Slate
+
   // === PRIMARY ACCENT RAMP (Electric Iris & Radiant Violet) ===
   static const Color irisPrimary = Color(0xFF6366F1);
   static const Color violetSecondary = Color(0xFF8B5CF6);
   static const Color orchidTertiary = Color(0xFFA855F7);
-  static const Color accent = irisPrimary;
-  static const Color accentSecondary = violetSecondary;
+  static const Color accent = brandCobalt;
+  static const Color accentSecondary = brandSapphire;
   static const Color accentSubduedDark = Color(0xFF1E1F3D);
   static const Color accentSubduedLight = Color(0xFFEEF2FF);
   static const Color accentBorder = Color(0xFF4F46E5);

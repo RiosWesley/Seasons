@@ -15,6 +15,8 @@ class AmigosA9FloodMomentsSlide extends StatelessWidget {
     final author = adapter.biggestFloodAuthor;
     final count = adapter.biggestFloodCount;
 
+    final isDuo = adapter.isDuo;
+
     return StoryCardBase(
       background: AmigosBackgroundVariants.a9FloodMoments(),
       isDarkTheme: true,
@@ -22,7 +24,9 @@ class AmigosA9FloodMomentsSlide extends StatelessWidget {
       category: 'Inundação de Mensagens',
       categoryIcon: Icons.waves_rounded,
       title: 'O Rei do\nMonólogo',
-      subtitle: 'Recorde de mensagens seguidas sem resposta.',
+      subtitle: isDuo
+          ? 'Recorde de mensagens seguidas sem resposta do amigo.'
+          : 'Recorde de mensagens seguidas sem resposta.',
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -99,11 +103,11 @@ class AmigosA9FloodMomentsSlide extends StatelessWidget {
                 // Simulated speech bubble waterfall
                 Column(
                   children: [
-                    _bubble('Alguém online aí??', true),
+                    _bubble(isDuo ? 'Cadê você??' : 'Alguém online aí??', true),
                     const SizedBox(height: 6),
-                    _bubble('Gente cês não tão entendendo kkkk', true),
+                    _bubble(isDuo ? 'Você não tá entendendo kkkk' : 'Gente cês não tão entendendo kkkk', true),
                     const SizedBox(height: 6),
-                    _bubble('Alô??? Socorro 😭', false),
+                    _bubble(isDuo ? 'Alô??? Me responde 😭' : 'Alô??? Socorro 😭', false),
                   ],
                 ),
               ],

@@ -110,4 +110,147 @@ void main() {
       expect(shareCalled, isTrue);
     });
   });
+
+  const duoChat = '''
+01/01/2025 10:00 - Lucas: E aí mano, bora jogar hoje?
+01/01/2025 10:01 - Gabriel: Bora demais! Que horas? 😂
+01/01/2025 10:05 - Lucas: Umas 20h no Discord
+01/01/2025 10:06 - Gabriel: Fechou!
+01/01/2025 10:07 - Lucas: Não atrasa hein kkkk
+01/01/2025 10:08 - Lucas: Alô?
+01/01/2025 10:09 - Lucas: Já sumiu de novo 😭
+01/01/2025 14:00 - Gabriel: Calma pô tava almoçando kkkk 😂
+''';
+
+  final duoAnalysis = ChatAnalyzer.analyzeRawExport(
+    const ChatParser().parse(duoChat),
+    overrideMode: ChatMode.amigos,
+  );
+
+  group('Calibrated Amigos Duo (2 Friends) Story Cards Test Suite', () {
+    final slides = StoryCatalog.getAmigosSlides();
+
+    testWidgets('Slide a1 (Capa) highlights A Dupla and Parceria Oficial', (tester) async {
+      setMobileViewport(tester);
+      final slide1 = slides.firstWhere((s) => s.id == 'a1');
+      await tester.pumpWidget(
+        wrapWithApp(
+          StoryCardFactory.buildCard(
+            slide: slide1,
+            analysis: duoAnalysis,
+          ),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 600));
+
+      expect(find.text('A DUPLA'), findsOneWidget);
+      expect(find.text('PARCERIA OFICIAL'), findsWidgets);
+      expect(find.text('Lucas'), findsOneWidget);
+      expect(find.text('Gabriel'), findsOneWidget);
+    });
+
+    testWidgets('Slide a3 (Estilos) renders Duo Showdown VS', (tester) async {
+      setMobileViewport(tester);
+      final slide3 = slides.firstWhere((s) => s.id == 'a3');
+      await tester.pumpWidget(
+        wrapWithApp(
+          StoryCardFactory.buildCard(
+            slide: slide3,
+            analysis: duoAnalysis,
+          ),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 600));
+
+      expect(find.text('DUELO DE ESTILOS'), findsOneWidget);
+      expect(find.text('VS'), findsOneWidget);
+      expect(find.text('LADO A'), findsOneWidget);
+      expect(find.text('LADO B'), findsOneWidget);
+    });
+
+    testWidgets('Slide a4 (Compatibilidade) shows Sintonia da Dupla and Nível de Conexão', (tester) async {
+      setMobileViewport(tester);
+      final slide4 = slides.firstWhere((s) => s.id == 'a4');
+      await tester.pumpWidget(
+        wrapWithApp(
+          StoryCardFactory.buildCard(
+            slide: slide4,
+            analysis: duoAnalysis,
+          ),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 600));
+
+      expect(find.text('SINTONIA DA DUPLA'), findsOneWidget);
+      expect(find.text('NÍVEL DE CONEXÃO'), findsOneWidget);
+    });
+
+    testWidgets('Slide a10 (Personalidades) distributes titles between both friends', (tester) async {
+      setMobileViewport(tester);
+      final slide10 = slides.firstWhere((s) => s.id == 'a10');
+      await tester.pumpWidget(
+        wrapWithApp(
+          StoryCardFactory.buildCard(
+            slide: slide10,
+            analysis: duoAnalysis,
+          ),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 600));
+
+      expect(find.text('TÍTULOS DA DUPLA'), findsOneWidget);
+      expect(find.text('Lucas'), findsWidgets);
+      expect(find.text('Gabriel'), findsWidgets);
+    });
+
+    testWidgets('Slide a11 (Estatísticas) shows Métricas da Parceria', (tester) async {
+      setMobileViewport(tester);
+      final slide11 = slides.firstWhere((s) => s.id == 'a11');
+      await tester.pumpWidget(
+        wrapWithApp(
+          StoryCardFactory.buildCard(
+            slide: slide11,
+            analysis: duoAnalysis,
+          ),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 600));
+
+      expect(find.text('MÉTRICAS DA PARCERIA'), findsOneWidget);
+    });
+
+    testWidgets('Slide a13 (Interações Ocultas) highlights who ghosts who', (tester) async {
+      setMobileViewport(tester);
+      final slide13 = slides.firstWhere((s) => s.id == 'a13');
+      await tester.pumpWidget(
+        wrapWithApp(
+          StoryCardFactory.buildCard(
+            slide: slide13,
+            analysis: duoAnalysis,
+          ),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 600));
+
+      expect(find.text('★ QUEM DEIXOU QUEM NO VÁCUO ★'), findsOneWidget);
+      expect(find.textContaining('Vítima mais paciente:'), findsOneWidget);
+    });
+
+    testWidgets('Slide a18 (Pôster) celebrates A Dupla do Ano with shared poster button', (tester) async {
+      setMobileViewport(tester);
+      final slide18 = slides.firstWhere((s) => s.id == 'a18');
+      await tester.pumpWidget(
+        wrapWithApp(
+          StoryCardFactory.buildCard(
+            slide: slide18,
+            analysis: duoAnalysis,
+          ),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 600));
+
+      expect(find.text('A DUPLA DO ANO'), findsOneWidget);
+      expect(find.text('COMPARTILHAR PÔSTER DA DUPLA'), findsOneWidget);
+    });
+  });
 }

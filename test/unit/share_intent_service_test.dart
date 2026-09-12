@@ -8,6 +8,7 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:chat_wrapped/core/models/general_stats.dart';
 import 'package:chat_wrapped/core/models/raw_chat_export.dart';
 import 'package:chat_wrapped/core/services/share_intent_service.dart';
+import 'package:chat_wrapped/screens/dashboard_screen.dart';
 import 'package:chat_wrapped/screens/mode_selection_screen.dart';
 
 class TestSharingIntentPlugin extends ReceiveSharingIntent {
@@ -40,6 +41,8 @@ void main() {
 
   final sampleTxtPath =
       File('test/fixtures/brazilian_24h.txt').absolute.path;
+  final sampleTxtDuoPath =
+      File('test/fixtures/brazilian_12h.txt').absolute.path;
   final sampleZipPath =
       File('test/fixtures/sample_chat.zip').absolute.path;
 
@@ -129,7 +132,7 @@ void main() {
       expect(capturedAnalysis, isNotNull);
       expect(capturedExport!.messages.isNotEmpty, isTrue);
       expect(capturedExport!.participants.length, equals(3));
-      expect(capturedAnalysis!.mode, equals(ChatMode.amigos));
+      expect(capturedAnalysis!.mode, equals(ChatMode.grupo));
     });
 
     test('processSharedFilePath ingests .zip export and generates analysis', () async {
@@ -274,7 +277,7 @@ void main() {
   });
 
   group('ShareIntentService - Navigation Integration', () {
-    testWidgets('handleSharedFiles pushes ModeSelectionScreen onto navigator',
+    testWidgets('handleSharedFiles with duo chat pushes ModeSelectionScreen onto navigator',
         (WidgetTester tester) async {
       final navKey = GlobalKey<NavigatorState>();
       final testPlugin = TestSharingIntentPlugin();
@@ -293,7 +296,40 @@ void main() {
       expect(find.text('Home Base'), findsOneWidget);
       expect(find.byType(ModeSelectionScreen), findsNothing);
 
-      // Process shared WhatsApp export file inside runAsync for real file I/O
+      // Process shared duo WhatsApp export file inside runAsync for real file I/O
+      await tester.runAsync(() async {
+        await service.handleSharedFiles([
+          SharedMediaFile(path: sampleTxtDuoPath, type: SharedMediaType.file),
+        ]);
+      });
+
+      await tester.pumpAndSettle();
+
+      // ModeSelectionScreen should now be in the widget tree for duo
+      expect(find.byType(ModeSelectionScreen), findsOneWidget);
+      expect(find.text('Configurar Retrospectiva'), findsOneWidget);
+    });
+
+    testWidgets('handleSharedFiles with 3+ members routes directly to DashboardScreen as Grupo',
+        (WidgetTester tester) async {
+      final navKey = GlobalKey<NavigatorState>();
+      final testPlugin = TestSharingIntentPlugin();
+      final service = ShareIntentService(
+        intentPlugin: testPlugin,
+        navigatorKey: navKey,
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          navigatorKey: navKey,
+          home: const Scaffold(body: Text('Home Base')),
+        ),
+      );
+
+      expect(find.text('Home Base'), findsOneWidget);
+      expect(find.byType(DashboardScreen), findsNothing);
+
+      // Process shared 3-member WhatsApp export file inside runAsync
       await tester.runAsync(() async {
         await service.handleSharedFiles([
           SharedMediaFile(path: sampleTxtPath, type: SharedMediaType.file),
@@ -302,9 +338,9 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      // ModeSelectionScreen should now be in the widget tree
-      expect(find.byType(ModeSelectionScreen), findsOneWidget);
-      expect(find.text('Configurar Retrospectiva'), findsOneWidget);
+      // DashboardScreen should now be opened directly for 3+ members
+      expect(find.byType(DashboardScreen), findsOneWidget);
+      expect(find.text('Relatório Completo'), findsOneWidget);
     });
   });
 }
