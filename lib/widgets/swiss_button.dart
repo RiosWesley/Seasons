@@ -150,12 +150,16 @@ class _SwissButtonState extends State<SwissButton> {
           ),
           const SizedBox(width: 8),
         ],
-        Text(
-          widget.label,
-          style: SwissTypography.labelLarge.copyWith(
-            color: foregroundColor,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.2,
+        Flexible(
+          child: Text(
+            widget.label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: SwissTypography.labelLarge.copyWith(
+              color: foregroundColor,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.2,
+            ),
           ),
         ),
       ],

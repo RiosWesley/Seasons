@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import '../core/analytics/chat_analyzer.dart';
-import '../core/models/general_stats.dart';
-import '../core/models/raw_chat_export.dart';
-import '../theme/squircle_border.dart';
-import '../theme/swiss_colors.dart';
-import '../theme/swiss_typography.dart';
-import '../widgets/metric_badge.dart';
-import '../widgets/swiss_button.dart';
-import '../widgets/swiss_card.dart';
-import 'dashboard_screen.dart';
+import 'package:chat_wrapped/core/analytics/chat_analyzer.dart';
+import 'package:chat_wrapped/core/models/general_stats.dart';
+import 'package:chat_wrapped/core/models/raw_chat_export.dart';
+import 'package:chat_wrapped/theme/squircle_border.dart';
+import 'package:chat_wrapped/theme/swiss_colors.dart';
+import 'package:chat_wrapped/theme/swiss_typography.dart';
+import 'package:chat_wrapped/widgets/swiss_button.dart';
+import 'package:chat_wrapped/screens/dashboard_screen.dart';
 
 /// Screen allowing the user to inspect detected chat participants
 /// and choose or confirm the retrospective analysis mode (Casal, Amigos, Grupo).
+/// Redesigned with warm editorial identity, continuous squircle bento cards,
+/// subtle textures, dedicated semantic palettes, and dynamic recommendations.
 class ModeSelectionScreen extends StatefulWidget {
   final RawChatExport? rawExport;
   final ChatAnalysisResult initialAnalysis;
@@ -40,12 +41,13 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
 
     _recommendedMode = widget.rawExport != null
         ? ChatAnalyzer.detectMode(widget.rawExport!.participants.length)
-        : widget.initialAnalysis.mode;
+        : ChatAnalyzer.detectMode(widget.initialAnalysis.generalStats.participants.length);
 
     _selectedMode = _recommendedMode;
   }
 
   void _proceedToDashboard() {
+    HapticFeedback.mediumImpact();
     ChatAnalysisResult analysisToUse = widget.initialAnalysis;
 
     if (widget.rawExport != null && _selectedMode != widget.initialAnalysis.mode) {
@@ -73,68 +75,153 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
       (
         mode: ChatMode.casal,
         title: 'Modo Casal',
+        eyebrow: 'AFINIDADE & RITMO A DOIS',
         icon: LucideIcons.heart,
         participantHint: '2 participantes',
+        microBadgeIcon: LucideIcons.heartHandshake,
+        microBadgeLabel: 'Ritmo a dois & Afinidade',
+        accentColor: const Color(0xFFE11D48),
+        accentSecondary: const Color(0xFFF43F5E),
+        bgLightGradient: const [Color(0xFFFFF1F2), Color(0xFFFFE4E6)],
+        bgDarkGradient: const [Color(0xFF1E1015), Color(0xFF2D121B)],
+        borderLight: const Color(0xFFFECDD3),
+        borderDark: const Color(0xFF4C1D2A),
+        avatarBgLight: const Color(0xFFFDE8EA),
+        avatarBgDark: const Color(0xFF3B121E),
+        doodlePainter: _HeartDoodlePainter(),
         description:
             'Índice de sintonia amorosa, love language (corações, afeto, memes), horários a dois e métricas de resposta.',
       ),
       (
         mode: ChatMode.amigos,
         title: 'Modo Amigos',
+        eyebrow: 'SQUAD & ARQUÉTIPOS',
         icon: LucideIcons.users,
         participantHint: '3 a 5 participantes',
+        microBadgeIcon: LucideIcons.sparkles,
+        microBadgeLabel: 'Arquétipos do squad & Dinâmica',
+        accentColor: const Color(0xFF2563EB),
+        accentSecondary: const Color(0xFF3B82F6),
+        bgLightGradient: const [Color(0xFFF0F9FF), Color(0xFFE0F2FE)],
+        bgDarkGradient: const [Color(0xFF0C192E), Color(0xFF112240)],
+        borderLight: const Color(0xFFBAE6FD),
+        borderDark: const Color(0xFF1E3A8A),
+        avatarBgLight: const Color(0xFFE0EDFD),
+        avatarBgDark: const Color(0xFF13274A),
+        doodlePainter: _AmigosDoodlePainter(),
         description:
             'Arquétipos de comunicação (Tagarela, Fantasma, Áudio-maníaco), dinâmicas do squad, ghosting e quem inicia conversas.',
       ),
       (
         mode: ChatMode.grupo,
         title: 'Modo Grupo',
-        icon: LucideIcons.users,
+        eyebrow: 'LEADERBOARD GERAL & VIBES',
+        icon: LucideIcons.messagesSquare,
         participantHint: '6 ou mais participantes',
+        microBadgeIcon: LucideIcons.trophy,
+        microBadgeLabel: 'Leaderboard geral & Radar de vibes',
+        accentColor: const Color(0xFF7C3AED),
+        accentSecondary: const Color(0xFF8B5CF6),
+        bgLightGradient: const [Color(0xFFF5F3FF), Color(0xFFEDE9FE)],
+        bgDarkGradient: const [Color(0xFF1A102E), Color(0xFF251642)],
+        borderLight: const Color(0xFFDDD6FE),
+        borderDark: const Color(0xFF4C1D95),
+        avatarBgLight: const Color(0xFFEDE9FE),
+        avatarBgDark: const Color(0xFF251445),
+        doodlePainter: _GrupoDoodlePainter(),
         description:
             'Leaderboard geral com pódios e porcentagens, matriz de interação, ranking de vibes e corujas da madrugada.',
       ),
     ];
 
     return Scaffold(
+      backgroundColor: isDark ? SwissColors.darkBackground : SwissColors.lightBackground,
       appBar: AppBar(
-        title: Text('Configurar Retrospectiva', style: SwissTypography.titleMedium),
+        title: Text(
+          'Configurar Retrospectiva',
+          style: SwissTypography.titleMedium.copyWith(
+            fontFamily: 'serif',
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: false,
       ),
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
           children: [
             // Participants detected header card
-            SwissCard(
+            Container(
+              padding: const EdgeInsets.all(18),
+              decoration: ShapeDecoration(
+                color: isDark ? SwissColors.darkSurfaceCard : Colors.white,
+                shape: SquircleBorder.radius(
+                  20,
+                  side: BorderSide(
+                    color: isDark ? SwissColors.darkBorder : SwissColors.lightBorder,
+                    width: 1.0,
+                  ),
+                ),
+                shadows: [
+                  BoxShadow(
+                    color: isDark ? Colors.black38 : const Color(0x060F172A),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
-                      const Icon(
-                        LucideIcons.users,
-                        size: 18,
-                        color: SwissColors.emeraldPrimary,
+                      Container(
+                        width: 32,
+                        height: 32,
+                        decoration: ShapeDecoration(
+                          color: isDark
+                              ? SwissColors.accentSubduedDark
+                              : SwissColors.accentSubduedLight,
+                          shape: SquircleBorder.radius(10),
+                        ),
+                        child: const Center(
+                          child: Icon(
+                            LucideIcons.users,
+                            size: 16,
+                            color: SwissColors.irisPrimary,
+                          ),
+                        ),
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: 10),
                       Text(
                         'Participantes Detectados (${_participants.length})',
-                        style: SwissTypography.titleMedium.copyWith(fontSize: 16),
+                        style: SwissTypography.titleMedium.copyWith(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 14),
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
                     children: _participants.map((name) {
                       return Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
                         decoration: ShapeDecoration(
                           color: isDark
                               ? SwissColors.darkSurfaceSubdued
                               : SwissColors.lightSurfaceSubdued,
-                          shape: SquircleBorder.radius(12),
+                          shape: SquircleBorder.radius(
+                            12,
+                            side: BorderSide(
+                              color: isDark ? SwissColors.darkBorder : SwissColors.lightBorder,
+                              width: 1.0,
+                            ),
+                          ),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -142,7 +229,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                             const Icon(
                               LucideIcons.user,
                               size: 13,
-                              color: SwissColors.emeraldPrimary,
+                              color: SwissColors.irisPrimary,
                             ),
                             const SizedBox(width: 6),
                             Text(
@@ -151,6 +238,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                                 color: isDark
                                     ? SwissColors.darkTextPrimary
                                     : SwissColors.lightTextPrimary,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ],
@@ -164,139 +252,338 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
 
             const SizedBox(height: 24),
 
+            // Section Headline: Editorial Warm Typography
             Text(
               'Escolha a Experiência',
-              style: SwissTypography.titleLarge.copyWith(fontSize: 18),
+              style: SwissTypography.titleLarge.copyWith(
+                fontFamily: 'serif',
+                fontWeight: FontWeight.w800,
+                fontSize: 22,
+                color: isDark ? SwissColors.darkTextPrimary : SwissColors.lightTextPrimary,
+              ),
             ),
             const SizedBox(height: 6),
             Text(
               'Sugerimos um modo com base no número de participantes, mas você pode escolher qualquer modalidade.',
               style: SwissTypography.bodyMedium.copyWith(
-                fontSize: 13,
+                fontSize: 13.5,
                 color: isDark ? SwissColors.darkTextSecondary : SwissColors.lightTextSecondary,
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: 18),
 
-            // Mode Cards List
+            // Expressive Bento Cards List
             ...modeOptions.map((opt) {
               final isSelected = _selectedMode == opt.mode;
               final isRecommended = _recommendedMode == opt.mode;
 
               return Padding(
-                padding: const EdgeInsets.only(bottom: 12.0),
-                child: SwissCard(
-                  highlight: isSelected,
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: GestureDetector(
                   onTap: () {
+                    HapticFeedback.selectionClick();
                     setState(() {
                       _selectedMode = opt.mode;
                     });
                   },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            width: 38,
-                            height: 38,
-                            decoration: ShapeDecoration(
-                              color: isSelected
-                                  ? SwissColors.accentSubdued(isDark)
-                                  : (isDark
-                                      ? SwissColors.darkSurfaceSubdued
-                                      : SwissColors.lightSurfaceSubdued),
-                              shape: SquircleBorder.radius(10),
-                            ),
-                            child: Icon(
-                              opt.icon,
-                              size: 18,
-                              color: isSelected
-                                  ? SwissColors.emeraldPrimary
-                                  : (isDark
-                                      ? SwissColors.darkTextSecondary
-                                      : SwissColors.lightTextSecondary),
-                            ),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 180),
+                    curve: Curves.easeOutCubic,
+                    decoration: ShapeDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: isDark ? opt.bgDarkGradient : opt.bgLightGradient,
+                      ),
+                      shadows: isSelected
+                          ? [
+                              BoxShadow(
+                                color: opt.accentColor.withValues(alpha: 0.22),
+                                blurRadius: 22,
+                                offset: const Offset(0, 6),
+                                spreadRadius: -2,
+                              ),
+                            ]
+                          : [
+                              BoxShadow(
+                                color: isDark ? Colors.black26 : const Color(0x04000000),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                      shape: SquircleBorder.radius(
+                        22,
+                        side: BorderSide(
+                          color: isSelected
+                              ? opt.accentColor
+                              : (isDark ? opt.borderDark : opt.borderLight),
+                          width: isSelected ? 2.0 : 1.0,
+                        ),
+                      ),
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: Stack(
+                      children: [
+                        // Subtle vector doodle layer
+                        Positioned.fill(
+                          child: CustomPaint(
+                            painter: opt.doodlePainter,
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      opt.title,
-                                      style: SwissTypography.titleMedium.copyWith(fontSize: 16),
+                        ),
+
+                        // Foreground content
+                        Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Top Row: Avatar squircle + Eyebrow/Title + Stylized Radio
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  // Avatar Squircle
+                                  Container(
+                                    width: 44,
+                                    height: 44,
+                                    decoration: ShapeDecoration(
+                                      color: isDark ? opt.avatarBgDark : opt.avatarBgLight,
+                                      shape: SquircleBorder.radius(
+                                        14,
+                                        side: BorderSide(
+                                          color: opt.accentColor.withValues(alpha: 0.35),
+                                          width: 1.0,
+                                        ),
+                                      ),
                                     ),
-                                    if (isRecommended) ...[
-                                      const SizedBox(width: 8),
-                                      const MetricBadge(
-                                        label: 'Recomendado',
-                                        isAccent: true,
+                                    child: Center(
+                                      child: Icon(
+                                        opt.icon,
+                                        size: 22,
+                                        color: opt.accentColor,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+
+                                  // Eyebrow & Title Column
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          opt.eyebrow,
+                                          style: TextStyle(
+                                            fontSize: 9.5,
+                                            letterSpacing: 1.1,
+                                            fontWeight: FontWeight.w800,
+                                            color: opt.accentColor,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        const SizedBox(height: 2),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              opt.title,
+                                              style: TextStyle(
+                                                fontFamily: 'serif',
+                                                fontSize: 19,
+                                                fontWeight: FontWeight.w800,
+                                                letterSpacing: -0.3,
+                                                color: isDark
+                                                    ? SwissColors.darkTextPrimary
+                                                    : SwissColors.lightTextPrimary,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Container(
+                                              padding: const EdgeInsets.symmetric(
+                                                horizontal: 7,
+                                                vertical: 2,
+                                              ),
+                                              decoration: ShapeDecoration(
+                                                color: isDark
+                                                    ? Colors.white.withValues(alpha: 0.08)
+                                                    : Colors.black.withValues(alpha: 0.05),
+                                                shape: SquircleBorder.radius(6),
+                                              ),
+                                              child: Text(
+                                                opt.participantHint,
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: isDark
+                                                      ? SwissColors.darkTextMuted
+                                                      : SwissColors.lightTextMuted,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+
+                                  // Stylized Radio Indicator
+                                  AnimatedContainer(
+                                    duration: const Duration(milliseconds: 180),
+                                    curve: Curves.easeOutCubic,
+                                    width: 24,
+                                    height: 24,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: isSelected ? opt.accentColor : Colors.transparent,
+                                      border: Border.all(
+                                        color: isSelected
+                                            ? opt.accentColor
+                                            : (isDark
+                                                ? SwissColors.darkBorderStrong
+                                                : SwissColors.lightBorderStrong),
+                                        width: 2.0,
+                                      ),
+                                      boxShadow: isSelected
+                                          ? [
+                                              BoxShadow(
+                                                color: opt.accentColor.withValues(alpha: 0.40),
+                                                blurRadius: 8,
+                                                offset: const Offset(0, 2),
+                                              ),
+                                            ]
+                                          : null,
+                                    ),
+                                    child: isSelected
+                                        ? const Center(
+                                            child: Icon(
+                                              LucideIcons.check,
+                                              size: 14,
+                                              color: Colors.white,
+                                            ),
+                                          )
+                                        : null,
+                                  ),
+                                ],
+                              ),
+
+                              // Dynamic Recommendation Badge (if recommended)
+                              if (isRecommended) ...[
+                                const SizedBox(height: 12),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 4,
+                                  ),
+                                  decoration: ShapeDecoration(
+                                    color: opt.accentColor.withValues(alpha: 0.12),
+                                    shape: SquircleBorder.radius(
+                                      10,
+                                      side: BorderSide(
+                                        color: opt.accentColor.withValues(alpha: 0.40),
+                                        width: 1.0,
+                                      ),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        LucideIcons.sparkles,
+                                        size: 12,
+                                        color: opt.accentColor,
+                                      ),
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        'Recomendado',
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w700,
+                                          letterSpacing: 0.2,
+                                          color: opt.accentColor,
+                                        ),
+                                      ),
+                                      Text(
+                                        ' para esta conversa',
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w600,
+                                          letterSpacing: 0.1,
+                                          color: opt.accentColor.withValues(alpha: 0.85),
+                                        ),
                                       ),
                                     ],
-                                  ],
-                                ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  opt.participantHint,
-                                  style: SwissTypography.labelSmall.copyWith(
-                                    color: isDark
-                                        ? SwissColors.darkTextMuted
-                                        : SwissColors.lightTextMuted,
                                   ),
                                 ),
                               ],
-                            ),
-                          ),
-                          Container(
-                            width: 22,
-                            height: 22,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: isSelected
-                                    ? SwissColors.emeraldPrimary
-                                    : (isDark
-                                        ? SwissColors.darkBorder
-                                        : SwissColors.lightBorder),
-                                width: 2,
+
+                              const SizedBox(height: 10),
+
+                              // Micro-Badge of specific lens capability
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                                decoration: ShapeDecoration(
+                                  color: isDark
+                                      ? Colors.white.withValues(alpha: 0.07)
+                                      : Colors.white.withValues(alpha: 0.70),
+                                  shape: SquircleBorder.radius(
+                                    8,
+                                    side: BorderSide(
+                                      color: opt.accentColor.withValues(alpha: 0.25),
+                                      width: 0.8,
+                                    ),
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      opt.microBadgeIcon,
+                                      size: 11.5,
+                                      color: opt.accentColor,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Text(
+                                      opt.microBadgeLabel,
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w600,
+                                        letterSpacing: 0.1,
+                                        color: isDark
+                                            ? SwissColors.darkTextPrimary
+                                            : const Color(0xFF1E293B),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              color: isSelected
-                                  ? SwissColors.emeraldPrimary
-                                  : Colors.transparent,
-                            ),
-                            child: isSelected
-                                ? const Icon(
-                                    LucideIcons.check,
-                                    size: 14,
-                                    color: Colors.black,
-                                  )
-                                : null,
+
+                              const SizedBox(height: 10),
+
+                              // Narrative Description
+                              Text(
+                                opt.description,
+                                style: SwissTypography.bodyMedium.copyWith(
+                                  fontSize: 13,
+                                  height: 1.45,
+                                  color: isDark
+                                      ? SwissColors.darkTextSecondary
+                                      : SwissColors.lightTextSecondary,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        opt.description,
-                        style: SwissTypography.bodyMedium.copyWith(
-                          fontSize: 13,
-                          color: isDark
-                              ? SwissColors.darkTextSecondary
-                              : SwissColors.lightTextSecondary,
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               );
             }),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 8),
 
-            // Proceed CTA
+            // Tactile Continue Button with primary action
             SwissButton(
               label: 'Continuar para o Dashboard',
               icon: LucideIcons.arrowRight,
@@ -304,9 +591,122 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
               fullWidth: true,
               onPressed: _proceedToDashboard,
             ),
+            const SizedBox(height: 16),
           ],
         ),
       ),
     );
   }
+}
+
+/// Custom painter that draws a subtle tilted heart doodle on the Casal Bento card
+class _HeartDoodlePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.80)
+      ..strokeWidth = 2.2
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+
+    final center = Offset(size.width * 0.84, size.height * 0.50);
+
+    canvas.save();
+    canvas.translate(center.dx, center.dy);
+    canvas.rotate(0.20); // subtle tilt
+
+    final path = Path();
+    path.moveTo(0, 16);
+    path.cubicTo(-18, 5, -20, -10, -7, -15);
+    path.cubicTo(-1, -17, 0, -10, 0, -8);
+    path.cubicTo(0, -10, 1, -17, 7, -15);
+    path.cubicTo(20, -10, 18, 5, 0, 16);
+
+    canvas.drawPath(path, paint);
+    canvas.restore();
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+/// Custom painter that draws spark rays and a soft organic hill wave on the Amigos Bento card
+class _AmigosDoodlePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    // 1. Soft organic translucent wave in lower right
+    final wavePaint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.30)
+      ..style = PaintingStyle.fill;
+
+    final wavePath = Path();
+    wavePath.moveTo(size.width * 0.45, size.height);
+    wavePath.quadraticBezierTo(
+      size.width * 0.72,
+      size.height * 0.72,
+      size.width,
+      size.height * 0.60,
+    );
+    wavePath.lineTo(size.width, size.height);
+    wavePath.close();
+    canvas.drawPath(wavePath, wavePaint);
+
+    // 2. Three radiating spark rays
+    final rayPaint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.80)
+      ..strokeWidth = 2.0
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    final cx = size.width * 0.86;
+    final cy = size.height * 0.32;
+
+    canvas.drawLine(Offset(cx - 10, cy + 6), Offset(cx - 18, cy + 12), rayPaint);
+    canvas.drawLine(Offset(cx - 8, cy - 6), Offset(cx - 15, cy - 14), rayPaint);
+    canvas.drawLine(Offset(cx + 6, cy - 8), Offset(cx + 14, cy - 16), rayPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+/// Custom painter that draws radar pulse arcs and connected interaction nodes on the Grupo Bento card
+class _GrupoDoodlePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    // 1. Concentric radar pulse arcs in lower right corner
+    final arcPaint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.25)
+      ..strokeWidth = 1.6
+      ..style = PaintingStyle.stroke;
+
+    final center = Offset(size.width * 0.90, size.height * 0.76);
+    canvas.drawCircle(center, 22, arcPaint);
+    canvas.drawCircle(center, 44, arcPaint);
+
+    // 2. Connected network triad nodes in upper right
+    final nodePaint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.85)
+      ..style = PaintingStyle.fill;
+
+    final linePaint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.45)
+      ..strokeWidth = 1.3;
+
+    final n1 = Offset(size.width * 0.80, size.height * 0.28);
+    final n2 = Offset(size.width * 0.92, size.height * 0.18);
+    final n3 = Offset(size.width * 0.88, size.height * 0.40);
+
+    canvas.drawLine(n1, n2, linePaint);
+    canvas.drawLine(n2, n3, linePaint);
+    canvas.drawLine(n1, n3, linePaint);
+
+    canvas.drawCircle(n1, 3.5, nodePaint);
+    canvas.drawCircle(n2, 3.0, nodePaint);
+    canvas.drawCircle(n3, 3.2, nodePaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

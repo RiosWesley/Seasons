@@ -9,9 +9,11 @@ import '../core/services/file_ingestion_service.dart';
 import '../theme/squircle_border.dart';
 import '../theme/swiss_colors.dart';
 import '../theme/swiss_typography.dart';
+import '../widgets/floating_bottom_bar.dart';
 import '../widgets/stage_progress_indicator.dart';
 import '../widgets/swiss_button.dart';
 import 'mode_selection_screen.dart';
+import 'onboarding_screen.dart';
 
 /// Summary metadata for a saved retrospective.
 class SavedWrappedSummary {
@@ -415,9 +417,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
+    final scrollCompensation = 100.0 + bottomInset;
+
     return Scaffold(
       backgroundColor: SwissColors.lightBackground, // Warm Ivory #FBF9F5
-      bottomNavigationBar: _buildBottomNavigationBar(),
+      extendBody: true,
+      bottomNavigationBar: FloatingBottomNavBar(
+        currentIndex: _selectedTabIndex,
+        onTap: (index) {
+          setState(() => _selectedTabIndex = index);
+          if (index == 2) {
+            _showAllModelsBottomSheet();
+          } else if (index == 3) {
+            _showSettingsBottomSheet();
+          }
+        },
+      ),
       body: Stack(
         children: [
           // Subtle Crumpled Paper Texture Background Layer
@@ -433,53 +449,57 @@ class _HomeScreenState extends State<HomeScreen> {
 
           // Primary Scrollable Editorial Content
           SafeArea(
-            child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
-              children: [
-                // 1. Editorial Brand Header with 100% Offline Pill
-                _buildTopBar(),
+            bottom: false,
+            child: SingleChildScrollView(
+              padding: EdgeInsets.fromLTRB(20.0, 12.0, 20.0, scrollCompensation),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // 1. Editorial Brand Header with 100% Offline Pill
+                  _buildTopBar(),
 
-                const SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
-                // 2. Hero Greeting + Editorial Headline + 3D Cards Illustration
-                _buildHeroSection(),
+                  // 2. Hero Greeting + Editorial Headline + 3D Cards Illustration
+                  _buildHeroSection(),
 
-                const SizedBox(height: 20),
-
-                // 3. Three Guarantee Feature Badges
-                _buildFeatureBadgesRow(),
-
-                const SizedBox(height: 24),
-
-                // 4. Central Dashed Ingestion Card ("Importe sua conversa")
-                _buildMainIngestionCard(),
-
-                const SizedBox(height: 20),
-
-                // Pipeline Progress Indicator (during decompression/parsing)
-                if (_currentStage != PipelineStage.idle) ...[
-                  StageProgressIndicator(
-                    stage: _currentStage,
-                    customMessage: _statusMessage,
-                  ),
                   const SizedBox(height: 20),
+
+                  // 3. Three Guarantee Feature Badges
+                  _buildFeatureBadgesRow(),
+
+                  const SizedBox(height: 24),
+
+                  // 4. Central Dashed Ingestion Card ("Importe sua conversa")
+                  _buildMainIngestionCard(),
+
+                  const SizedBox(height: 20),
+
+                  // Pipeline Progress Indicator (during decompression/parsing)
+                  if (_currentStage != PipelineStage.idle) ...[
+                    StageProgressIndicator(
+                      stage: _currentStage,
+                      customMessage: _statusMessage,
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+
+                  // 5. Retrospectivas Recentes
+                  _buildRecentRetrospectivesSection(),
+
+                  const SizedBox(height: 26),
+
+                  // 6. Escolha uma Lente de Análise (2-Column Bento Grid)
+                  _buildLenteDeAnaliseSection(),
+
+                  const SizedBox(height: 28),
+
+                  // 7. Footer Tagline
+                  _buildFooterTagline(),
+
+                  const SizedBox(height: 24),
                 ],
-
-                // 5. Retrospectivas Recentes
-                _buildRecentRetrospectivesSection(),
-
-                const SizedBox(height: 26),
-
-                // 6. Escolha uma Lente de Análise (2-Column Bento Grid)
-                _buildLenteDeAnaliseSection(),
-
-                const SizedBox(height: 28),
-
-                // 7. Footer Tagline
-                _buildFooterTagline(),
-
-                const SizedBox(height: 24),
-              ],
+              ),
             ),
           ),
         ],
@@ -496,67 +516,77 @@ class _HomeScreenState extends State<HomeScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Left: Squircle Sparkle Icon + "Chat Wrapped" & "ARCHIVE EDITION"
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              width: 38,
-              height: 38,
-              decoration: ShapeDecoration(
-                gradient: const LinearGradient(
-                  colors: [SwissColors.irisPrimary, SwissColors.violetSecondary],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                shape: SquircleBorder.radius(12),
-                shadows: [
-                  BoxShadow(
-                    color: SwissColors.irisPrimary.withValues(alpha: 0.25),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
+        Expanded(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: 38,
+                height: 38,
+                decoration: ShapeDecoration(
+                  gradient: const LinearGradient(
+                    colors: [SwissColors.irisPrimary, SwissColors.violetSecondary],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
-                ],
+                  shape: SquircleBorder.radius(12),
+                  shadows: [
+                    BoxShadow(
+                      color: SwissColors.irisPrimary.withValues(alpha: 0.25),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: const Center(
+                  child: Icon(
+                    LucideIcons.sparkles,
+                    color: Colors.white,
+                    size: 20,
+                  ),
+                ),
               ),
-              child: const Center(
-                child: Icon(
-                  LucideIcons.sparkles,
-                  color: Colors.white,
-                  size: 20,
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Chat Wrapped',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontFamily: 'serif',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                        letterSpacing: -0.3,
+                        color: Color(0xFF1E1B4B),
+                      ),
+                    ),
+                    Text(
+                      'ARCHIVE EDITION',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: SwissTypography.labelSmall.copyWith(
+                        fontSize: 9.5,
+                        letterSpacing: 1.4,
+                        fontWeight: FontWeight.w700,
+                        color: SwissColors.irisPrimary,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            const SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Chat Wrapped',
-                  style: TextStyle(
-                    fontFamily: 'serif',
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18,
-                    letterSpacing: -0.3,
-                    color: Color(0xFF1E1B4B),
-                  ),
-                ),
-                Text(
-                  'ARCHIVE EDITION',
-                  style: SwissTypography.labelSmall.copyWith(
-                    fontSize: 9.5,
-                    letterSpacing: 1.4,
-                    fontWeight: FontWeight.w700,
-                    color: SwissColors.irisPrimary,
-                  ),
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
+        const SizedBox(width: 8),
 
         // Right: "100% OFFLINE" pill + Subtitle "Seus dados ficam apenas neste aparelho."
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -666,8 +696,11 @@ class _HomeScreenState extends State<HomeScreen> {
   // SECTION 3: 3 GUARANTEE FEATURE BADGES
   // ==========================================
   Widget _buildFeatureBadgesRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Wrap(
+      alignment: WrapAlignment.spaceBetween,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: 8,
+      runSpacing: 8,
       children: [
         _buildFeatureBadgeItem(
           icon: LucideIcons.shieldCheck,
@@ -917,6 +950,49 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
+          const SizedBox(height: 14),
+
+          // Quick Tutorial Link to WhatsApp Export Guide
+          InkWell(
+            onTap: () {
+              HapticFeedback.selectionClick();
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const OnboardingScreen(
+                    isReplay: true,
+                    initialPage: 2,
+                  ),
+                ),
+              );
+            },
+            borderRadius: BorderRadius.circular(8),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  Icon(
+                    LucideIcons.helpCircle,
+                    size: 14,
+                    color: SwissColors.irisPrimary,
+                  ),
+                  SizedBox(width: 6),
+                  Flexible(
+                    child: Text(
+                      'Como exportar do WhatsApp? Ver tutorial →',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: SwissColors.irisPrimary,
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -930,8 +1006,11 @@ class _HomeScreenState extends State<HomeScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Header Row: "RETROSPECTIVAS RECENTES" + "Ver todas →"
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Wrap(
+          alignment: WrapAlignment.spaceBetween,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: 8,
+          runSpacing: 4,
           children: [
             const Text(
               'RETROSPECTIVAS RECENTES',
@@ -1170,8 +1249,11 @@ class _HomeScreenState extends State<HomeScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Header Row: "ESCOLHA UMA LENTE DE ANÁLISE" + "Conheça todos os modelos →"
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Wrap(
+          alignment: WrapAlignment.spaceBetween,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: 8,
+          runSpacing: 4,
           children: [
             const Text(
               'ESCOLHA UMA LENTE DE ANÁLISE',
@@ -1216,7 +1298,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: _buildBentoCard(
                 eyebrow: 'AFINIDADE & RITMO',
-                title: 'Casal',
+                title: 'Modo Casal',
                 description: 'Entenda a dinâmica,\no afeto e os momentos\nmais especiais.',
                 bgAsset: 'assets/images/casal_bento_bg.jpg',
                 doodlePainter: _HeartDoodlePainter(),
@@ -1235,7 +1317,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: _buildBentoCard(
                 eyebrow: 'DINÂMICA & SQUAD',
-                title: 'Amigos',
+                title: 'Modo Amigos',
                 description: 'Descubra os padrões,\nos memes, os áudios\ne quem manda mais.',
                 bgAsset: 'assets/images/amigos_bento_bg.jpg',
                 doodlePainter: _AmigosDoodlePainter(),
@@ -1421,13 +1503,17 @@ class _HomeScreenState extends State<HomeScreen> {
           color: Color(0xFF818CF8),
         ),
         SizedBox(width: 6),
-        Text(
-          'CONVERSAS REAIS. PERSPECTIVAS EXTRAORDINÁRIAS.',
-          style: TextStyle(
-            fontSize: 10,
-            letterSpacing: 1.2,
-            fontWeight: FontWeight.w700,
-            color: Color(0xFF818CF8),
+        Flexible(
+          child: Text(
+            'CONVERSAS REAIS. PERSPECTIVAS EXTRAORDINÁRIAS.',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 10,
+              letterSpacing: 1.2,
+              fontWeight: FontWeight.w700,
+              color: Color(0xFF818CF8),
+            ),
           ),
         ),
       ],
@@ -1435,108 +1521,142 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // ==========================================
-  // SECTION 8: BOTTOM NAVIGATION BAR
+  // SETTINGS MODAL BOTTOM SHEET
   // ==========================================
-  Widget _buildBottomNavigationBar() {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          top: BorderSide(color: Color(0xFFF1F5F9), width: 1.0),
-        ),
+  void _showSettingsBottomSheet() {
+    HapticFeedback.lightImpact();
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: SafeArea(
-        top: false,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildNavItem(
-              index: 0,
-              icon: LucideIcons.house,
-              label: 'Início',
-              isActive: _selectedTabIndex == 0,
-            ),
-            _buildNavItem(
-              index: 1,
-              icon: LucideIcons.trendingUp,
-              label: 'Minhas Análises',
-              isActive: _selectedTabIndex == 1,
-            ),
-            _buildNavItem(
-              index: 2,
-              icon: LucideIcons.layoutGrid,
-              label: 'Modelos',
-              isActive: _selectedTabIndex == 2,
-            ),
-            _buildNavItem(
-              index: 3,
-              icon: LucideIcons.settings,
-              label: 'Configurações',
-              isActive: _selectedTabIndex == 3,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem({
-    required int index,
-    required IconData icon,
-    required String label,
-    required bool isActive,
-  }) {
-    return InkWell(
-      onTap: () {
-        HapticFeedback.selectionClick();
-        setState(() => _selectedTabIndex = index);
-        if (index == 2) {
-          _showAllModelsBottomSheet();
-        }
-      },
-      borderRadius: BorderRadius.circular(16),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (isActive)
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                decoration: const ShapeDecoration(
-                  color: Color(0xFFEEF2FF),
-                  shape: StadiumBorder(),
+      builder: (context) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 36,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE2E8F0),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
                 ),
-                child: Icon(icon, color: const Color(0xFF6366F1), size: 20),
-              )
-            else
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                child: Icon(icon, color: const Color(0xFF94A3B8), size: 20),
               ),
-            const SizedBox(height: 2),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
-                color: isActive ? const Color(0xFF4F46E5) : const Color(0xFF64748B),
-              ),
-            ),
-            const SizedBox(height: 2),
-            if (isActive)
-              Container(
-                width: 4,
-                height: 4,
-                decoration: const BoxDecoration(
-                  color: Color(0xFF6366F1),
-                  shape: BoxShape.circle,
+              const SizedBox(height: 20),
+              Text(
+                'Configurações',
+                style: SwissTypography.titleLarge.copyWith(
+                  fontFamily: 'serif',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 22,
                 ),
-              )
-            else
-              const SizedBox(height: 4),
-          ],
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Preferências, privacidade e ajuda do Chat Wrapped.',
+                style: SwissTypography.bodyMedium.copyWith(color: const Color(0xFF64748B)),
+              ),
+              const SizedBox(height: 20),
+              ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                tileColor: const Color(0xFFF8FAFC),
+                leading: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: ShapeDecoration(
+                    color: const Color(0xFFEEF2FF),
+                    shape: SquircleBorder.radius(10),
+                  ),
+                  child: const Center(
+                    child: Icon(LucideIcons.bookOpen, color: SwissColors.irisPrimary, size: 20),
+                  ),
+                ),
+                title: const Text(
+                  'Rever Onboarding',
+                  style: TextStyle(
+                    fontSize: 14.5,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF0F172A),
+                  ),
+                ),
+                subtitle: const Text(
+                  'Veja o tutorial de exportação e os recursos do app',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Color(0xFF64748B),
+                  ),
+                ),
+                trailing: const Icon(LucideIcons.chevronRight, size: 18, color: Color(0xFF94A3B8)),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const OnboardingScreen(isReplay: true),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 12),
+              ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                tileColor: const Color(0xFFF8FAFC),
+                leading: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: ShapeDecoration(
+                    color: const Color(0xFFECFDF5),
+                    shape: SquircleBorder.radius(10),
+                  ),
+                  child: const Center(
+                    child: Icon(LucideIcons.shieldCheck, color: Color(0xFF10B981), size: 20),
+                  ),
+                ),
+                title: const Text(
+                  '100% Offline e Privado',
+                  style: TextStyle(
+                    fontSize: 14.5,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF0F172A),
+                  ),
+                ),
+                subtitle: const Text(
+                  'Nenhum dado ou mensagem sai do seu aparelho',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Color(0xFF64748B),
+                  ),
+                ),
+                trailing: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: const ShapeDecoration(
+                    color: Color(0xFFECFDF5),
+                    shape: StadiumBorder(),
+                  ),
+                  child: const Text(
+                    'ATIVO',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF10B981),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

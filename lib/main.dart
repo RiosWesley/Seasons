@@ -1,28 +1,33 @@
 import 'package:flutter/material.dart';
 
+import 'core/services/onboarding_preferences.dart';
 import 'core/services/share_intent_service.dart';
 import 'screens/home_screen.dart';
+import 'screens/onboarding_screen.dart';
 import 'theme/swiss_theme.dart';
 
 /// Global navigation key enabling programmatic routing from external triggers (e.g. Share Intents).
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  final hasSeenOnboarding = await OnboardingPreferences.hasSeenOnboarding();
+  runApp(MyApp(initialHasSeenOnboarding: hasSeenOnboarding));
 }
 
 /// Root application widget configuring Swiss-Minimalist adaptive light/dark themes,
-/// mounting [HomeScreen], and registering [ShareIntentService] to listen for incoming
-/// WhatsApp chat export files.
+/// mounting [HomeScreen] or [OnboardingScreen], and registering [ShareIntentService]
+/// to listen for incoming WhatsApp chat export files.
 class MyApp extends StatefulWidget {
   final ShareIntentService? shareIntentService;
   final GlobalKey<NavigatorState>? navigatorKey;
+  final bool? initialHasSeenOnboarding;
 
   const MyApp({
     super.key,
     this.shareIntentService,
     this.navigatorKey,
+    this.initialHasSeenOnboarding,
   });
 
   @override
@@ -32,6 +37,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late final GlobalKey<NavigatorState> _navKey;
   late final ShareIntentService _shareService;
+  late final bool _hasSeenOnboarding;
 
   @override
   void initState() {
@@ -42,6 +48,7 @@ class _MyAppState extends State<MyApp> {
           navigatorKey: _navKey,
         );
     _shareService.initialize();
+    _hasSeenOnboarding = widget.initialHasSeenOnboarding ?? false;
   }
 
   @override
@@ -59,7 +66,9 @@ class _MyAppState extends State<MyApp> {
       theme: SwissTheme.lightTheme,
       darkTheme: SwissTheme.darkTheme,
       themeMode: ThemeMode.light,
-      home: const HomeScreen(),
+      home: _hasSeenOnboarding
+          ? const HomeScreen()
+          : const OnboardingScreen(),
     );
   }
 }

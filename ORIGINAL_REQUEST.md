@@ -70,3 +70,80 @@ Upon successful build verification, prompt the user to ensure their Android devi
 - [ ] `flutter analyze` passes with zero errors.
 - [ ] `flutter build apk` completes with exit code 0.
 - [ ] ADB deployment command executes cleanly onto connected Android device.
+
+## 2026-09-11T23:57:46Z
+
+This is a focused UI and navigation implementation; keep it clean and focused.
+Implement an editorial 4-page onboarding experience explaining app capabilities and WhatsApp export instructions, redesign the Mode Selection screen to match the warm editorial visual identity (Casal, Amigos, Grupo), and transform the bottom navigation bar into a modern frosted-glass floating navigation bar.
+
+Working directory: /home/wesley/Documents/chat_wrapped_flutter
+Integrity mode: development
+
+## Requirements
+
+### R1. Editorial 4-Page Onboarding Experience
+Implement an interactive, fluid 4-page onboarding flow following the warm ivory aesthetic (`#FBF9F5`), serif editorial typography, continuous squircles, and Lucide iconography:
+1. **Página 1 (Boas-Vindas & Apresentação):** Introdução marcante ao Chat Wrapped como o arquivo pessoal e retrospectiva de conversas, 100% offline e com privacidade inegociável.
+2. **Página 2 (O que o App Faz & Modos):** Visão dos 3 modelos de análise calibrados (Casal com sintonia e love language, Amigos/Squad com arquétipos e vácuo, Grupo com rankings e dinâmica de rede) e os Stories 9:16 interativos.
+3. **Página 3 (Como Exportar Conversa do WhatsApp):** Guia visual passo a passo simplificado ensinando como exportar do WhatsApp:
+   - Passo 1: Abra a conversa desejada no WhatsApp.
+   - Passo 2: Toque nos três pontinhos (⋮) > **Mais** > **Exportar conversa**.
+   - Passo 3: Escolha obrigatoriamente **"Sem mídia"** para processamento instantâneo.
+   - Passo 4: Salve ou compartilhe o arquivo gerado (`.txt` ou `.zip`) diretamente no Chat Wrapped.
+4. **Página 4 (Privacidade & Início):** Selo de garantia local (zero servidores, zero tracking, dados nunca saem do celular) e CTA principal para começar ("Começar a Explorar" / "Importar Minha Conversa").
+- Navegação fluida com PageView, indicador de passos em pílula suave, botão "Pular" e botão de avanço tátil.
+- **Persistência de Primeiro Acesso:** Salvar a visualização no armazenamento local (`shared_preferences`) para não exibir novamente em aberturas subsequentes, e disponibilizar um botão/opção "Rever Onboarding" no menu/configurações.
+
+### R2. Frosted-Glass Floating Bottom Navigation Bar
+Transform the pinned bottom navigation bar into a floating dock with frosted glassmorphism:
+- Margens flutuantes (`margin: EdgeInsets.fromLTRB(20, 0, 20, 16)`) e cantos arredondados contínuos (`SquircleBorder` / `BorderRadius.circular(26)`).
+- Efeito **Glassmorphism**: `ClipRRect` com `BackdropFilter(filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12))`, fundo semitranslúcido (`Colors.white.withValues(alpha: 0.82)`), borda sutil (`Border.all(color: Colors.white.withValues(alpha: 0.6))`) e sombra difusa elegante (`BoxShadow(color: Color(0x1A0F172A), blurRadius: 20, offset: Offset(0, 8))`).
+- Ícones Lucide (`house`, `trendingUp`, `layoutGrid`, `settings`), feedback tátil (`HapticFeedback.selectionClick()`), e pílula de seleção ativa suave com transição fluida.
+- Compensação adequada de padding no final do scroll das páginas da Home para garantir que nenhum conteúdo fique oculto sob o dock flutuante.
+
+### R3. Mode Selection Screen Redesign (Casal, Amigos, Grupo)
+Redesign the `ModeSelectionScreen` to seamlessly continue the warm editorial identity and visual craft of the Home screen:
+- Substituição dos cards minimalistas genéricos por cards bento expressivos com texturas sutis, tipografia serifada, cantos squircle contínuos e paletas dedicadas:
+  - **Casal (2 participantes):** Acentos rose/coral (`#E11D48`), micro-badge de afinidade e ritmo a dois.
+  - **Amigos (3-5 participantes):** Acentos sky/blue (`#2563EB`), micro-badge de arquétipos do squad e dinâmica de grupo.
+  - **Grupo (6+ participantes):** Acentos violet/iris (`#7C3AED`), micro-badge de leaderboard geral e radar de vibes.
+- Tag visual indicativa de **"Recomendado para esta conversa"** destacada automaticamente no modo correspondente ao número de participantes detectados.
+- Seletor de modo interativo com indicador de rádio estilizado e botão primário tátil de continuação para o Dashboard.
+
+### R4. Test Suite Integrity & Build Verification
+- Manter 100% dos testes existentes (536 testes) passando sem quebras de regressão.
+- Criar novos testes de unidade e widgets cobrindo:
+  - Exibição, paginação e conclusão do Onboarding (4 páginas).
+  - Persistência da flag de primeiro acesso (`hasSeenOnboarding`).
+  - Renderização e interatividade da Floating Bottom Bar.
+  - Seleção e confirmação de modo na nova `ModeSelectionScreen`.
+- `dart analyze .` deve passar com 0 erros e 0 warnings.
+- O build de release deve compilar com sucesso (`flutter build apk --release`).
+
+---
+
+## Acceptance Criteria
+
+### Onboarding Experience
+- [ ] O onboarding de 4 páginas é exibido apenas no primeiro acesso do app e redireciona para a Home ao concluir.
+- [ ] O estado de conclusão é persistido localmente e não reaparece ao reabrir o app.
+- [ ] É possível rever o onboarding a qualquer momento através das opções/configurações.
+- [ ] O guia de exportação do WhatsApp (Página 3) detalha os passos com clareza visual.
+- [ ] Gestos de deslizar, indicador de progresso e botões "Pular" / "Avançar" funcionam com suavidade e haptics.
+
+### Floating Bottom Navigation Bar
+- [ ] A barra inferior é flutuante com margens laterais e inferiores sobre o canvas.
+- [ ] O efeito frosted-glass (BackdropFilter blur + semitransparência) é renderizado de forma fluida sem queda de FPS.
+- [ ] O scroll das telas compensa a altura do dock para não sobrepor conteúdos no rodapé.
+- [ ] A seleção de abas aciona feedback háptico e destaca a pílula ativa.
+
+### Mode Selection Redesign
+- [ ] Cada modo (Casal, Amigos, Grupo) apresenta layout bento dedicado com cores semânticas e tipografia refinada.
+- [ ] O modo recomendado é destacado visualmente com base no número de participantes do arquivo importado.
+- [ ] A confirmação do modo mantém o fluxo de transição íntegro para o `DashboardScreen`.
+
+### Quality & Performance Verification
+- [ ] `dart analyze .` retorna 0 erros e 0 avisos.
+- [ ] 100% dos testes passam no `flutter test` (incluindo novos testes de onboarding e UI).
+- [ ] `flutter build apk --release` finaliza com código 0 e gera o APK otimizado.
+
