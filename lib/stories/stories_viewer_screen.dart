@@ -253,74 +253,108 @@ class _StoriesViewerScreenState extends State<StoriesViewerScreen>
                             AnimatedBuilder(
                               animation: _animController,
                               builder: (context, _) {
+                                final isDark = currentSlide.isDarkTheme;
                                 return StoryProgressBar(
                                   totalSegments: _slides.length,
                                   currentIndex: _currentIndex,
                                   animationProgress: _animController.value,
                                   activeColor: _resolveModeAccent(widget.analysis.mode),
-                                  completedColor: const Color(0x591E1B4B),
-                                  unfilledColor: const Color(0x1A1E1B4B),
+                                  completedColor: isDark
+                                      ? Colors.white.withValues(alpha: 0.65)
+                                      : const Color(0x591E1B4B),
+                                  unfilledColor: isDark
+                                      ? Colors.white.withValues(alpha: 0.22)
+                                      : const Color(0x1A1E1B4B),
                                 );
                               },
                             ),
 
                             const SizedBox(height: 10),
 
-                            // Controls Row
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                // Close button
-                                IconButton(
-                                  icon: const Icon(
-                                    LucideIcons.x,
-                                    color: Color(0xFF1E1B4B),
-                                    size: 24,
-                                  ),
-                                  tooltip: 'Fechar',
-                                  onPressed: () => Navigator.of(context).pop(),
-                                ),
+                            // Controls Row with adaptive contrast
+                            Builder(
+                              builder: (context) {
+                                final isDark = currentSlide.isDarkTheme;
+                                final chromeIconColor = isDark ? Colors.white : const Color(0xFF1E1B4B);
+                                final chromeCounterColor = isDark
+                                    ? Colors.white.withValues(alpha: 0.85)
+                                    : const Color(0xB31E1B4B);
+                                final pillBg = isDark
+                                    ? Colors.black.withValues(alpha: 0.25)
+                                    : Colors.white.withValues(alpha: 0.45);
 
-                                // Slide counter & Share action
-                                Row(
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      '${_currentIndex + 1}/${_slides.length}',
-                                      style: const TextStyle(
-                                        color: Color(0xB31E1B4B),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
-                                        fontFeatures: [
-                                          FontFeature.tabularFigures(),
+                                    // Close button in tactile frosted capsule
+                                    Container(
+                                      decoration: ShapeDecoration(
+                                        color: pillBg,
+                                        shape: const CircleBorder(),
+                                      ),
+                                      child: IconButton(
+                                        icon: Icon(
+                                          LucideIcons.x,
+                                          color: chromeIconColor,
+                                          size: 22,
+                                        ),
+                                        tooltip: 'Fechar',
+                                        onPressed: () => Navigator.of(context).pop(),
+                                      ),
+                                    ),
+
+                                    // Slide counter & Share action in tactile frosted capsule
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                      decoration: ShapeDecoration(
+                                        color: pillBg,
+                                        shape: const StadiumBorder(),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            '${_currentIndex + 1}/${_slides.length}',
+                                            style: TextStyle(
+                                              color: chromeCounterColor,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w700,
+                                              fontFeatures: const [
+                                                FontFeature.tabularFigures(),
+                                              ],
+                                            ),
+                                          ),
+                                          const SizedBox(width: 8),
+                                          IconButton(
+                                            padding: EdgeInsets.zero,
+                                            constraints: const BoxConstraints(),
+                                            icon: _isExporting
+                                                ? SizedBox(
+                                                    width: 16,
+                                                    height: 16,
+                                                    child: CircularProgressIndicator(
+                                                      strokeWidth: 2,
+                                                      valueColor:
+                                                          AlwaysStoppedAnimation<Color>(
+                                                        chromeIconColor,
+                                                      ),
+                                                    ),
+                                                  )
+                                                : Icon(
+                                                    LucideIcons.share2,
+                                                    color: chromeIconColor,
+                                                    size: 18,
+                                                  ),
+                                            tooltip: 'Compartilhar Slide',
+                                            onPressed:
+                                                _isExporting ? null : _handleShare,
+                                          ),
                                         ],
                                       ),
                                     ),
-                                    const SizedBox(width: 8),
-                                    IconButton(
-                                      icon: _isExporting
-                                          ? const SizedBox(
-                                              width: 18,
-                                              height: 18,
-                                              child: CircularProgressIndicator(
-                                                strokeWidth: 2,
-                                                valueColor:
-                                                    AlwaysStoppedAnimation<Color>(
-                                                  Color(0xFF1E1B4B),
-                                                ),
-                                              ),
-                                            )
-                                          : const Icon(
-                                              LucideIcons.share2,
-                                              color: Color(0xFF1E1B4B),
-                                              size: 22,
-                                            ),
-                                      tooltip: 'Compartilhar Slide',
-                                      onPressed:
-                                          _isExporting ? null : _handleShare,
-                                    ),
                                   ],
-                                ),
-                              ],
+                                );
+                              },
                             ),
                           ],
                         ),

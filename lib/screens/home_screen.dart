@@ -435,7 +435,6 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: FloatingBottomNavBar(
         currentIndex: _selectedTabIndex,
         onTap: (index) {
-          HapticFeedback.selectionClick();
           if (index == 0 && _selectedTabIndex == 0) {
             if (_homeScrollController.hasClients) {
               _homeScrollController.animateTo(
@@ -1222,14 +1221,16 @@ class _HomeScreenState extends State<HomeScreen> {
   // ==========================================
   Widget _buildTutorialActionCard() {
     return Container(
-      decoration: BoxDecoration(
+      decoration: ShapeDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(
-          color: const Color(0xFFE2E8F0),
-          width: 1.2,
+        shape: SquircleBorder.radius(
+          22,
+          side: const BorderSide(
+            color: Color(0xFFE2E8F0),
+            width: 1.2,
+          ),
         ),
-        boxShadow: [
+        shadows: [
           BoxShadow(
             color: const Color(0xFF0F172A).withValues(alpha: 0.05),
             blurRadius: 18,
@@ -1329,10 +1330,10 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               borderRadius: BorderRadius.circular(14),
               child: Ink(
-                decoration: BoxDecoration(
+                decoration: ShapeDecoration(
                   color: const Color(0xFF6366F1),
-                  borderRadius: BorderRadius.circular(14),
-                  boxShadow: [
+                  shape: SquircleBorder.radius(14),
+                  shadows: [
                     BoxShadow(
                       color: const Color(0xFF6366F1).withValues(alpha: 0.30),
                       blurRadius: 12,
@@ -1483,6 +1484,18 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: () => _handleDemoRetrospective(_demoChatAmigos, 'Resenha do Squad'),
         ),
 
+        const SizedBox(height: 10),
+
+        // Static Showcase Card 3: "Turma da Faculdade 🎓"
+        _buildRecentWrappedCard(
+          avatarBg: const Color(0xFFEDE9FE),
+          iconColor: const Color(0xFF7C3AED),
+          icon: LucideIcons.messagesSquare,
+          title: 'Turma da Faculdade 🎓',
+          subtitle: '14.290 mensagens  •  28 de fev. de 2024',
+          onTap: () => _handleDemoRetrospective(_demoChatGrupo, 'Turma da Faculdade (Grupo)'),
+        ),
+
         // Newly added user imports
         ..._savedWrappeds.map(
           (saved) => Padding(
@@ -1490,13 +1503,19 @@ class _HomeScreenState extends State<HomeScreen> {
             child: _buildRecentWrappedCard(
               avatarBg: saved.mode == ChatMode.casal
                   ? const Color(0xFFFDE8EA)
-                  : const Color(0xFFE0EDFD),
+                  : (saved.mode == ChatMode.grupo
+                      ? const Color(0xFFEDE9FE)
+                      : const Color(0xFFE0EDFD)),
               iconColor: saved.mode == ChatMode.casal
                   ? const Color(0xFFE11D48)
-                  : const Color(0xFF2563EB),
+                  : (saved.mode == ChatMode.grupo
+                      ? const Color(0xFF7C3AED)
+                      : const Color(0xFF2563EB)),
               icon: saved.mode == ChatMode.casal
                   ? LucideIcons.heart
-                  : LucideIcons.users,
+                  : (saved.mode == ChatMode.grupo
+                      ? LucideIcons.messagesSquare
+                      : LucideIcons.users),
               title: saved.title,
               subtitle: '${saved.messageCount} mensagens  •  ${saved.dateText}',
               onTap: () {
@@ -1744,7 +1763,147 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
+
+        const SizedBox(height: 14),
+
+        // Card 3: Grupo (Wide Bento Card)
+        _buildWideGrupoBentoCard(),
       ],
+    );
+  }
+
+  Widget _buildWideGrupoBentoCard() {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: _isLoading
+            ? null
+            : () => _handleDemoRetrospective(_demoChatGrupo, 'Turma Completa (Grupo)'),
+        borderRadius: BorderRadius.circular(22),
+        child: Container(
+          decoration: ShapeDecoration(
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFFF5F3FF), Color(0xFFEDE9FE)],
+            ),
+            shape: SquircleBorder.radius(
+              22,
+              side: const BorderSide(color: Color(0xFFDDD6FE), width: 1.0),
+            ),
+            shadows: [
+              BoxShadow(
+                color: const Color(0xFF7C3AED).withValues(alpha: 0.08),
+                blurRadius: 16,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: CustomPaint(
+                  painter: _GrupoDoodlePainter(),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 44,
+                      height: 44,
+                      decoration: ShapeDecoration(
+                        color: const Color(0xFFEDE9FE),
+                        shape: SquircleBorder.radius(
+                          14,
+                          side: const BorderSide(
+                            color: Color(0x667C3AED),
+                            width: 1.0,
+                          ),
+                        ),
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          LucideIcons.messagesSquare,
+                          color: Color(0xFF7C3AED),
+                          size: 22,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            spacing: 8,
+                            runSpacing: 4,
+                            children: [
+                              const Text(
+                                'LEADERBOARD & VIBES',
+                                style: TextStyle(
+                                  fontSize: 9.5,
+                                  letterSpacing: 1.1,
+                                  fontWeight: FontWeight.w800,
+                                  color: Color(0xFF7C3AED),
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                                decoration: ShapeDecoration(
+                                  color: const Color(0x147C3AED),
+                                  shape: SquircleBorder.radius(6),
+                                ),
+                                child: const Text(
+                                  '6+ membros',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(0xFF7C3AED),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 2),
+                          const Text(
+                            'Modo Grupo',
+                            style: TextStyle(
+                              fontFamily: 'serif',
+                              fontSize: 19,
+                              fontWeight: FontWeight.w800,
+                              color: Color(0xFF0F172A),
+                              letterSpacing: -0.3,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          const Text(
+                            'Pódio dos 3 maiores membros, radar de horários, campeão de vácuo e matriz coletiva.',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Color(0xFF64748B),
+                              height: 1.35,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    const Icon(
+                      LucideIcons.arrowRight,
+                      size: 18,
+                      color: Color(0xFF7C3AED),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

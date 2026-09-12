@@ -7,6 +7,7 @@ class StorySlide {
   final String title;
   final ChatMode mode;
   final bool isLocked;
+  final bool isDarkTheme;
 
   const StorySlide({
     required this.id,
@@ -14,6 +15,7 @@ class StorySlide {
     required this.title,
     required this.mode,
     this.isLocked = false,
+    this.isDarkTheme = false,
   });
 
   @override
@@ -25,13 +27,14 @@ class StorySlide {
           type == other.type &&
           title == other.title &&
           mode == other.mode &&
-          isLocked == other.isLocked;
+          isLocked == other.isLocked &&
+          isDarkTheme == other.isDarkTheme;
 
   @override
-  int get hashCode => Object.hash(id, type, title, mode, isLocked);
+  int get hashCode => Object.hash(id, type, title, mode, isLocked, isDarkTheme);
 
   @override
-  String toString() => 'StorySlide(id: $id, type: $type, title: "$title")';
+  String toString() => 'StorySlide(id: $id, type: $type, title: "$title", isDark: $isDarkTheme)';
 }
 
 /// Definitive Story Catalog for WhatsApp Chat Wrapped.
@@ -58,15 +61,15 @@ class StoryCatalog {
         StorySlide(id: 'c4', type: 'compatibility', title: 'Compatibilidade', mode: ChatMode.casal),
         StorySlide(id: 'c5', type: 'timeline', title: 'Atividade no Tempo', mode: ChatMode.casal),
         StorySlide(id: 'c6', type: 'top-words', title: 'Top Palavras', mode: ChatMode.casal),
-        StorySlide(id: 'c7', type: 'heatmap', title: 'Heatmap de Atividade', mode: ChatMode.casal),
+        StorySlide(id: 'c7', type: 'heatmap', title: 'Heatmap de Atividade', mode: ChatMode.casal, isDarkTheme: true),
         StorySlide(id: 'c8', type: 'emoji-evolution', title: 'Evolução de Emojis', mode: ChatMode.casal),
         StorySlide(id: 'c9', type: 'special-moments', title: 'Momentos Especiais', mode: ChatMode.casal),
         StorySlide(id: 'c10', type: 'comparison', title: 'Comparação', mode: ChatMode.casal),
         StorySlide(id: 'c11', type: 'stats', title: 'Estatísticas', mode: ChatMode.casal),
-        StorySlide(id: 'c12', type: 'insight', title: 'Insight', mode: ChatMode.casal),
+        StorySlide(id: 'c12', type: 'insight', title: 'Insight', mode: ChatMode.casal, isDarkTheme: true),
         StorySlide(id: 'c13', type: 'ignoring', title: 'Interações Ocultas', mode: ChatMode.casal),
-        StorySlide(id: 'c14', type: 'audio-ignoring', title: 'Áudios Ignorados', mode: ChatMode.casal),
-        StorySlide(id: 'c15', type: 'fake-screenshots', title: 'Prints Tirados', mode: ChatMode.casal),
+        StorySlide(id: 'c14', type: 'audio-ignoring', title: 'Áudios Ignorados', mode: ChatMode.casal, isDarkTheme: true),
+        StorySlide(id: 'c15', type: 'fake-screenshots', title: 'Prints Tirados', mode: ChatMode.casal, isDarkTheme: true),
         StorySlide(id: 'c16', type: 'fake-forwarded', title: 'Encaminhamentos', mode: ChatMode.casal),
         StorySlide(id: 'c17', type: 'fake-typed', title: 'Digitou mas não enviou', mode: ChatMode.casal),
         StorySlide(id: 'c18', type: 'final', title: 'Conclusão', mode: ChatMode.casal),
@@ -80,15 +83,15 @@ class StoryCatalog {
         StorySlide(id: 'a4', type: 'compatibility', title: 'Compatibilidade', mode: ChatMode.amigos),
         StorySlide(id: 'a5', type: 'timeline', title: 'Atividade no Tempo', mode: ChatMode.amigos),
         StorySlide(id: 'a6', type: 'topics', title: 'Top Conversas', mode: ChatMode.amigos),
-        StorySlide(id: 'a7', type: 'heatmap', title: 'Heatmap de Atividade', mode: ChatMode.amigos),
+        StorySlide(id: 'a7', type: 'heatmap', title: 'Heatmap de Atividade', mode: ChatMode.amigos, isDarkTheme: true),
         StorySlide(id: 'a8', type: 'emoji-culture', title: 'Emoji Culture', mode: ChatMode.amigos),
-        StorySlide(id: 'a9', type: 'floods', title: 'Flood Moments', mode: ChatMode.amigos),
-        StorySlide(id: 'a10', type: 'personalities', title: 'Personalidades', mode: ChatMode.amigos),
+        StorySlide(id: 'a9', type: 'floods', title: 'Flood Moments', mode: ChatMode.amigos, isDarkTheme: true),
+        StorySlide(id: 'a10', type: 'personalities', title: 'Personalidades', mode: ChatMode.amigos, isDarkTheme: true),
         StorySlide(id: 'a11', type: 'stats', title: 'Estatísticas do Squad', mode: ChatMode.amigos),
         StorySlide(id: 'a12', type: 'insight', title: 'Insight', mode: ChatMode.amigos),
         StorySlide(id: 'a13', type: 'ignoring', title: 'Interações Ocultas', mode: ChatMode.amigos),
-        StorySlide(id: 'a14', type: 'audio-ignoring', title: 'Áudios no Vácuo', mode: ChatMode.amigos),
-        StorySlide(id: 'a15', type: 'fake-screenshots', title: 'Prints Tirados', mode: ChatMode.amigos),
+        StorySlide(id: 'a14', type: 'audio-ignoring', title: 'Áudios no Vácuo', mode: ChatMode.amigos, isDarkTheme: true),
+        StorySlide(id: 'a15', type: 'fake-screenshots', title: 'Prints Tirados', mode: ChatMode.amigos, isDarkTheme: true),
         StorySlide(id: 'a16', type: 'fake-forwarded', title: 'Encaminhamentos', mode: ChatMode.amigos),
         StorySlide(id: 'a17', type: 'fake-typed', title: 'Digitou mas não enviou', mode: ChatMode.amigos),
         StorySlide(id: 'a18', type: 'final', title: 'Conclusão', mode: ChatMode.amigos),
@@ -102,15 +105,15 @@ class StoryCatalog {
         StorySlide(id: 'g4', type: 'dynamics', title: 'Dinâmicas do Grupo', mode: ChatMode.grupo),
         StorySlide(id: 'g5', type: 'timeline', title: 'Atividade no Tempo', mode: ChatMode.grupo),
         StorySlide(id: 'g6', type: 'topics', title: 'Top Conversas', mode: ChatMode.grupo),
-        StorySlide(id: 'g7', type: 'heatmap', title: 'Heatmap de Atividade', mode: ChatMode.grupo),
+        StorySlide(id: 'g7', type: 'heatmap', title: 'Heatmap de Atividade', mode: ChatMode.grupo, isDarkTheme: true),
         StorySlide(id: 'g8', type: 'emoji-evolution', title: 'Evolução de Emojis', mode: ChatMode.grupo),
-        StorySlide(id: 'g9', type: 'floods', title: 'Flood Moments', mode: ChatMode.grupo),
-        StorySlide(id: 'g10', type: 'network', title: 'Análise de Rede', mode: ChatMode.grupo),
+        StorySlide(id: 'g9', type: 'floods', title: 'Flood Moments', mode: ChatMode.grupo, isDarkTheme: true),
+        StorySlide(id: 'g10', type: 'network', title: 'Análise de Rede', mode: ChatMode.grupo, isDarkTheme: true),
         StorySlide(id: 'g11', type: 'insight', title: 'Insight', mode: ChatMode.grupo),
-        StorySlide(id: 'g12', type: 'ignoring', title: 'Quem Mais Ignora', mode: ChatMode.grupo),
-        StorySlide(id: 'g13', type: 'fake-screenshots', title: 'Quem Mais Tira Print', mode: ChatMode.grupo),
+        StorySlide(id: 'g12', type: 'ignoring', title: 'Quem Mais Ignora', mode: ChatMode.grupo, isDarkTheme: true),
+        StorySlide(id: 'g13', type: 'fake-screenshots', title: 'Quem Mais Tira Print', mode: ChatMode.grupo, isDarkTheme: true),
         StorySlide(id: 'g14', type: 'fake-forwarded', title: 'Quem Mais Encaminha', mode: ChatMode.grupo),
-        StorySlide(id: 'g15', type: 'fake-deleted', title: 'Quem Mais Apaga', mode: ChatMode.grupo),
+        StorySlide(id: 'g15', type: 'fake-deleted', title: 'Quem Mais Apaga', mode: ChatMode.grupo, isDarkTheme: true),
         StorySlide(id: 'g16', type: 'final', title: 'Conclusão', mode: ChatMode.grupo),
       ];
 

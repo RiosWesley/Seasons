@@ -180,17 +180,21 @@ class DashboardScreen extends StatelessWidget {
                             child: Container(
                               width: 42,
                               height: 42,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: isDark ? SwissColors.darkBorder : SwissColors.lightBorder,
-                                  width: 1.0,
+                              decoration: ShapeDecoration(
+                                shape: SquircleBorder.radius(
+                                  14,
+                                  side: BorderSide(
+                                    color: isDark ? SwissColors.darkBorder : SwissColors.lightBorder,
+                                    width: 1.0,
+                                  ),
                                 ),
-                                borderRadius: BorderRadius.circular(14),
                               ),
-                              child: Icon(
-                                LucideIcons.arrowLeft,
-                                size: 18,
-                                color: isDark ? Colors.white : const Color(0xFF0F172A),
+                              child: Center(
+                                child: Icon(
+                                  LucideIcons.arrowLeft,
+                                  size: 18,
+                                  color: isDark ? Colors.white : const Color(0xFF0F172A),
+                                ),
                               ),
                             ),
                           ),
@@ -232,21 +236,21 @@ class DashboardScreen extends StatelessWidget {
                             child: Container(
                               width: 42,
                               height: 42,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: isDark ? SwissColors.darkBorder : SwissColors.lightBorder,
-                                  width: 1.0,
+                              decoration: ShapeDecoration(
+                                shape: SquircleBorder.radius(
+                                  14,
+                                  side: BorderSide(
+                                    color: isDark ? SwissColors.darkBorder : SwissColors.lightBorder,
+                                    width: 1.0,
+                                  ),
                                 ),
-                                borderRadius: BorderRadius.circular(14),
                               ),
-                              child: IconButton(
-                                icon: Icon(
+                              child: Center(
+                                child: Icon(
                                   LucideIcons.share2,
                                   size: 18,
                                   color: modeAccent,
                                 ),
-                                tooltip: 'Exportar Relatório',
-                                onPressed: () => _launchStories(context),
                               ),
                             ),
                           ),
@@ -321,7 +325,18 @@ class DashboardScreen extends StatelessWidget {
                       else if (analysis is GrupoAnalysisResult)
                         _buildGrupoSection(context, analysis as GrupoAnalysisResult),
 
-                      const SizedBox(height: 28),
+                      const SizedBox(height: 32),
+
+                      // End-of-Report Action Cards
+                      SwissButton(
+                        label: 'Ver Retrospectiva em Stories',
+                        icon: LucideIcons.sparkles,
+                        type: SwissButtonType.primary,
+                        fullWidth: true,
+                        onPressed: () => _launchStories(context),
+                      ),
+
+                      const SizedBox(height: 12),
 
                       // Bottom Return Button
                       SwissButton(
