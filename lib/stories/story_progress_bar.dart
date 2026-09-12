@@ -21,9 +21,9 @@ class StoryProgressBar extends StatelessWidget {
     required this.animationProgress,
     this.barHeight = 3.5,
     this.gap = 4.0,
-    this.activeColor = Colors.white,
-    this.completedColor = Colors.white,
-    this.unfilledColor = const Color(0x40FFFFFF), // 25% white
+    this.activeColor = const Color(0xFFE11D48),
+    this.completedColor = const Color(0x591E1B4B),
+    this.unfilledColor = const Color(0x1A1E1B4B),
   });
 
   @override

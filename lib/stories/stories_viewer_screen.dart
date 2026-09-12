@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../core/models/general_stats.dart';
 import '../export/story_export_service.dart';
-import '../theme/swiss_colors.dart';
 import 'cards/story_card_factory.dart';
 import 'story_progress_bar.dart';
 import 'story_slide.dart';
@@ -166,6 +165,17 @@ class _StoriesViewerScreenState extends State<StoriesViewerScreen>
     }
   }
 
+  Color _resolveModeAccent(ChatMode mode) {
+    switch (mode) {
+      case ChatMode.casal:
+        return const Color(0xFFE11D48);
+      case ChatMode.amigos:
+        return const Color(0xFF2563EB);
+      case ChatMode.grupo:
+        return const Color(0xFF7C3AED);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentSlide = _slides.isNotEmpty
@@ -247,9 +257,9 @@ class _StoriesViewerScreenState extends State<StoriesViewerScreen>
                                   totalSegments: _slides.length,
                                   currentIndex: _currentIndex,
                                   animationProgress: _animController.value,
-                                  activeColor: SwissColors.emeraldPrimary,
-                                  completedColor: Colors.white,
-                                  unfilledColor: const Color(0x33FFFFFF),
+                                  activeColor: _resolveModeAccent(widget.analysis.mode),
+                                  completedColor: const Color(0x591E1B4B),
+                                  unfilledColor: const Color(0x1A1E1B4B),
                                 );
                               },
                             ),
@@ -264,7 +274,7 @@ class _StoriesViewerScreenState extends State<StoriesViewerScreen>
                                 IconButton(
                                   icon: const Icon(
                                     LucideIcons.x,
-                                    color: Colors.white,
+                                    color: Color(0xFF1E1B4B),
                                     size: 24,
                                   ),
                                   tooltip: 'Fechar',
@@ -277,7 +287,7 @@ class _StoriesViewerScreenState extends State<StoriesViewerScreen>
                                     Text(
                                       '${_currentIndex + 1}/${_slides.length}',
                                       style: const TextStyle(
-                                        color: Colors.white70,
+                                        color: Color(0xB31E1B4B),
                                         fontSize: 12,
                                         fontWeight: FontWeight.w600,
                                         fontFeatures: [
@@ -295,13 +305,13 @@ class _StoriesViewerScreenState extends State<StoriesViewerScreen>
                                                 strokeWidth: 2,
                                                 valueColor:
                                                     AlwaysStoppedAnimation<Color>(
-                                                  SwissColors.emeraldPrimary,
+                                                  Color(0xFF1E1B4B),
                                                 ),
                                               ),
                                             )
                                           : const Icon(
                                               LucideIcons.share2,
-                                              color: Colors.white,
+                                              color: Color(0xFF1E1B4B),
                                               size: 22,
                                             ),
                                       tooltip: 'Compartilhar Slide',

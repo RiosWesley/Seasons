@@ -1,155 +1,123 @@
-# Project: WhatsApp Chat Wrapped Flutter Android App
+# Project: Stories 9:16 Editorial Revamp (Seasons)
 
 ## Architecture
-- **Framework**: Flutter 3.47.3 / Dart 3.13.3
-- **Design Philosophy**: Sober Swiss-Minimalist (adaptive dark/light, G2 continuous squircles, tabular figures, zero emoji in UI chrome, 60fps micro-animations).
-- **Privacy Model**: 100% Offline, deterministic local processing, zero network permissions (`android.permission.INTERNET` omitted).
-- **Core Modules**:
-  1. `lib/core/models/`: Strongly-typed chat messages, participant stats, and mode-specific analytic models (`CasalStats`, `AmigosStats`, `GrupoStats`).
-  2. `lib/core/parser/`: Resilient WhatsApp export regex parser (Brazilian 24h & 12h, Unicode zero-width stripping, multiline accumulation, system & media markers).
-  3. `lib/core/services/`: ZIP decompression, file ingestion, Android Send/Share intent handling (`receive_sharing_intent`).
-  4. `lib/core/analytics/`: Local deterministic analysis engines for Casal, Amigos, and Grupo.
-  5. `lib/theme/`: Swiss-minimalist tokens (Dark/Light colors, emerald accent, continuous squircle shapes, typography with tabular numerals).
-  6. `lib/widgets/`: Reusable Swiss components (Squircle cards, metric stat cards with count-up animations, buttons with 0.97 scale feedback, vector icons).
-  7. `lib/screens/`: App shell, Home/Import screen with stage feedback, Mode Selector, Dashboard overview.
-  8. `lib/stories/`: 9:16 Fullscreen Stories viewer (segmented progress, gesture navigation, hold-to-pause, swipe-down dismiss, story cards).
-  9. `lib/export/`: Offscreen/RepaintBoundary 1080x1920 image generation and `share_plus` native Android share sheet trigger.
-
-## Feature Inventory
-| # | Feature | Description | Milestone | Source |
-|---|---------|-------------|-----------|--------|
-| 1 | Chat File Ingestion | Direct file picker for `.txt` and `.zip` files | M1 | R1 |
-| 2 | Zip Decompression | In-memory/temp decompress `.zip`, locate `_chat.txt` or `*.txt`, ignore heavy media | M1 | R1 |
-| 3 | Brazilian 24h Regex Parser | Parse `dd/MM/yyyy HH:mm - Author: msg` and `dd/MM/yyyy, HH:mm - Author: msg` | M1 | R1 |
-| 4 | Brazilian 12h Regex Parser | Parse `dd/MM/yyyy, hh:mm a - Author: msg` and `dd/MM/yy` 2-digit years | M1 | R1 |
-| 5 | Unicode Sanitization | Strip zero-width and directional characters (`\u200E`, `\u200F`, `\uFEFF`, `\u00A0`, `\u202F`) | M1 | R1 |
-| 6 | Multiline Accumulation | Accumulate multi-line paragraphs into previous message body | M1 | R1 |
-| 7 | System Message Filter | Detect and filter encryption notices, group creation, member added/left messages | M1 | R1 |
-| 8 | Media Marker Detection | Detect `<Mídia oculta>`, `<Media omitted>`, audio notes, stickers | M1 | R1 |
-| 9 | Casal Love Language Breakdown | Count hearts, romantic words, memes, direct messages per participant | M2 | R2 |
-| 10 | Casal Compatibility Score | Weighted compatibility index ($0.3 S_{len} + 0.3 S_{emoji} + 0.4 S_{resp}$) and classification | M2 | R2 |
-| 11 | Casal Activity & Timeline | Hourly/daily heatmaps, chronological timeline, message balance, response times | M2 | R2 |
-| 12 | Casal Ghosting Metrics | 2h ignoring streaks, 1h audio ignoring streaks, and response turnaround stats | M2 | R2 |
-| 13 | Amigos Personas Tree | Assign personas (engraçado, expressivo, detalhista, objetivo, carinhoso) | M2 | R2 |
-| 14 | Amigos Group Dynamics | Fastest replier, ghosting streaks, conversation initiator, biggest flooder | M2 | R2 |
-| 15 | Amigos Superlatives | Friend superlatives and vibe compatibility index | M2 | R2 |
-| 16 | Grupo Leaderboard | Member activity ranking, percentage contribution, medal badges | M2 | R2 |
-| 17 | Grupo Interaction Triad | Interaction matrix (who replies to whom), reactions, topic starters | M2 | R2 |
-| 18 | Grupo Dynamics & Vibes | Silent members, late-night chatter (22h-06h), 4-vibe ranking, keyword clusters | M2 | R2 |
-| 19 | 100% Offline Guarantee | 0 network requests initiated; zero telemetry | M2 | R2 |
-| 20 | Swiss Neutral Color Tokens | Adaptive Light (`#F8F9FA`/`#FFFFFF`) and Dark (`#0B0C0E`/`#14171A`) monotone palettes | M3 | R3 |
-| 21 | Disciplined Accent Token | Swiss Precision Emerald (`#00DC82` / `#10B981`) single accent | M3 | R3 |
-| 22 | Continuous Squircle Geometry | Strict `ContinuousRectangleBorder` (G2 squircle) on cards and buttons | M3 | R3 |
-| 23 | Tabular Figures Typography | Mandatory `FontFeature.tabularFigures()` for all stats and counters | M3 | R3 |
-| 24 | Zero-Emoji Chrome Iconography | 100% Lucide/Phosphor/Material Symbols vector icons in UI; emojis only in chat data | M3 | R3 |
-| 25 | 60fps Micro-Animations | Physics springs, count-up numbers, 0.97 press-scale feedback | M3 | R3 |
-| 26 | Stage Feedback Cycles | Empty states, decompression/parsing progress bars with stage indicators | M3 | R3 |
-| 27 | 100% Free / Zero Paywalls | Completely unlocked: no paywalls, no billing, no locked cards | M3 | R5 |
-| 28 | 9:16 Fullscreen Stories Viewer | Spotify Wrapped-style viewer with segmented progress bars & 5s auto-advance | M4 | R4 |
-| 29 | Stories Gesture Navigation | Tap left 30% (prev), tap right 70% (next), hold (pause), swipe down (dismiss) | M4 | R4 |
-| 30 | Bespoke Story Slide Cards | Visual story cards for Casal (18), Amigos (18), and Grupo (16) | M4 | R4 |
-| 31 | 9:16 Social Export Pipeline | Render 1080x1920 crisp PNG via `RepaintBoundary` & save to cache | M4 | R4 |
-| 32 | Native Android Share Sheet | Trigger native Android share sheet (`share_plus`) for WhatsApp/Instagram | M4 | R4 |
-| 33 | Android Send/Share Intent | Receive shared `.zip` or `.txt` directly from WhatsApp via Android share sheet | M5 | R1 |
-| 34 | Android Manifest & Permissions | Clean manifest without internet permission, `singleTask` launchMode | M5 | R1, R6 |
-| 35 | Production Build Pipeline | Clean `flutter analyze` (0 errors) and `flutter build apk --release` (exit 0) | M5 | R6 |
-| 36 | Physical Device ADB Flow | Detect device via `adb devices`, `adb install -r`, launch app | M6 | R7 |
-
-## Milestones
-| # | Name | Scope | Dependencies | Status |
-|---|------|-------|-------------|--------|
-| M1 | Ingestion & Parsing Engine | File picker, ZIP decompress, multi-format regex parser, Unicode sanitization | None | DONE |
-| M2 | Deterministic Analytics Engine | Casal, Amigos, Grupo local algorithms, models, 100% offline | M1 | DONE |
-| M3 | Swiss-Minimal UI & Design System | Dark/Light themes, squircle cards, count-up stats, home/dashboard, 0 paywall | M2 | DONE |
-| M4 | 9:16 Stories & Social Export | Fullscreen viewer, gestures, story cards, 1080x1920 capture, native share | M3 | DONE |
-| M5 | Android Intent Filter & Release Build | AndroidManifest SEND intent, singleTask, pubspec deps, release APK | M4 | DONE |
-| M6 | Physical Device ADB Deployment | `adb devices` detection, `adb install -r`, app launch verification | M5 | DONE |
-
-## Interface Contracts
-### `lib/core/parser/` ↔ `lib/core/analytics/`
-```dart
-class RawChatExport {
-  final List<ChatMessage> messages;
-  final Set<String> participants;
-  final DateTime startDate;
-  final DateTime endDate;
-}
-
-class ChatMessage {
-  final DateTime timestamp;
-  final String author;
-  final String content;
-  final bool isMedia;
-  final String? mediaType; // 'image', 'audio', 'video', 'sticker'
-  final bool isSystem;
-}
-```
-
-### `lib/core/analytics/` ↔ `lib/screens/` & `lib/stories/`
-```dart
-abstract class ChatAnalysisResult {
-  GeneralStats get generalStats;
-  ChatMode get mode; // casal, amigos, grupo
-}
-
-class CasalAnalysisResult extends ChatAnalysisResult { ... }
-class AmigosAnalysisResult extends ChatAnalysisResult { ... }
-class GrupoAnalysisResult extends ChatAnalysisResult { ... }
-```
-
-### `lib/stories/` ↔ `lib/export/`
-```dart
-class StoryExportService {
-  static Future<String?> captureStoryCardToPng(GlobalKey boundaryKey);
-  static Future<void> shareStoryImage(String imagePath);
-}
-```
+- **Art Direction**: Physical editorial aesthetic based on Warm Ivory (`#FBF9F5`), tactile creased paper texture (`assets/images/home_paper_texture.jpg`), serif typography (`fontFamily: 'serif'`), tabular figures (`FontFeature.tabularFigures()`), and custom seals/stamps/wax motifs.
+- **Chrome & Branding**: Complete elimination of legacy `"CHAT WRAPPED"` and `"100% OFFLINE"` in favor of clean lowercase serif `"seasons"` branding with mode edition labels.
+- **Modality Visual Themes**:
+  - **Casal (Mémoire d'Amour)**: Rose/Coral palette (`#FFF1F2`, `#E11D48`, `#FB7185`), wax seals, epistolary cards, couple passport.
+  - **Amigos (Squad Indie Zine)**: Sky/Electric Blue palette (`#EFF6FF`, `#2563EB`, `#38BDF8`), rubber stamps, trading cards, festival poster.
+  - **Grupo (Gazeta da Comunidade)**: Imperial Violet/Cyber-Grape palette (`#FAF5FF`, `#7C3AED`, `#A855F7`), broadsheet layout, 3D podiums, community certificate.
+- **Adapter Architecture**: Dedicated zero-breaking-change adapters (`CasalStoryAdapter`, `AmigosStoryAdapter`, `GrupoStoryAdapter`) to expose realistic, deterministic derivations for audio durations, print counts, memes, unsent drafts, and interaction matrix without mutating core model constructors.
 
 ## Code Layout
 ```
 lib/
-├── core/
-│   ├── models/
-│   │   ├── chat_message.dart
-│   │   ├── general_stats.dart
-│   │   ├── casal_stats.dart
-│   │   ├── amigos_stats.dart
-│   │   └── grupo_stats.dart
-│   ├── parser/
-│   │   ├── chat_parser.dart
-│   │   ├── whatsapp_regex.dart
-│   │   └── text_sanitizer.dart
-│   ├── services/
-│   │   ├── file_ingestion_service.dart
-│   │   └── zip_extractor_service.dart
-│   └── analytics/
-│       ├── chat_analyzer.dart
-│       ├── casal_analyzer.dart
-│       ├── amigos_analyzer.dart
-│       └── grupo_analyzer.dart
-├── theme/
-│   ├── swiss_colors.dart
-│   ├── swiss_typography.dart
-│   ├── swiss_theme.dart
-│   └── squircle_border.dart
 ├── widgets/
-│   ├── swiss_card.dart
-│   ├── swiss_button.dart
-│   ├── count_up_text.dart
-│   ├── metric_badge.dart
-│   └── stage_progress_indicator.dart
-├── screens/
-│   ├── home_screen.dart
-│   ├── mode_selection_screen.dart
-│   └── dashboard_screen.dart
+│   └── stories/
+│       ├── shared/
+│       │   ├── retro_paper_scaffold.dart      # Warm Ivory paper base, creased texture, organic gradients
+│       │   ├── seasons_story_footer.dart      # Minimal 'seasons' serif signature, slide indicator
+│       │   ├── story_paper_background.dart    # Tactile paper texture canvas
+│       │   ├── editorial_stamp.dart           # Rubber stamp / wax seal / postal graphics
+│       │   ├── monumental_count_up.dart       # Giant serif/tabular count-up numeral
+│       │   ├── story_gauge_meter.dart         # Semi-circular retro gauge for compatibility
+│       │   └── story_share_action.dart        # Tactile export & native share button (preserves Icons.share_rounded)
+│       ├── casal/                             # c1..c18 slides (18 files)
+│       ├── amigos/                            # a1..a18 slides (18 files)
+│       └── grupo/                             # g1..g16 slides (16 files)
 ├── stories/
-│   ├── stories_viewer_screen.dart
-│   ├── story_progress_bar.dart
-│   └── cards/
-│       ├── casal/
-│       ├── amigos/
-│       └── grupo/
-├── export/
-│   └── story_export_service.dart
-└── main.dart
+│   ├── adapters/                              # casal, amigos, grupo story adapters
+│   ├── cards/
+│   │   ├── story_card_base.dart               # Base container updated to Warm Ivory & seasons footer
+│   │   ├── casal_story_cards.dart             # Facade routing c1..c18
+│   │   ├── amigos_story_cards.dart            # Facade routing a1..a18
+│   │   ├── grupo_story_cards.dart             # Facade routing g1..g16
+│   │   └── story_card_factory.dart            # Factory dispatching by mode
+│   ├── story_progress_bar.dart                # Calibrated progress bar
+│   └── stories_viewer_screen.dart             # Fullscreen 9:16 viewer
 ```
+
+## Feature Inventory
+| # | Feature | Description | Milestone | Source |
+|---|---------|-------------|-----------|--------|
+| 1 | Shared Paper Engine | Warm Ivory canvas with creased paper texture & gradients | M1 | Survey |
+| 2 | seasons Footer Branding | Minimal lowercase serif 'seasons' footer replacing legacy text | M1 | Survey |
+| 3 | Calibrated Progress Bar | Mode-tinted active segments & refined timing | M1 | Survey |
+| 4 | Reusable Editorial Stamps | Wax seal, rubber stamp, and imperial medal widgets | M1 | Survey |
+| 5 | Tabular Metric Count-Up | Jitter-free CountUpText with FontFeature.tabularFigures() | M1 | Survey |
+| 6 | Zero-Breaking Adapter Layer | Adapters for derived stats (audio min, prints, memes, unsent) | M1 | Survey |
+| 7 | Casal c1: Capa | Book cover poster with couple names & wax seal | M2 | Survey |
+| 8 | Casal c2: Total Mensagens | Monumental count-up, percentage balance, daily pace | M2 | Survey |
+| 9 | Casal c3: Love Language | Asymmetric 2x2 cards with love language bars | M2 | Survey |
+| 10 | Casal c4: Compatibilidade | Semi-circular affinity gauge & lyrical diagnosis | M2 | Survey |
+| 11 | Casal c5: Timeline | Activity spline curve with golden peak marker | M2 | Survey |
+| 12 | Casal c6: Top Palavras | Movable-type letterpress cloud with nicknames | M2 | Survey |
+| 13 | Casal c7: Heatmap | "A Nossa Hora" 24h intensity matrix | M2 | Survey |
+| 14 | Casal c8: Evolução Emojis | 3-pedestal triptych altar with beating heart emoji | M2 | Survey |
+| 15 | Casal c9: Momentos Especiais | Scrapbook cards with washi tape & record days | M2 | Survey |
+| 16 | Casal c10: Comparação Hábitos | Bipartite editorial balance on texting habits | M2 | Survey |
+| 17 | Casal c11: Estatísticas Cotidiano | Dotted-rule tabular stats for reply speed & consistency | M2 | Survey |
+| 18 | Casal c12: Insight Afeto | Editorial chronicle with illuminated quote marks | M2 | Survey |
+| 19 | Casal c13: Interações Ocultas | Playful waiting-time note with worn red stamp | M2 | Survey |
+| 20 | Casal c14: Áudios no Vácuo | Vinyl/cassette sleeve with audio duration minutes | M2 | Survey |
+| 21 | Casal c15: Prints e Arquivos | Polaroid frame with silver washi tape | M2 | Survey |
+| 22 | Casal c16: Encaminhamentos | Airmail envelope with chevron pattern for memes | M2 | Survey |
+| 23 | Casal c17: Digitou mas não enviou | Censored draft note with pulsing ellipsis | M2 | Survey |
+| 24 | Casal c18: Conclusão & Passaporte | Official Couple Passport collectible card with share trigger | M2 | Survey |
+| 25 | Amigos a1: Capa do Squad | Indie zine cover with circular rubber stamp | M3 | Survey |
+| 26 | Amigos a2: Total de Mensagens | Graph paper poster with member volume bars | M3 | Survey |
+| 27 | Amigos a3: Estilos Comunicação | Trading cards for member archetypes | M3 | Survey |
+| 28 | Amigos a4: Compatibilidade Squad | Chaos meter / radar on kraft paper | M3 | Survey |
+| 29 | Amigos a5: Timeline | Seismograph activity curve with highlighter spikes | M3 | Survey |
+| 30 | Amigos a6: Top Conversas | Bulletin board with pushpins & hot topics | M3 | Survey |
+| 31 | Amigos a7: Heatmap do Squad | Subway-style 24h block clock | M3 | Survey |
+| 32 | Amigos a8: Emoji Culture | Pop-art die-cut sticker album | M3 | Survey |
+| 33 | Amigos a9: Flood Moments | Comic book monologue explosion graphic | M3 | Survey |
+| 34 | Amigos a10: Personalidades | Honorary squad titles and condecorations | M3 | Survey |
+| 35 | Amigos a11: Estatísticas Squad | Telemetry speedometer for response speeds | M3 | Survey |
+| 36 | Amigos a12: Insight do Squad | Zine editorial manifesto with white correction tape | M3 | Survey |
+| 37 | Amigos a13: Interações Ocultas | FBI Wanted Poster for vacuum champions | M3 | Survey |
+| 38 | Amigos a14: Áudios no Vácuo | Podcast episode sleeve with vertical soundwaves | M3 | Survey |
+| 39 | Amigos a15: Prints Tirados | Confidential detective dossier | M3 | Survey |
+| 40 | Amigos a16: Encaminhamentos | Broadcast news tower with teletype | M3 | Survey |
+| 41 | Amigos a17: Digitou mas não enviou | Warning isolation tape on near-crisis drafts | M3 | Survey |
+| 42 | Amigos a18: Conclusão & Pôster | Festival tour poster with barcode & share trigger | M3 | Survey |
+| 43 | Grupo g1: Capa da Gazeta | Broadsheet front page with imperial seal | M4 | Survey |
+| 44 | Grupo g2: Total de Mensagens | Census plaque with literary book volume equivalence | M4 | Survey |
+| 45 | Grupo g3: Top 3 do Grupo | Monumental 3D podium with medals and laurels | M4 | Survey |
+| 46 | Grupo g4: Dinâmicas do Grupo | Pareto 80/20 distribution diagram | M4 | Survey |
+| 47 | Grupo g5: Timeline Coletiva | Four-season annual calendar with 12 monthly columns | M4 | Survey |
+| 48 | Grupo g6: Top Conversas | Legislative assembly docket with items | M4 | Survey |
+| 49 | Grupo g7: Heatmap de Atividade | 24x7 temperature matrix with compass rose | M4 | Survey |
+| 50 | Grupo g8: Evolução de Emojis | Stock exchange currency ticker panel | M4 | Survey |
+| 51 | Grupo g9: Flood Moments | Extraordinary news alert edition | M4 | Survey |
+| 52 | Grupo g10: Análise de Rede | Constellation star chart / interaction matrix graph | M4 | Survey |
+| 53 | Grupo g11: Insight Coletivo | Sociological feature essay with illuminated drop-cap | M4 | Survey |
+| 54 | Grupo g12: Quem Mais Ignora | Golden Vacuum Trophy on carved stone pedestal | M4 | Survey |
+| 55 | Grupo g13: Quem Mais Tira Print | Investigative press badge with photographic filmstrip | M4 | Survey |
+| 56 | Grupo g14: Quem Mais Encaminha | Telegraph central news relay station | M4 | Survey |
+| 57 | Grupo g15: Quem Mais Apaga | Invisible chat ghost with fading smoke effect | M4 | Survey |
+| 58 | Grupo g16: Conclusão & Certificado | Formal community certificate with guilloche borders & share trigger | M4 | Survey |
+| 59 | E2E & Full Verification | 100% passing tests (flutter test) & 0 analyze issues | M5 | Survey |
+| 60 | Release Build & ADB Deployment | flutter build apk --release & adb install without git commit | M5 | Survey |
+
+## Milestones
+| # | Name | Scope | Dependencies | Status |
+|---|------|-------|-------------|--------|
+| M1 | Shared Editorial Infrastructure & Adapters | Paper engine, SeasonsStoryFooter, ProgressBar, Adapters, StoryCardBase test alignment | none | DONE |
+| M2 | Casal Mode Stories (18 Slides) | c1..c18 bespoke slides, romantic editorial identity, couple passport | M1 | DONE |
+| M3 | Amigos Mode Stories (18 Slides) | a1..a18 bespoke slides, squad zine identity, squad tour poster | M1 | DONE |
+| M4 | Grupo Mode Stories (16 Slides) | g1..g16 bespoke slides, periodical identity, community certificate | M1 | DONE |
+| M5 | Verification, Build & ADB Deploy | dart analyze (0/0), flutter test (100%), release APK, ADB install, 0 git commit | M1, M2, M3, M4 | DONE |
+
+## Interface Contracts
+### Story Adapters ↔ Story Cards
+- `CasalStoryAdapter(CasalAnalysisResult result)`: provides formatted partners, daily pace, love languages, lyrical compatibility, top words, peak intimacy hour, top emojis, habits balance, audio duration estimate, prints estimate, memes estimate, drafts estimate.
+- `AmigosStoryAdapter(AmigosAnalysisResult result)`: provides member list, volume balance, archetypes, chaos score, timeline spikes, top slang, peak hour, emoji dictionary, flood record, honorary titles, telemetry speeds, vacuum rankings, podcaster stats, detective prints, news forwarder, drafts estimate.
+- `GrupoStoryAdapter(GrupoAnalysisResult result)`: provides active population, literary book volumes, top 3 podium members, Pareto ratio, 12-month calendar, assembly topics, 24x7 peak quadrant, collective emojis, chaotic flood peak, interaction network pairs, drop-cap essay, golden vacuum trophy, press archivist, telegraph relay, unsend ghost.
+
+### Shared Widgets ↔ Slide Builders
+- `RetroPaperScaffold(modeTheme, children)`: renders 4-layer paper background with Warm Ivory and hairline border.
+- `SeasonsStoryFooter(editionLabel)`: renders lowercase serif `seasons` with edition tag.
+- `MonumentalCountUp(targetNumber, label)`: jitter-free CountUpText with `FontFeature.tabularFigures()`.
+- `StoryShareAction(onShare)`: interactive share button with `Icons.share_rounded` preserved.

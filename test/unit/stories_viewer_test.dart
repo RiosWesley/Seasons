@@ -154,6 +154,7 @@ void main() {
       // Tap on the right side of the screen (x = 800, y = 500)
       await tester.tapAt(const Offset(800, 500));
       await tester.pump(const Duration(milliseconds: 600));
+      await tester.pump(const Duration(milliseconds: 600));
 
       expect(find.text('2/18'), findsOneWidget);
     });

@@ -147,3 +147,124 @@ Redesign the `ModeSelectionScreen` to seamlessly continue the warm editorial ide
 - [ ] 100% dos testes passam no `flutter test` (incluindo novos testes de onboarding e UI).
 - [ ] `flutter build apk --release` finaliza com código 0 e gera o APK otimizado.
 
+
+
+## 2026-09-12T10:58:21Z
+
+Planejar e implementar a renovação completa da experiência dos Stories 9:16 para todos os tipos de análise (Casal, Amigos, Grupo), transformando os slides básicos atuais em peças de design editorial físico memoráveis e distintas, baseadas na direção de arte do app (Warm Ivory, texturas de papel, tipografia serifada e selos), onde cada modo tem sua personalidade e cada story individual tem diagramação e infografia próprias.
+
+Requested team: Um agente para planejar a estética e design dos stories de cada grupo (garantindo que cada storie seja diferente e cada grupo tenha sua estética) e um agente dedicado para cada grupo de storie (Casal, Amigos, Grupo).
+
+Working directory: /home/wesley/Documents/chat_wrapped_flutter
+Integrity mode: development
+
+Environment & Tooling:
+- Flutter binary: /home/wesley/development/flutter/bin/flutter (ou adicionar /home/wesley/development/flutter/bin ao PATH)
+- Android SDK: /home/wesley/Android/Sdk
+- Java JBR: /opt/android-studio/jbr (set JAVA_HOME=/opt/android-studio/jbr)
+- ADB: /home/wesley/Android/Sdk/platform-tools/adb
+- Device IP: 192.168.18.213:42907
+
+## Requirements
+
+### R1. Direção de Arte Geral & Arquitetura Visual dos Stories
+- Estabelecer a base 9:16 dos Stories em sintonia com o visual da Home e Onboarding:
+  - Fundo tátil com textura de papel (papel creased/artesanal), tonalidade Warm Ivory e gradientes orgânicos sutis.
+  - Assinatura mínima no rodapé com a marca seasons em tipografia serifada elegante, removendo definitivamente qualquer menção a "CHAT WRAPPED" e o badge "100% OFFLINE".
+  - Barra de progresso superior refinada com ritmo temporal calibrado e controle interativo tátil (toque para avançar/voltar, segurar para pausar).
+  - Geração de ilustrações e texturas temáticas via IA para servir como assets de destaque nos momentos-chave de cada modalidade.
+
+### R2. Stories do Modo Casal (Identidade Romântica Editorial)
+- Identidade visual dedicada: Paleta Rose / Coral / Cream Ivory (#FFF1F2, #E11D48, #FB7185), tipografia serifada intimista, doodles afetivos e atmosfera de carta/memória.
+- 18 slides com variações de diagramação e elementos próprios:
+  - Capa (c1): Pôster de cinema/livro com nomes dos parceiros, período analisado e textura quente.
+  - Total de Mensagens (c2): Numeral monumental com contagem progressiva (CountUpText), balanço percentual e ritmo de troca.
+  - Love Language (c3): Diagramação em cartões assimétricos com as 4 linguagens do amor e micro-barras táteis.
+  - Compatibilidade (c4): Gauge editorial de sintonia e diagnóstico relacional lírico.
+  - Timeline (c5): Curva de atividade cronológica com marcos das conversas mais longas.
+  - Top Palavras (c6): Nuvem de vocabulário e apelidos carinhosos em composição de tipos móveis.
+  - Heatmap (c7): Grade horária "A Nossa Hora" mostrando a intensidade de mensagens por período do dia.
+  - Evolução de Emojis (c8): Pódio dos emojis mais expressivos do casal com contextualização emotiva.
+  - Momentos Especiais (c9): Os dias mais memoráveis do ano com recordes de mensagens.
+  - Comparação de Hábitos (c10): Quem puxa assunto, quem envia mais mídia, quem digita mais caracteres por mensagem.
+  - Estatísticas do Cotidiano (c11): Média de resposta e constância diária do casal.
+  - Insight de Afeto (c12): Diagnóstico editorial profundo sobre o ritmo da parceria.
+  - Interações Ocultas (c13): Estatísticas bem-humoradas de mensagens pendentes e tempos de espera.
+  - Áudios no Vácuo (c14): Minutagem total de áudio trocado e quem ouve mais rápido.
+  - Prints e Arquivos (c15): Curiosidade provocativa sobre momentos eternizados em print.
+  - Encaminhamentos (c16): Circulação de memes, vídeos e links que moldaram o humor a dois.
+  - Digitou mas não enviou (c17): Momento de suspense cômico sobre hesitações e conversas apagadas.
+  - Conclusão & Passaporte (c18): Cartão final colecionável tipo "Passaporte do Casal" pronto para compartilhamento em Stories.
+
+### R3. Stories do Modo Amigos (Identidade de Squad & Zine)
+- Identidade visual dedicada: Paleta Sky / Electric Blue / Kraft Ivory (#EFF6FF, #2563EB, #38BDF8), tipografia bold contrastante, estética de zine editorial, carimbos e selos gráficos.
+- 18 slides projetados para o dinamismo do squad de amigos (3 a 5 participantes):
+  - Capa (a1): Capa no formato de zine independente com o squad em evidência.
+  - Total de Mensagens (a2): Gráfico de impacto do grupo e comparativo de volume anual.
+  - Estilos de Comunicação (a3): Cards individuais dos arquétipos de comunicação do squad.
+  - Compatibilidade do Squad (a4): Índice de sintonia cruzada e dinâmica interna.
+  - Timeline (a5): Picos de tretas, saídas e comemorações ao longo dos meses.
+  - Top Conversas (a6): Tópicos mais debatidos e jargões recorrentes do squad.
+  - Heatmap (a7): O horário oficial em que o squad mais movimenta o chat.
+  - Emoji Culture (a8): Dicionário de reações e emojis que definem o squad.
+  - Flood Moments (a9): O recorde de mensagens seguidas sem resposta de um único participante.
+  - Personalidades (a10): Títulos honorários do squad concedidos a cada membro.
+  - Estatísticas do Squad (a11): Velocidade média de resposta e tamanho médio dos textos.
+  - Insight (a12): Resumo sociológico bem-humorado sobre a vibe do grupo de amigos.
+  - Interações Ocultas (a13): Quem mais distribui e quem mais recebe vácuos no squad.
+  - Áudios no Vácuo (a14): Quem tem o costume de enviar áudios gigantescos no chat.
+  - Prints Tirados (a15): Estatísticas sobre arquivos e flags de fofoca.
+  - Encaminhamentos (a16): Quem abastece o squad com conteúdo externo.
+  - Digitou mas não enviou (a17): O momento de quase crise que ficou no rascunho.
+  - Conclusão & Share Card (a18): Pôster oficial do Squad otimizado para exportação e postagem.
+
+### R4. Stories do Modo Grupo (Identidade de Coletivo & Leaderboard)
+- Identidade visual dedicada: Paleta Violet / Iris / Cyber-Grape (#FAF5FF, #7C3AED, #A855F7), design editorial inspirado em revistas periódicas, visualizações de dados avançadas, rankings e matrizes de interação.
+- 16 slides desenhados para grupos grandes (6+ participantes):
+  - Capa (g1): Cartaz de comunidade com cluster visual e contagem de membros ativos.
+  - Total de Mensagens (g2): Métrica monumental do grupo com equivalência literária (ex: volumes de livros).
+  - Top 3 do Grupo (g3): Pódio editorial com destaques para os membros mais ativos.
+  - Dinâmicas do Grupo (g4): Concentração de conversa (a lei dos que mais falam vs. ouvintes silenciosos).
+  - Timeline (g5): Ondas sazonais de atividade da comunidade no ano.
+  - Top Conversas (g6): Nuvem léxica e temas que mobilizaram o grupo.
+  - Heatmap de Atividade (g7): O mapa de temperatura horária de engajamento do grupo.
+  - Evolução de Emojis (g8): Os emojis coletivos mais disparados.
+  - Flood Moments (g9): O minuto mais caótico da história do chat.
+  - Análise de Rede (g10): Grafo/matriz simplificada de quem mais responde a quem.
+  - Insight (g11): Retrato sociológico do ecossistema e cultura do grupo.
+  - Quem Mais Ignora (g12): O troféu de ouro do vácuo no coletivo.
+  - Quem Mais Tira Print (g13): O repórter/informante oficial do grupo.
+  - Quem Mais Encaminha (g14): A central de notícias e memes encaminhados.
+  - Quem Mais Apaga (g15): O líder das mensagens apagadas antes que alguém lesse.
+  - Conclusão & Share Card (g16): Certificado oficial do grupo para compartilhamento social.
+
+### R5. Restrições e Governança de Entrega
+- NÃO FAZER COMMIT: Fica estritamente proibido executar qualquer comando git commit ou push. O usuário testará e validará diretamente no dispositivo antes de qualquer commit.
+- Integridade da Suíte de Testes: Manter 100% dos testes unitários e de widget passando (flutter test).
+- Análise Estática: Garantir dart analyze . com zero erros e zero avisos.
+- Build & Deploy: Ao finalizar e passar nos testes, builde o APK (--release) e instale via ADB no IP 192.168.18.213:42907 sem efetuar commit do Git.
+
+---
+
+## Acceptance Criteria
+
+### Design & Identidades Visuais
+- [ ] O rodapé de todos os slides de todos os modos exibe consistentemente a marca seasons em minúsculas e tipografia serifada limpa, sem menção a "CHAT WRAPPED" ou "100% OFFLINE".
+- [ ] Cada modo possui estética inconfundível: Casal (Rose/Warm Coral romântico), Amigos (Sky/Kraft Blue dinâmico) e Grupo (Violet/Iris editorial com leaderboards).
+- [ ] Cada um dos 52 slides possui identidade gráfica, diagramação e componentes próprios, sem repetição preguiçosa de templates genéricos.
+- [ ] Texturas táteis de papel e fundos orgânicos aplicados com alta fidelidade visual e renderização a 60fps.
+
+### Interatividade & Compartilhamento
+- [ ] Navegação completa entre stories (toque esquerdo, toque direito, toque longo para pausar) operando de forma suave e com haptics.
+- [ ] As telas finais de cada modo geram a imagem 9:16 nítida via story_export_service e abrem o share sheet nativo.
+
+### Verificação & Não-Cometimento
+- [ ] dart analyze . retorna 0 erros e 0 warnings.
+- [ ] flutter test executa com sucesso sem falhas na suíte.
+- [ ] O repositório Git não possui nenhum novo commit criado durante a execução desta tarefa.
+- [ ] O aplicativo com os novos stories é instalado no dispositivo via ADB para testes manuais do usuário.
+
+
+## 2026-09-12T11:32:12Z
+
+Atualização de dispositivo ADB: O celular já está conectado e autorizado com sucesso como "192.168.2.20:44167". Quando for realizar o deploy, use o target `192.168.2.20:44167` ou simplesmente deixe o adb direcionar se for o único device listado.

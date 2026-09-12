@@ -92,8 +92,7 @@ void main() {
       expect(find.text('TITULO TESTE'), findsOneWidget);
       expect(find.text('Subtítulo explicativo'), findsOneWidget);
       expect(find.text('Corpo do Card'), findsOneWidget);
-      expect(find.text('CHAT WRAPPED'), findsOneWidget);
-      expect(find.text('100% OFFLINE • PRIVACIDADE LOCAL'), findsOneWidget);
+      expect(find.text('seasons'), findsOneWidget);
     });
   });
 
