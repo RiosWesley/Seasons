@@ -455,22 +455,17 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // 1. Editorial Brand Header with 100% Offline Pill
+                  // 1. Editorial Brand Header
                   _buildTopBar(),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
 
                   // 2. Hero Greeting + Editorial Headline + 3D Cards Illustration
                   _buildHeroSection(),
 
                   const SizedBox(height: 20),
 
-                  // 3. Three Guarantee Feature Badges
-                  _buildFeatureBadgesRow(),
-
-                  const SizedBox(height: 24),
-
-                  // 4. Central Dashed Ingestion Card ("Importe sua conversa")
+                  // 3. Central Dashed Ingestion Card ("Importe sua conversa")
                   _buildMainIngestionCard(),
 
                   const SizedBox(height: 20),
@@ -484,17 +479,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 20),
                   ],
 
-                  // 5. Retrospectivas Recentes
+                  // 4. Retrospectivas Recentes
                   _buildRecentRetrospectivesSection(),
 
                   const SizedBox(height: 26),
 
-                  // 6. Escolha uma Lente de Análise (2-Column Bento Grid)
+                  // 5. Escolha uma Lente de Análise (2-Column Bento Grid)
                   _buildLenteDeAnaliseSection(),
 
                   const SizedBox(height: 28),
 
-                  // 7. Footer Tagline
+                  // 6. Footer Tagline
                   _buildFooterTagline(),
 
                   const SizedBox(height: 24),
@@ -508,123 +503,53 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // ==========================================
-  // SECTION 1: TOP BRAND BAR & SECURITY PILL
+  // SECTION 1: TOP BRAND BAR ("seasons")
   // ==========================================
   Widget _buildTopBar() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // Left: Squircle Sparkle Icon + "Chat Wrapped" & "ARCHIVE EDITION"
-        Expanded(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                width: 38,
-                height: 38,
-                decoration: ShapeDecoration(
-                  gradient: const LinearGradient(
-                    colors: [SwissColors.irisPrimary, SwissColors.violetSecondary],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  shape: SquircleBorder.radius(12),
-                  shadows: [
-                    BoxShadow(
-                      color: SwissColors.irisPrimary.withValues(alpha: 0.25),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: const Center(
-                  child: Icon(
-                    LucideIcons.sparkles,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Chat Wrapped',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontFamily: 'serif',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18,
-                        letterSpacing: -0.3,
-                        color: Color(0xFF1E1B4B),
-                      ),
-                    ),
-                    Text(
-                      'ARCHIVE EDITION',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: SwissTypography.labelSmall.copyWith(
-                        fontSize: 9.5,
-                        letterSpacing: 1.4,
-                        fontWeight: FontWeight.w700,
-                        color: SwissColors.irisPrimary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: 8),
-
-        // Right: "100% OFFLINE" pill + Subtitle "Seus dados ficam apenas neste aparelho."
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
+        // Left: Smaller App Logo + "seasons"
+        Row(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              decoration: const ShapeDecoration(
-                color: Color(0xFFEEF2FF),
-                shape: StadiumBorder(
-                  side: BorderSide(color: Color(0xFFE0E7FF), width: 1.0),
+              width: 28,
+              height: 28,
+              decoration: ShapeDecoration(
+                gradient: const LinearGradient(
+                  colors: [SwissColors.irisPrimary, SwissColors.violetSecondary],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  Icon(
-                    LucideIcons.lock,
-                    size: 13,
-                    color: Color(0xFF4F46E5),
-                  ),
-                  SizedBox(width: 4),
-                  Text(
-                    '100% OFFLINE',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 0.8,
-                      color: Color(0xFF4338CA),
-                    ),
+                shape: SquircleBorder.radius(8),
+                shadows: [
+                  BoxShadow(
+                    color: SwissColors.irisPrimary.withValues(alpha: 0.25),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
                   ),
                 ],
               ),
+              child: const Center(
+                child: Icon(
+                  LucideIcons.sparkles,
+                  color: Colors.white,
+                  size: 15,
+                ),
+              ),
             ),
-            const SizedBox(height: 3),
+            const SizedBox(width: 8),
             const Text(
-              'Seus dados ficam\napenas neste aparelho.',
-              textAlign: TextAlign.right,
+              'seasons',
               style: TextStyle(
-                fontSize: 9,
-                color: Color(0xFF64748B),
-                height: 1.2,
+                fontFamily: 'serif',
+                fontWeight: FontWeight.w700,
+                fontSize: 20,
+                letterSpacing: -0.3,
+                color: Color(0xFF1E1B4B),
               ),
             ),
           ],
@@ -638,9 +563,9 @@ class _HomeScreenState extends State<HomeScreen> {
   // ==========================================
   Widget _buildHeroSection() {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // Left Column: Eyebrow + Headline + Pitch
+        // Left Column: Eyebrow + Headline
         Expanded(
           flex: 11,
           child: Column(
@@ -667,15 +592,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: Color(0xFF0F172A),
                 ),
               ),
-              const SizedBox(height: 8),
-              const Text(
-                'Transforme seu arquivo do WhatsApp em uma retrospectiva interativa e cheia de insights.',
-                style: TextStyle(
-                  fontSize: 13,
-                  height: 1.45,
-                  color: Color(0xFF475569),
-                ),
-              ),
             ],
           ),
         ),
@@ -685,74 +601,8 @@ class _HomeScreenState extends State<HomeScreen> {
         // Right Column: Composed WhatsApp 3D Tilted Cards & Arrow Annotation
         const SizedBox(
           width: 132,
-          height: 145,
+          height: 130,
           child: _HeroChatIllustration(),
-        ),
-      ],
-    );
-  }
-
-  // ==========================================
-  // SECTION 3: 3 GUARANTEE FEATURE BADGES
-  // ==========================================
-  Widget _buildFeatureBadgesRow() {
-    return Wrap(
-      alignment: WrapAlignment.spaceBetween,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      spacing: 8,
-      runSpacing: 8,
-      children: [
-        _buildFeatureBadgeItem(
-          icon: LucideIcons.shieldCheck,
-          line1: 'Privacidade',
-          line2: 'garantida',
-        ),
-        _buildFeatureBadgeItem(
-          icon: LucideIcons.cloudOff,
-          line1: 'Funciona',
-          line2: '100% offline',
-        ),
-        _buildFeatureBadgeItem(
-          icon: LucideIcons.chartBar,
-          line1: 'Seus dados,',
-          line2: 'suas histórias',
-        ),
-      ],
-    );
-  }
-
-  Widget _buildFeatureBadgeItem({
-    required IconData icon,
-    required String line1,
-    required String line2,
-  }) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 32,
-          height: 32,
-          decoration: const BoxDecoration(
-            color: Color(0xFFEEF2FF),
-            shape: BoxShape.circle,
-          ),
-          child: Center(
-            child: Icon(
-              icon,
-              size: 16,
-              color: const Color(0xFF4F46E5),
-            ),
-          ),
-        ),
-        const SizedBox(width: 8),
-        Text(
-          '$line1\n$line2',
-          style: const TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w500,
-            color: Color(0xFF475569),
-            height: 1.2,
-          ),
         ),
       ],
     );

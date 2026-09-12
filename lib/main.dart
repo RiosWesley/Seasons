@@ -61,7 +61,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: _navKey,
-      title: 'Chat Wrapped',
+      title: 'seasons',
       debugShowCheckedModeBanner: false,
       theme: SwissTheme.lightTheme,
       darkTheme: SwissTheme.darkTheme,

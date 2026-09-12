@@ -52,8 +52,7 @@ void main() {
       await tester.pumpWidget(wrapWithApp(const HomeScreen()));
       await tester.pumpAndSettle();
 
-      expect(find.text('Chat Wrapped'), findsOneWidget);
-      expect(find.text('100% OFFLINE'), findsOneWidget);
+      expect(find.text('seasons'), findsOneWidget);
       expect(find.text('Selecionar arquivo'), findsOneWidget);
       expect(find.text('Experimentar com uma conversa de exemplo'), findsOneWidget);
       expect(find.text('ESCOLHA UMA LENTE DE ANÁLISE'), findsOneWidget);
