@@ -516,28 +516,23 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              width: 28,
-              height: 28,
+              width: 30,
+              height: 30,
               decoration: ShapeDecoration(
-                gradient: const LinearGradient(
-                  colors: [SwissColors.irisPrimary, SwissColors.violetSecondary],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
                 shape: SquircleBorder.radius(8),
                 shadows: [
                   BoxShadow(
-                    color: SwissColors.irisPrimary.withValues(alpha: 0.25),
+                    color: Colors.black.withValues(alpha: 0.08),
                     blurRadius: 6,
                     offset: const Offset(0, 2),
                   ),
                 ],
               ),
-              child: const Center(
-                child: Icon(
-                  LucideIcons.sparkles,
-                  color: Colors.white,
-                  size: 15,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.asset(
+                  'assets/images/icone.png',
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
