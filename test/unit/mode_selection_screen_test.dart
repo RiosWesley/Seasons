@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:chat_wrapped/core/analytics/chat_analyzer.dart';
+import 'package:chat_wrapped/core/models/general_stats.dart';
 import 'package:chat_wrapped/core/parser/chat_parser.dart';
 import 'package:chat_wrapped/screens/dashboard_screen.dart';
 import 'package:chat_wrapped/screens/mode_selection_screen.dart';
@@ -258,6 +259,65 @@ void main() {
       expect(find.text('Modo Amigos'), findsOneWidget);
       expect(find.text('Modo Grupo'), findsNothing);
       expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('9. Duo connection card displays duo names headline, messages count, and feature chips', (tester) async {
+      setMobileViewport(tester);
+      final export = const ChatParser().parse(sampleCasalChat);
+      final analysis = ChatAnalyzer.analyzeRawExport(export);
+
+      await tester.pumpWidget(
+        wrapWithApp(
+          ModeSelectionScreen(
+            rawExport: export,
+            initialAnalysis: analysis,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Duo connection headline
+      expect(find.text('Ana & Carlos'), findsOneWidget);
+
+      // Status badge and message count
+      expect(find.text('SINCRONIZADO'), findsOneWidget);
+      expect(find.text('${analysis.generalStats.totalMessages} mensagens'), findsOneWidget);
+
+      // Feature tags
+      expect(find.text('Love Language'), findsOneWidget);
+      expect(find.text('Quem Puxa Papo'), findsOneWidget);
+      expect(find.text('Duelo de Estilos'), findsOneWidget);
+      expect(find.text('Podcast de Áudios'), findsOneWidget);
+    });
+
+    testWidgets('10. Dynamic recommendation selects and recommends Amigos when initialAnalysis is Amigos', (tester) async {
+      setMobileViewport(tester);
+      final export = const ChatParser().parse(sampleCasalChat);
+      // Analyze with override to Amigos
+      final analysis = ChatAnalyzer.analyzeRawExport(export, overrideMode: ChatMode.amigos);
+
+      await tester.pumpWidget(
+        wrapWithApp(
+          ModeSelectionScreen(
+            rawExport: export,
+            initialAnalysis: analysis,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Amigos should be recommended
+      expect(find.text('Recomendado'), findsOneWidget);
+      expect(find.text(' para esta conversa'), findsOneWidget);
+      expect(find.text('Modo Amigos'), findsOneWidget);
+
+      // Tapping continue immediately proceeds in Modo Amigos without manual switch
+      await tester.ensureVisible(find.text('Continuar para o Dashboard'));
+      await tester.tap(find.text('Continuar para o Dashboard'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(DashboardScreen), findsOneWidget);
+      expect(find.text('Modo Amigos'), findsOneWidget);
     });
   });
 }

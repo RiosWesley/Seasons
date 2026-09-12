@@ -449,9 +449,9 @@ void main() {
       expect(find.text('Modo Casal'), findsOneWidget);
       expect(find.text('Ritmo a dois & Afinidade'), findsOneWidget);
 
-      expect(find.text('SQUAD & ARQUÉTIPOS'), findsOneWidget);
+      expect(find.text('DUPLA & RESENHA A DOIS'), findsOneWidget);
       expect(find.text('Modo Amigos'), findsOneWidget);
-      expect(find.text('Arquétipos do squad & Dinâmica'), findsOneWidget);
+      expect(find.text('Duelo de estilos & Resenha a dois'), findsOneWidget);
 
       expect(find.text('LEADERBOARD GERAL & VIBES'), findsOneWidget);
       expect(find.text('Modo Grupo'), findsOneWidget);

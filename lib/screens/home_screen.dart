@@ -1278,15 +1278,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: 44,
                 height: 44,
                 decoration: ShapeDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+                  color: const Color(0xFF2563EB),
                   shape: SquircleBorder.radius(13),
                   shadows: [
                     BoxShadow(
-                      color: const Color(0xFF6366F1).withValues(alpha: 0.25),
+                      color: const Color(0xFF2563EB).withValues(alpha: 0.25),
                       blurRadius: 8,
                       offset: const Offset(0, 3),
                     ),
@@ -1311,7 +1307,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontSize: 10,
                         letterSpacing: 1.2,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF6366F1),
+                        color: const Color(0xFF2563EB),
                       ),
                     ),
                     const SizedBox(height: 3),
@@ -1359,11 +1355,11 @@ class _HomeScreenState extends State<HomeScreen> {
               borderRadius: BorderRadius.circular(14),
               child: Ink(
                 decoration: ShapeDecoration(
-                  color: const Color(0xFF6366F1),
+                  color: const Color(0xFF2563EB),
                   shape: SquircleBorder.radius(14),
                   shadows: [
                     BoxShadow(
-                      color: const Color(0xFF6366F1).withValues(alpha: 0.30),
+                      color: const Color(0xFF2563EB).withValues(alpha: 0.30),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
@@ -2288,14 +2284,14 @@ class _HeroChatIllustration extends StatelessWidget {
             height: 32,
             decoration: BoxDecoration(
               gradient: const LinearGradient(
-                colors: [SwissColors.irisPrimary, SwissColors.violetSecondary],
+                colors: [Color(0xFF2563EB), Color(0xFF1D4ED8)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: SwissColors.irisPrimary.withValues(alpha: 0.35),
+                  color: const Color(0xFF2563EB).withValues(alpha: 0.35),
                   blurRadius: 8,
                   offset: const Offset(0, 3),
                 ),

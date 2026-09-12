@@ -24,6 +24,8 @@ class SwissButton extends StatefulWidget {
   final EdgeInsetsGeometry padding;
   final double scaleDownFactor;
   final Duration animationDuration;
+  final Color? customBackgroundColor;
+  final Gradient? customGradient;
 
   const SwissButton({
     super.key,
@@ -36,6 +38,8 @@ class SwissButton extends StatefulWidget {
     this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
     this.scaleDownFactor = 0.97,
     this.animationDuration = const Duration(milliseconds: 110),
+    this.customBackgroundColor,
+    this.customGradient,
   });
 
   @override
@@ -60,24 +64,28 @@ class _SwissButtonState extends State<SwissButton> {
     switch (widget.type) {
       case SwissButtonType.primary:
         if (_isEnabled) {
-          backgroundColor = isDark
-              ? const Color(0xFF2563EB)
-              : const Color(0xFF0F172A);
+          if (widget.customGradient != null) {
+            backgroundGradient = widget.customGradient;
+            backgroundColor = null;
+          } else {
+            backgroundColor = widget.customBackgroundColor ??
+                (isDark ? const Color(0xFF2563EB) : const Color(0xFF0F172A));
+          }
           foregroundColor = Colors.white;
           borderSide = BorderSide(
-            color: isDark
-                ? const Color(0x4060A5FA)
-                : const Color(0x20000000),
+            color: widget.customBackgroundColor != null
+                ? Colors.white.withValues(alpha: 0.18)
+                : (isDark ? const Color(0x4060A5FA) : const Color(0x20000000)),
             width: 1.0,
           );
+          final activeGlowColor = widget.customBackgroundColor ??
+              (isDark ? const Color(0xFF2563EB) : const Color(0xFF0F172A));
           shadows = [
             BoxShadow(
-              color: isDark
-                  ? const Color(0xFF2563EB).withValues(alpha: 0.35)
-                  : const Color(0xFF0F172A).withValues(alpha: 0.18),
+              color: activeGlowColor.withValues(alpha: isDark ? 0.35 : 0.22),
               blurRadius: 14,
               offset: const Offset(0, 4),
-              spreadRadius: -2,
+              spreadRadius: -1,
             ),
           ];
         } else {
