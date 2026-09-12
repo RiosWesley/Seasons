@@ -5,6 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../core/services/onboarding_preferences.dart';
 import '../theme/squircle_border.dart';
 import '../theme/swiss_colors.dart';
+import '../widgets/model_bento_card.dart';
 import '../widgets/swiss_button.dart';
 import 'home_screen.dart';
 
@@ -647,43 +648,70 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           const SizedBox(height: 18),
 
           // Mode 1: Casal Bento Card
-          _buildModelCard(
+          ModelBentoCard(
             title: 'Modo Casal',
-            badgeText: '2 PARTICIPANTES',
+            eyebrow: 'AFINIDADE & RITMO A DOIS',
+            participantHint: '2 participantes',
             icon: LucideIcons.heart,
-            accentColor: const Color(0xFFE11D48),
-            bgColors: const [Color(0xFFFFF1F2), Color(0xFFFFE4E6)],
-            borderColor: const Color(0xFFFECDD3),
+            microBadgeIcon: LucideIcons.heartHandshake,
+            microBadgeLabel: 'Ritmo a dois & Afinidade',
             description:
                 'Sintonia do casal, linguagens do afeto, horários a dois, carinhos e equilíbrio de mensagens.',
+            featureTags: const ['Love Language', 'Quem Puxa Papo', 'Horário do Amor', 'Sintonia 360°'],
+            accentColor: const Color(0xFFE11D48),
+            bgLightGradient: const [Color(0xFFFFF1F2), Color(0xFFFFE4E6)],
+            bgDarkGradient: const [Color(0xFF1E1015), Color(0xFF2D121B)],
+            borderLight: const Color(0xFFFECDD3),
+            borderDark: const Color(0xFF4C1D2A),
+            avatarBgLight: const Color(0xFFFDE8EA),
+            avatarBgDark: const Color(0xFF3B121E),
+            doodlePainter: HeartDoodlePainter(),
           ),
 
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
 
           // Mode 2: Amigos Bento Card
-          _buildModelCard(
+          ModelBentoCard(
             title: 'Modo Amigos',
-            badgeText: '2 PARTICIPANTES (DUPLA)',
+            eyebrow: 'PARCERIA, RESENHA & ZOEIRA',
+            participantHint: '2 amigos (dupla)',
             icon: LucideIcons.users,
-            accentColor: const Color(0xFF2563EB),
-            bgColors: const [Color(0xFFF0F9FF), Color(0xFFE0F2FE)],
-            borderColor: const Color(0xFFBAE6FD),
+            microBadgeIcon: LucideIcons.sparkles,
+            microBadgeLabel: 'Duelo de estilos & Resenha a dois',
             description:
                 'A amizade a dois: duelo de estilos, quem responde mais rápido, áudios intermináveis de podcast, vácuos históricos e cumplicidade.',
+            featureTags: const ['Duelo de Estilos', 'Podcast de Áudios', 'Ranking do Vácuo', 'Cultura de Emojis'],
+            accentColor: const Color(0xFF2563EB),
+            bgLightGradient: const [Color(0xFFF0F9FF), Color(0xFFE0F2FE)],
+            bgDarkGradient: const [Color(0xFF0C192E), Color(0xFF112240)],
+            borderLight: const Color(0xFFBAE6FD),
+            borderDark: const Color(0xFF1E3A8A),
+            avatarBgLight: const Color(0xFFE0EDFD),
+            avatarBgDark: const Color(0xFF13274A),
+            doodlePainter: AmigosDoodlePainter(),
           ),
 
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
 
           // Mode 3: Grupo Bento Card
-          _buildModelCard(
+          ModelBentoCard(
             title: 'Modo Grupo',
-            badgeText: '3 OU MAIS PARTICIPANTES',
+            eyebrow: 'LEADERBOARD GERAL & VIBES',
+            participantHint: '3 ou mais participantes',
             icon: LucideIcons.messagesSquare,
-            accentColor: const Color(0xFF1D4ED8),
-            bgColors: const [Color(0xFFF5F3FF), Color(0xFFEDE9FE)],
-            borderColor: const Color(0xFFDDD6FE),
+            microBadgeIcon: LucideIcons.trophy,
+            microBadgeLabel: 'Leaderboard geral & Radar de vibes',
             description:
                 'Leaderboard geral de mensagens, pódio de engajamento, radar de vibes, matriz coletiva e corujas da madrugada.',
+            featureTags: const ['Pódio Geral', 'Radar de Vibes', 'Corujas da Madrugada', 'Matriz de Interação'],
+            accentColor: const Color(0xFF1D4ED8),
+            bgLightGradient: const [Color(0xFFF5F3FF), Color(0xFFEDE9FE)],
+            bgDarkGradient: const [Color(0xFF1A102E), Color(0xFF251642)],
+            borderLight: const Color(0xFFDDD6FE),
+            borderDark: const Color(0xFF4C1D95),
+            avatarBgLight: const Color(0xFFEDE9FE),
+            avatarBgDark: const Color(0xFF251445),
+            doodlePainter: GrupoDoodlePainter(),
           ),
 
           const SizedBox(height: 14),
@@ -753,108 +781,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  Widget _buildModelCard({
-    required String title,
-    required String badgeText,
-    required IconData icon,
-    required Color accentColor,
-    required List<Color> bgColors,
-    required Color borderColor,
-    required String description,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: ShapeDecoration(
-        gradient: LinearGradient(
-          colors: bgColors,
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        shape: SquircleBorder.card(
-          side: BorderSide(color: borderColor, width: 1.0),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Wrap(
-            alignment: WrapAlignment.spaceBetween,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            spacing: 8,
-            runSpacing: 6,
-            children: [
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  return ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: constraints.maxWidth),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          width: 32,
-                          height: 32,
-                          decoration: ShapeDecoration(
-                            color: Colors.white.withValues(alpha: 0.9),
-                            shape: SquircleBorder.radius(9),
-                          ),
-                          child: Center(
-                            child: Icon(icon, size: 16, color: accentColor),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Flexible(
-                          child: Text(
-                            title,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontFamily: 'serif',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xFF0F172A),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: ShapeDecoration(
-                  color: Colors.white.withValues(alpha: 0.8),
-                  shape: SquircleBorder.radius(
-                    6,
-                    side: BorderSide(color: accentColor.withValues(alpha: 0.3), width: 0.8),
-                  ),
-                ),
-                child: Text(
-                  badgeText,
-                  style: TextStyle(
-                    fontSize: 9.5,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.6,
-                    color: accentColor,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            description,
-            style: const TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-              height: 1.45,
-              color: Color(0xFF334155),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   // ==========================================
   // PAGE 3: COMO EXPORTAR CONVERSA DO WHATSAPP
