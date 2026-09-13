@@ -712,6 +712,7 @@ class _HomeScreenState extends State<HomeScreen> {
             avatarBgLight: const Color(0xFFFDE8EA),
             avatarBgDark: const Color(0xFF3B121E),
             doodlePainter: _HeartDoodlePainter(),
+            bgAsset: 'assets/images/casal_bento_bg.jpg',
             onTap: () => _handleDemoRetrospective(_demoChatCasal, 'Mariana & Lucas (Casal)'),
           ),
           const SizedBox(height: 16),
@@ -730,6 +731,7 @@ class _HomeScreenState extends State<HomeScreen> {
             avatarBgLight: const Color(0xFFE0EDFD),
             avatarBgDark: const Color(0xFF13274A),
             doodlePainter: _AmigosDoodlePainter(),
+            bgAsset: 'assets/images/amigos_bento_bg.jpg',
             onTap: () => _handleDemoRetrospective(_demoChatAmigos, 'Resenha da Dupla (Amigos)', ChatMode.amigos),
           ),
           const SizedBox(height: 16),
@@ -748,6 +750,7 @@ class _HomeScreenState extends State<HomeScreen> {
             avatarBgLight: const Color(0xFFEDE9FE),
             avatarBgDark: const Color(0xFF251445),
             doodlePainter: _GrupoDoodlePainter(),
+            bgAsset: 'assets/images/grupo_bento_bg.jpg',
             onTap: () => _handleDemoRetrospective(_demoChatGrupo, 'Turma Completa (Grupo)'),
           ),
           const SizedBox(height: 20),
@@ -770,6 +773,7 @@ class _HomeScreenState extends State<HomeScreen> {
     required Color avatarBgLight,
     required Color avatarBgDark,
     required CustomPainter doodlePainter,
+    String? bgAsset,
     required VoidCallback onTap,
   }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -799,10 +803,33 @@ class _HomeScreenState extends State<HomeScreen> {
       clipBehavior: Clip.antiAlias,
       child: Stack(
         children: [
+          // Background Texture Image (if provided)
+          if (bgAsset != null)
+            Positioned.fill(
+              child: isDark
+                  ? ColorFiltered(
+                      colorFilter: ColorFilter.mode(
+                        const Color(0xFF0F172A).withValues(alpha: 0.82),
+                        BlendMode.darken,
+                      ),
+                      child: Image.asset(
+                        bgAsset,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : Image.asset(
+                      bgAsset,
+                      fit: BoxFit.cover,
+                    ),
+            ),
+
           // Vector Doodle layer
           Positioned.fill(
-            child: CustomPaint(
-              painter: doodlePainter,
+            child: Opacity(
+              opacity: bgAsset != null ? 0.35 : 1.0,
+              child: CustomPaint(
+                painter: doodlePainter,
+              ),
             ),
           ),
 
@@ -1534,6 +1561,7 @@ class _HomeScreenState extends State<HomeScreen> {
     required String subtitle,
     required VoidCallback onTap,
   }) {
+    final String bgAsset;
     final String modeBadgeLabel;
     final Color modeAccentColor;
     final List<Color> cardGradient;
@@ -1547,6 +1575,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     switch (mode) {
       case ChatMode.casal:
+        bgAsset = 'assets/images/casal_bento_bg.jpg';
         modeBadgeLabel = 'MODO CASAL';
         modeAccentColor = const Color(0xFFE11D48);
         cardGradient = const [Color(0xFFFFF9FA), Color(0xFFFFF1F3)];
@@ -1559,6 +1588,7 @@ class _HomeScreenState extends State<HomeScreen> {
         doodlePainter = _HeartDoodlePainter();
         break;
       case ChatMode.amigos:
+        bgAsset = 'assets/images/amigos_bento_bg.jpg';
         modeBadgeLabel = 'MODO AMIGOS';
         modeAccentColor = const Color(0xFF2563EB);
         cardGradient = const [Color(0xFFF9FBFE), Color(0xFFF0F7FF)];
@@ -1571,6 +1601,7 @@ class _HomeScreenState extends State<HomeScreen> {
         doodlePainter = _AmigosDoodlePainter();
         break;
       case ChatMode.grupo:
+        bgAsset = 'assets/images/grupo_bento_bg.jpg';
         modeBadgeLabel = 'MODO GRUPO';
         modeAccentColor = const Color(0xFF7C3AED);
         cardGradient = const [Color(0xFFFAF8FF), Color(0xFFF5F2FF)];
@@ -1606,10 +1637,17 @@ class _HomeScreenState extends State<HomeScreen> {
       clipBehavior: Clip.antiAlias,
       child: Stack(
         children: [
+          // Background Texture Image (Casal, Amigos, Grupo)
+          Positioned.fill(
+            child: Image.asset(
+              bgAsset,
+              fit: BoxFit.cover,
+            ),
+          ),
           // Faint organic doodle layer matching mode identity
           Positioned.fill(
             child: Opacity(
-              opacity: 0.55,
+              opacity: 0.35,
               child: CustomPaint(painter: doodlePainter),
             ),
           ),
@@ -1890,8 +1928,17 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Stack(
             children: [
               Positioned.fill(
-                child: CustomPaint(
-                  painter: _GrupoDoodlePainter(),
+                child: Image.asset(
+                  'assets/images/grupo_bento_bg.jpg',
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Positioned.fill(
+                child: Opacity(
+                  opacity: 0.35,
+                  child: CustomPaint(
+                    painter: _GrupoDoodlePainter(),
+                  ),
                 ),
               ),
               Padding(

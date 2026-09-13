@@ -639,6 +639,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
           avatarBgLight: const Color(0xFFFDE8EA),
           avatarBgDark: const Color(0xFF3B121E),
           doodlePainter: _HeartDoodlePainter(),
+          bgAsset: 'assets/images/casal_bento_bg.jpg',
           description:
               'Índice de sintonia amorosa, love language (corações, afeto, memes), horários a dois e métricas de resposta.',
           featureTags: const [
@@ -663,6 +664,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
           avatarBgLight: const Color(0xFFE0EDFD),
           avatarBgDark: const Color(0xFF13274A),
           doodlePainter: _AmigosDoodlePainter(),
+          bgAsset: 'assets/images/amigos_bento_bg.jpg',
           description:
               'A amizade a dois: quem responde mais rápido, duelo de estilos, áudios intermináveis de podcast, vácuos históricos e cumplicidade.',
           featureTags: const [
@@ -688,6 +690,7 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
           avatarBgLight: const Color(0xFFDBEAFE),
           avatarBgDark: const Color(0xFF172554),
           doodlePainter: _GrupoDoodlePainter(),
+          bgAsset: 'assets/images/grupo_bento_bg.jpg',
           description:
               'Leaderboard geral com pódios e porcentagens, matriz de interação, ranking de vibes e corujas da madrugada.',
           featureTags: const [
@@ -897,10 +900,32 @@ class _ModeSelectionScreenState extends State<ModeSelectionScreen> {
                         clipBehavior: Clip.antiAlias,
                         child: Stack(
                           children: [
+                            // Background Texture Image
+                            Positioned.fill(
+                              child: isDark
+                                  ? ColorFiltered(
+                                      colorFilter: ColorFilter.mode(
+                                        const Color(0xFF0F172A).withValues(alpha: 0.82),
+                                        BlendMode.darken,
+                                      ),
+                                      child: Image.asset(
+                                        opt.bgAsset,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
+                                  : Image.asset(
+                                      opt.bgAsset,
+                                      fit: BoxFit.cover,
+                                    ),
+                            ),
+
                             // Subtle vector doodle layer
                             Positioned.fill(
-                              child: CustomPaint(
-                                painter: opt.doodlePainter,
+                              child: Opacity(
+                                opacity: 0.35,
+                                child: CustomPaint(
+                                  painter: opt.doodlePainter,
+                                ),
                               ),
                             ),
 
