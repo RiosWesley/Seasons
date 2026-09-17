@@ -211,9 +211,9 @@ Terceiro parágrafo após linha em branco.
 
   group('Sample WhatsApp Export Verification', () {
     test('correctly parses Conversa do WhatsApp com João Arthur Britto.txt', () {
-      const samplePath = '/home/wesley/Documents/chat-wrapped-mobile/Conversa do WhatsApp com João Arthur Britto.txt';
+      const samplePath = 'test/fixtures/benchmark_chat.txt';
       final file = File(samplePath);
-      expect(file.existsSync(), isTrue, reason: 'Sample file should exist at reference path');
+      expect(file.existsSync(), isTrue, reason: 'Sample file should exist at fixture path');
 
       final rawContent = file.readAsStringSync();
       final export = parser.parse(rawContent);
@@ -252,6 +252,27 @@ Terceiro parágrafo após linha em branco.
       expect(export.messages.last.author, equals('João Arthur Britto'));
       expect(export.messages.last.content, equals('<Mídia oculta>'));
       expect(export.messages.last.isMedia, isTrue);
+    });
+
+    test('correctly parses Conversa do WhatsApp com wesley rios ☭⃠.txt', () {
+      const userChatPath = 'test/Conversa do WhatsApp com wesley rios ☭⃠.txt';
+      final file = File(userChatPath);
+      expect(file.existsSync(), isTrue, reason: 'User chat export file should exist at relative path');
+
+      final rawContent = file.readAsStringSync();
+      // Validação explícita de Idempotência: invocações consecutivas retornam o mesmo resultado imutável
+      final export1 = parser.parse(rawContent);
+      final export2 = parser.parse(rawContent);
+
+      expect(export1.totalMessages, equals(8822));
+      expect(export2.totalMessages, equals(export1.totalMessages));
+      expect(export1.participants, equals({'Rafael F.', 'wesley rios ☭⃠'}));
+      expect(export2.participants, equals(export1.participants));
+
+      final rafaelMsgs = export1.messages.where((m) => m.author == 'Rafael F.').toList();
+      final wesleyMsgs = export1.messages.where((m) => m.author == 'wesley rios ☭⃠').toList();
+      expect(rafaelMsgs.length, equals(4635));
+      expect(wesleyMsgs.length, equals(4187));
     });
   });
 

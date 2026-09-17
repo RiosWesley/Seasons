@@ -120,7 +120,7 @@ void main() {
   });
 
   group('FileIngestionService Integration', () {
-    const samplePath = '/home/wesley/Documents/chat-wrapped-mobile/Conversa do WhatsApp com João Arthur Britto.txt';
+    const samplePath = 'test/fixtures/benchmark_chat.txt';
 
     test('isZipBytes identifies zip magic header correctly', () {
       expect(FileIngestionService.isZipBytes([0x50, 0x4B, 0x03, 0x04, 0x00]), isTrue);
