@@ -68,6 +68,7 @@ Zero chamadas de rede durante import/parse/visualização. ZIP extraído em cach
 
 ## Docs
 
+- `docs/jornada-do-usuario.md` — documentação completa para cliente e usuário final sobre a jornada no app
 - `docs/resumo-projeto.md` — modelo de negócio, problema, proposta, telas, jornada, interface (heurísticas + WCAG), aplicação e documentação
 - `PROJECT.md` — arquitetura e inventário de 60 features
 - `ORIGINAL_REQUEST.md` — requisitos e critérios de aceitação
